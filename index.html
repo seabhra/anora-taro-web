@@ -120,13 +120,13 @@ Embaralhar Cartas
 
 <div id="aiResponse"></div>
 
-<script>
+  <script>
 const totalCards = 22;
 const basePath = 'cards_images/';
 const backCard = 'cards_images/back.jpg';
 
 const names = [
- 'Louco','Mago','Sacerdotisa','Imperatriz','Imperador','Sacerdote',
+ 'Louco','Mago','Sacerdotisa','Imperatriz','Imperador','Hierofante',
  'Amantes','Carro','Força','Eremita','Roda','Justiça','Enforcado',
  'Morte','Temperança','Diabo','Torre','Estrela','Lua','Sol',
  'Julgamento','Mundo'
@@ -134,9 +134,20 @@ const names = [
 
 let hasReading = false;
 
-const imgs = [card1, card2, card3];
-const labels = [name1, name2, name3];
-const button = actionButton;
+// ✅ PEGAR ELEMENTOS CORRETAMENTE
+const imgs = [
+  document.getElementById('card1'),
+  document.getElementById('card2'),
+  document.getElementById('card3')
+];
+
+const labels = [
+  document.getElementById('name1'),
+  document.getElementById('name2'),
+  document.getElementById('name3')
+];
+
+const button = document.getElementById('actionButton');
 const status = document.getElementById('status');
 const loader = document.getElementById('loader');
 const aiBox = document.getElementById('aiResponse');
@@ -154,12 +165,12 @@ function pad(n) {
 }
 
 async function newReading() {
- const deck = shuffle([...Array(totalCards).keys()].map(i=>i+1));
- const selected = deck.slice(0,3);
+ const deck = shuffle([...Array(totalCards).keys()].map(i => i + 1));
+ const selected = deck.slice(0, 3);
 
- selected.forEach((num,i)=>{
-   imgs[i].src = `${basePath}${pad(num)}_${names[num-1].toLowerCase()}.jpg`;
-   labels[i].innerText = names[num-1];
+ selected.forEach((num, i) => {
+   imgs[i].src = `${basePath}${pad(num)}_${names[num - 1].toLowerCase()}.jpg`;
+   labels[i].innerText = names[num - 1];
  });
 
  hasReading = true;
@@ -171,22 +182,22 @@ async function newReading() {
  aiBox.style.display = 'none';
 
  await callAuroraAPI([
-   names[selected[0]-1],
-   names[selected[1]-1],
-   names[selected[2]-1]
+   names[selected[0] - 1],
+   names[selected[1] - 1],
+   names[selected[2] - 1]
  ]);
 }
 
 function resetReading() {
- imgs.forEach(i=>i.src=backCard);
- labels.forEach(l=>l.innerText='');
- aiBox.style.display='none';
- loader.style.display='none';
+ imgs.forEach(img => img.src = backCard);
+ labels.forEach(l => l.innerText = '');
+ aiBox.style.display = 'none';
+ loader.style.display = 'none';
 
- hasReading=false;
- button.innerText='Embaralhar Cartas';
- button.className='action-button pink';
- status.textContent='Aguardando sua consulta';
+ hasReading = false;
+ button.innerText = 'Embaralhar Cartas';
+ button.className = 'action-button pink';
+ status.textContent = 'Aguardando sua consulta';
 }
 
 async function callAuroraAPI(cards) {
@@ -202,24 +213,28 @@ Interprete como reflexão, sem previsões.
    const res = await fetch(
      'https://aurora-api-final-2025.vercel.app/api/chat',
      {
-       method:'POST',
-       headers:{'Content-Type':'application/json'},
-       body:JSON.stringify({message:prompt})
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({ message: prompt })
      }
    );
    const data = await res.json();
    aiBox.innerText = data.reply || 'Sem resposta agora.';
- } catch {
+ } catch (e) {
    aiBox.innerText = 'Erro ao acessar a reflexão.';
  }
 
- loader.style.display='none';
- aiBox.style.display='block';
- status.textContent='Consulta realizada';
+ loader.style.display = 'none';
+ aiBox.style.display = 'block';
+ status.textContent = 'Consulta realizada';
 }
 
-button.onclick = ()=> hasReading ? resetReading() : newReading();
-</script>
+button.addEventListener('click', () => {
+ hasReading ? resetReading() : newReading();
+});
+
+
+  </script>
 
 </body>
 </html>
