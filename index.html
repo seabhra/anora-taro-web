@@ -120,12 +120,11 @@ Embaralhar Cartas
 
 <div id="aiResponse"></div>
 
-  <script>
+ <script>
 const totalCards = 22;
 const basePath = 'cards_images/';
 const backCard = 'cards_images/back.jpg';
 
-const names = [
 const cards = [
  { label:'Louco', file:'louco' },
  { label:'Mago', file:'mago' },
@@ -151,20 +150,19 @@ const cards = [
  { label:'Mundo', file:'mundo' }
 ];
 
-
 let hasReading = false;
 
-// ✅ PEGAR ELEMENTOS CORRETAMENTE
+// ELEMENTOS
 const imgs = [
-  document.getElementById('card1'),
-  document.getElementById('card2'),
-  document.getElementById('card3')
+ document.getElementById('card1'),
+ document.getElementById('card2'),
+ document.getElementById('card3')
 ];
 
 const labels = [
-  document.getElementById('name1'),
-  document.getElementById('name2'),
-  document.getElementById('name3')
+ document.getElementById('name1'),
+ document.getElementById('name2'),
+ document.getElementById('name3')
 ];
 
 const button = document.getElementById('actionButton');
@@ -188,9 +186,12 @@ async function newReading() {
  const deck = shuffle([...Array(totalCards).keys()].map(i => i + 1));
  const selected = deck.slice(0, 3);
 
+ const selectedLabels = [];
+
  selected.forEach((num, i) => {
- imgs[i].src = `${basePath}${pad(num)}_${cards[num-1].file}.jpg`;
-labels[i].innerText = cards[num-1].label;
+   imgs[i].src = `${basePath}${pad(num)}_${cards[num-1].file}.jpg`;
+   labels[i].innerText = cards[num-1].label;
+   selectedLabels.push(cards[num-1].label);
  });
 
  hasReading = true;
@@ -201,16 +202,13 @@ labels[i].innerText = cards[num-1].label;
  loader.style.display = 'block';
  aiBox.style.display = 'none';
 
- await callAuroraAPI([
-   names[selected[0] - 1],
-   names[selected[1] - 1],
-   names[selected[2] - 1]
- ]);
+ await callAuroraAPI(selectedLabels);
 }
 
 function resetReading() {
  imgs.forEach(img => img.src = backCard);
  labels.forEach(l => l.innerText = '');
+
  aiBox.style.display = 'none';
  loader.style.display = 'none';
 
@@ -220,13 +218,15 @@ function resetReading() {
  status.textContent = 'Aguardando sua consulta';
 }
 
-async function callAuroraAPI(cards) {
+async function callAuroraAPI(cardsDrawn) {
  const prompt = `
-Leitura simbólica de Tarô:
-Passado: ${cards[0]}
-Presente: ${cards[1]}
-Futuro: ${cards[2]}
-Interprete como reflexão, sem previsões.
+Leitura simbólica de Tarô.
+Passado: ${cardsDrawn[0]}
+Presente: ${cardsDrawn[1]}
+Futuro: ${cardsDrawn[2]}
+
+Interprete como reflexão emocional e racional.
+Não faça previsões nem promessas.
 `;
 
  try {
@@ -238,8 +238,14 @@ Interprete como reflexão, sem previsões.
        body: JSON.stringify({ message: prompt })
      }
    );
+
    const data = await res.json();
-   aiBox.innerText = data.reply || 'Sem resposta agora.';
+
+   aiBox.innerText =
+     data.reply ||
+     data.response ||
+     data.message ||
+     'Sem resposta agora.';
  } catch (e) {
    aiBox.innerText = 'Erro ao acessar a reflexão.';
  }
@@ -252,9 +258,7 @@ Interprete como reflexão, sem previsões.
 button.addEventListener('click', () => {
  hasReading ? resetReading() : newReading();
 });
-
-
-  </script>
+</script>
 
 </body>
 </html>
