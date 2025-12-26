@@ -202,16 +202,6 @@ function newReading() {
   status.textContent = 'Consultando…';
 }
 
-  function showPrompt(drawn) {
-  const promptBox = document.getElementById('promptBox');
-  promptBox.style.display = 'block';
-  promptBox.innerHTML = `
-    <strong>Passado:</strong> ${drawn[0]}<br>
-    <strong>Presente:</strong> ${drawn[1]}<br>
-    <strong>Futuro:</strong> ${drawn[2]}
-  `;
-}
-
 
 function resetReading() {
  imgs.forEach(img => img.src = backCard);
