@@ -62,7 +62,6 @@ body {
   color: #718096;
 }
 
-/* 🔄 LOADER CIRCULAR */
 #loader {
   display: none;
   margin: 20px auto;
@@ -78,6 +77,16 @@ body {
   100% { transform: rotate(360deg); }
 }
 
+#promptBox {
+  display: none;
+  margin-top:12px;
+  padding:10px;
+  background:#f0f0f5;
+  border-radius:10px;
+  font-size:13px;
+  text-align:left;
+}
+
 #aiResponse {
   display: none;
   margin-top: 16px;
@@ -87,16 +96,6 @@ body {
   font-size: 14px;
   text-align: left;
 }
-  <div id="promptBox" style="
-  margin-top:12px;
-  padding:10px;
-  background:#f0f0f5;
-  border-radius:10px;
-  font-size:13px;
-  text-align:left;
-  display:none;
-"></div>
-  
 </style>
 </head>
 
@@ -125,95 +124,62 @@ Embaralhar Cartas
 </button>
 
 <div id="status">Aguardando sua consulta</div>
-
 <div id="loader"></div>
 
+<div id="promptBox"></div>
 <div id="aiResponse"></div>
 
- <script>
-const totalCards = 22;
+<script>
 const basePath = 'cards_images/';
-const backCard = 'cards_images/back.jpg';
+const backCard = basePath + 'back.jpg';
 
 const cards = [
- { label:'Louco', file:'louco' },
- { label:'Mago', file:'mago' },
- { label:'Sacerdotisa', file:'sacerdotisa' },
- { label:'Imperatriz', file:'imperatriz' },
- { label:'Imperador', file:'imperador' },
- { label:'Sacerdote', file:'sacerdote' },
- { label:'Amantes', file:'amantes' },
- { label:'Carro', file:'carro' },
- { label:'Força', file:'forca' },
- { label:'Eremita', file:'eremita' },
- { label:'Roda', file:'roda' },
- { label:'Justiça', file:'justica' },
- { label:'Enforcado', file:'enforcado' },
- { label:'Morte', file:'morte' },
- { label:'Temperança', file:'temperanca' },
- { label:'Diabo', file:'diabo' },
- { label:'Torre', file:'torre' },
- { label:'Estrela', file:'estrela' },
- { label:'Lua', file:'lua' },
- { label:'Sol', file:'sol' },
- { label:'Julgamento', file:'julgamento' },
- { label:'Mundo', file:'mundo' }
+ 'Louco','Mago','Sacerdotisa','Imperatriz','Imperador','Sacerdote',
+ 'Amantes','Carro','Forca','Eremita','Roda','Justica','Enforcado',
+ 'Morte','Temperanca','Diabo','Torre','Estrela','Lua','Sol',
+ 'Julgamento','Mundo'
 ];
 
-let hasReading = false;
-
-// ELEMENTOS
 const imgs = [
- document.getElementById('card1'),
- document.getElementById('card2'),
- document.getElementById('card3')
+ card1 = document.getElementById('card1'),
+ card2 = document.getElementById('card2'),
+ card3 = document.getElementById('card3')
 ];
 
 const labels = [
- document.getElementById('name1'),
- document.getElementById('name2'),
- document.getElementById('name3')
+ name1 = document.getElementById('name1'),
+ name2 = document.getElementById('name2'),
+ name3 = document.getElementById('name3')
 ];
 
 const button = document.getElementById('actionButton');
 const status = document.getElementById('status');
 const loader = document.getElementById('loader');
 const aiBox = document.getElementById('aiResponse');
+const promptBox = document.getElementById('promptBox');
 
-function shuffle(a) {
- for (let i = a.length - 1; i > 0; i--) {
-   const j = Math.floor(Math.random() * (i + 1));
-   [a[i], a[j]] = [a[j], a[i]];
- }
- return a;
-}
+let hasReading = false;
 
-function pad(n) {
- return n.toString().padStart(2,'0');
+function shuffle(arr) {
+ return arr.sort(() => Math.random() - 0.5);
 }
 
 async function newReading() {
- const deck = shuffle([...Array(totalCards).keys()].map(i => i + 1));
- const selected = deck.slice(0, 3);
+ const deck = shuffle([...cards.keys()]);
+ const draw = deck.slice(0,3);
 
- const drawn = [];
-
- selected.forEach((num, i) => {
-   imgs[i].src = `${basePath}${pad(num)}_${cards[num-1].file}.jpg`;
-   labels[i].innerText = cards[num-1].label;
-   drawn.push(cards[num-1].label);
+ draw.forEach((i, idx) => {
+   imgs[idx].src = `${basePath}${String(i+1).padStart(2,'0')}_${cards[i].toLowerCase()}.jpg`;
+   labels[idx].innerText = cards[i];
  });
 
- // 👉 MOSTRAR O PROMPT AO USUÁRIO
- const promptBox = document.getElementById('promptBox');
  promptBox.style.display = 'block';
  promptBox.innerHTML = `
- <strong>Passado:</strong> ${drawn[0]}<br>
- <strong>Presente:</strong> ${drawn[1]}<br>
- <strong>Futuro:</strong> ${drawn[2]}
+ <strong>Passado:</strong> ${cards[draw[0]]}<br>
+ <strong>Presente:</strong> ${cards[draw[1]]}<br>
+ <strong>Futuro:</strong> ${cards[draw[2]]}
  `;
 
- hasReading = true;
  button.innerText = 'Nova Consulta';
  button.className = 'action-button blue';
  status.textContent = 'Consultando…';
@@ -221,52 +187,49 @@ async function newReading() {
  loader.style.display = 'block';
  aiBox.style.display = 'none';
 
- await callAuroraAPI(drawn);
-}
+ await callAuroraAPI([
+   cards[draw[0]],
+   cards[draw[1]],
+   cards[draw[2]]
+ ]);
 
+ hasReading = true;
+}
 
 function resetReading() {
  imgs.forEach(img => img.src = backCard);
  labels.forEach(l => l.innerText = '');
 
+ promptBox.style.display = 'none';
  aiBox.style.display = 'none';
  loader.style.display = 'none';
 
- hasReading = false;
  button.innerText = 'Embaralhar Cartas';
  button.className = 'action-button pink';
  status.textContent = 'Aguardando sua consulta';
+
+ hasReading = false;
 }
 
 async function callAuroraAPI(cardsDrawn) {
- const prompt = `
-Leitura simbólica de Tarô.
-Passado: ${cardsDrawn[0]}
-Presente: ${cardsDrawn[1]}
-Futuro: ${cardsDrawn[2]}
-
-Interprete como reflexão emocional e racional.
-Não faça previsões nem promessas.
-`;
-
  try {
    const res = await fetch(
      'https://aurora-api-final-2025.vercel.app/api/chat',
      {
        method: 'POST',
        headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({ message: prompt })
+       body: JSON.stringify({
+         message: `Leitura simbólica de Tarô:
+Passado: ${cardsDrawn[0]}
+Presente: ${cardsDrawn[1]}
+Futuro: ${cardsDrawn[2]}`
+       })
      }
    );
 
    const data = await res.json();
-
-   aiBox.innerText =
-     data.reply ||
-     data.response ||
-     data.message ||
-     'Sem resposta agora.';
- } catch (e) {
+   aiBox.innerText = data.reply || data.message || 'Sem resposta agora.';
+ } catch {
    aiBox.innerText = 'Erro ao acessar a reflexão.';
  }
 
@@ -275,9 +238,7 @@ Não faça previsões nem promessas.
  status.textContent = 'Consulta realizada';
 }
 
-button.addEventListener('click', () => {
- hasReading ? resetReading() : newReading();
-});
+button.onclick = () => hasReading ? resetReading() : newReading();
 </script>
 
 </body>
