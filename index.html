@@ -134,11 +134,30 @@ const basePath = 'cards_images/';
 const backCard = basePath + 'back.jpg';
 
 const cards = [
- 'Louco','Mago','Sacerdotisa','Imperatriz','Imperador','Sacerdote',
- 'Amantes','Carro','Forca','Eremita','Roda','Justica','Enforcado',
- 'Morte','Temperanca','Diabo','Torre','Estrela','Lua','Sol',
- 'Julgamento','Mundo'
+  { label:'Louco', file:'louco' },
+  { label:'Mago', file:'mago' },
+  { label:'Sacerdotisa', file:'sacerdotisa' },
+  { label:'Imperatriz', file:'imperatriz' },
+  { label:'Imperador', file:'imperador' },
+  { label:'Sacerdote', file:'sacerdote' },
+  { label:'Amantes', file:'amantes' },
+  { label:'Carro', file:'carro' },
+  { label:'Forca', file:'forca' },
+  { label:'Eremita', file:'eremita' },
+  { label:'Roda', file:'roda' },
+  { label:'Justica', file:'justica' },
+  { label:'Enforcado', file:'enforcado' },
+  { label:'Morte', file:'morte' },
+  { label:'Temperanca', file:'temperanca' },
+  { label:'Diabo', file:'diabo' },
+  { label:'Torre', file:'torre' },
+  { label:'Estrela', file:'estrela' },
+  { label:'Lua', file:'lua' },
+  { label:'Sol', file:'sol' },
+  { label:'Julgamento', file:'julgamento' },
+  { label:'Mundo', file:'mundo' }
 ];
+
 
 const imgs = [
  card1 = document.getElementById('card1'),
@@ -164,25 +183,25 @@ function shuffle(arr) {
  return arr.sort(() => Math.random() - 0.5);
 }
 
-async function newReading() {
- const deck = shuffle([...cards.keys()]);
- const draw = deck.slice(0,3);
+function newReading() {
+  const shuffled = shuffle([...cards]).slice(0, 3);
 
- draw.forEach((i, idx) => {
-   imgs[idx].src = `${basePath}${String(i+1).padStart(2,'0')}_${cards[i].toLowerCase()}.jpg`;
-   labels[idx].innerText = cards[i];
- });
+  shuffled.forEach((card, i) => {
+    imgs[i].src = `${basePath}${card.file}.jpg`;
+    labels[i].innerText = card.label;
+  });
 
- promptBox.style.display = 'block';
- promptBox.innerHTML = `
- <strong>Passado:</strong> ${cards[draw[0]]}<br>
- <strong>Presente:</strong> ${cards[draw[1]]}<br>
- <strong>Futuro:</strong> ${cards[draw[2]]}
- `;
+  const drawnNames = shuffled.map(c => c.label);
 
- button.innerText = 'Nova Consulta';
- button.className = 'action-button blue';
- status.textContent = 'Consultando…';
+  showPrompt(drawnNames);
+  callAuroraAPI(drawnNames);
+
+  hasReading = true;
+  button.innerText = 'Nova Consulta';
+  button.className = 'action-button blue';
+  status.textContent = 'Consultando…';
+}
+
 
  loader.style.display = 'block';
  aiBox.style.display = 'none';
