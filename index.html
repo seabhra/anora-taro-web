@@ -202,6 +202,12 @@ function newReading() {
   status.textContent = 'Consultando…';
 }
 
+   function showPrompt(drawn) {
+  const promptBox = document.getElementById('promptBox');
+  promptBox.style.display = 'block';
+ 
+}
+
 
 function resetReading() {
  imgs.forEach(img => img.src = backCard);
