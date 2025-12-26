@@ -2,22 +2,23 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Anora Tarô</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anora Tarô</title>
 
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f6f7fb;
-      text-align: center;
+      margin: 0;
       padding: 20px;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f7f7;
+      text-align: center;
     }
 
     .cards {
       display: flex;
       justify-content: center;
       gap: 12px;
-      margin-top: 30px;
+      margin-bottom: 24px;
     }
 
     .card {
@@ -26,85 +27,143 @@
 
     .card img {
       width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,.15);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
 
     .label {
       margin-top: 6px;
-      font-size: 14px;
-      color: #555;
+      font-size: 13px;
+      font-weight: bold;
+      color: #333;
     }
 
-    button {
-      margin-top: 30px;
-      padding: 14px 20px;
-      font-size: 16px;
+    .card-name {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #6b46c1;
+      min-height: 14px;
+    }
+
+    .action-button {
+      width: 100%;
+      max-width: 320px;
+      height: 50px;
       border: none;
-      border-radius: 8px;
-      color: white;
-      background: #ff5c93;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
       cursor: pointer;
     }
 
-    button.secondary {
-      background: #4fc3c7;
+    .pink {
+      background-color: #fd98be;
     }
 
-    #status {
-      margin-top: 16px;
-      color: #888;
-      font-size: 14px;
+    .blue {
+      background-color: #64b9ea;
     }
   </style>
 </head>
 
 <body>
 
-  <h2></h2>
-
+  <!-- CARTAS -->
   <div class="cards">
     <div class="card">
-      <img src="carta.jpg" />
+      <img id="card1" src="cards_images/back.jpg" alt="Carta Passado">
       <div class="label">Passado</div>
+      <div class="card-name" id="name1"></div>
     </div>
 
     <div class="card">
-      <img src="carta.jpg" />
+      <img id="card2" src="cards_images/back.jpg" alt="Carta Presente">
       <div class="label">Presente</div>
+      <div class="card-name" id="name2"></div>
     </div>
 
     <div class="card">
-      <img src="carta.jpg" />
+      <img id="card3" src="cards_images/back.jpg" alt="Carta Futuro">
       <div class="label">Futuro</div>
+      <div class="card-name" id="name3"></div>
     </div>
   </div>
 
-  <button id="actionBtn" onclick="handleAction()">
+  <!-- BOTÃO -->
+  <button
+    id="actionButton"
+    class="action-button pink">
     Embaralhar Cartas
   </button>
 
-  <div id="status">Aguardando sua consulta</div>
-
+  <!-- SCRIPT -->
   <script>
+    const totalCards = 22;
+    const basePath = 'cards_images/';
+    const backCard = 'cards_images/back.jpg';
+
     let hasReading = false;
 
-    function handleAction() {
-      const btn = document.getElementById("actionBtn");
-      const status = document.getElementById("status");
+    const cardImgs = [
+      document.getElementById('card1'),
+      document.getElementById('card2'),
+      document.getElementById('card3'),
+    ];
 
-      if (!hasReading) {
-        hasReading = true;
-        btn.textContent = "Nova Consulta";
-        btn.classList.add("secondary");
-        status.textContent = "Consulta realizada";
-      } else {
-        hasReading = false;
-        btn.textContent = "Embaralhar Cartas";
-        btn.classList.remove("secondary");
-        status.textContent = "Aguardando sua consulta";
-      }
+    const cardNames = [
+      document.getElementById('name1'),
+      document.getElementById('name2'),
+      document.getElementById('name3'),
+    ];
+
+    const actionButton = document.getElementById('actionButton');
+
+    const names = [
+      'Louco','Mago','Sacerdotisa','Imperatriz','Imperador',
+      'Hierofante','Amantes','Carro','Força','Eremita',
+      'Roda da Fortuna','Justiça','Enforcado','Morte','Temperança',
+      'Diabo','Torre','Estrela','Lua','Sol',
+      'Julgamento','Mundo'
+    ];
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
     }
+
+    function pad(num) {
+      return num.toString().padStart(2, '0');
+    }
+
+    function newReading() {
+      const deck = Array.from({ length: totalCards }, (_, i) => i + 1);
+      const selected = shuffle(deck).slice(0, 3);
+
+      selected.forEach((num, index) => {
+        cardImgs[index].src =
+          `${basePath}${pad(num)}_${names[num - 1].toLowerCase().replace(/ /g,'')}.jpg`;
+        cardNames[index].innerText = names[num - 1];
+      });
+
+      hasReading = true;
+      actionButton.innerText = 'Nova Consulta';
+      actionButton.classList.remove('pink');
+      actionButton.classList.add('blue');
+    }
+
+    function resetReading() {
+      cardImgs.forEach(img => img.src = backCard);
+      cardNames.forEach(name => name.innerText = '');
+
+      hasReading = false;
+      actionButton.innerText = 'Embaralhar Cartas';
+      actionButton.classList.remove('blue');
+      actionButton.classList.add('pink');
+    }
+
+    actionButton.addEventListener('click', () => {
+      hasReading ? resetReading() : newReading();
+    });
   </script>
 
 </body>
