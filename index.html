@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Anora Tarô</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f6f7fb;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .cards {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .card {
+      width: 90px;
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,.15);
+    }
+
+    .label {
+      margin-top: 6px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 14px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      background: #ff5c93;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #4fc3c7;
+    }
+
+    #status {
+      margin-top: 16px;
+      color: #888;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Anora Tarô</h2>
+
+  <div class="cards">
+    <div class="card">
+      <img src="carta.png" />
+      <div class="label">Passado</div>
+    </div>
+
+    <div class="card">
+      <img src="carta.png" />
+      <div class="label">Presente</div>
+    </div>
+
+    <div class="card">
+      <img src="carta.png" />
+      <div class="label">Futuro</div>
+    </div>
+  </div>
+
+  <button id="actionBtn" onclick="handleAction()">
+    Embaralhar Cartas
+  </button>
+
+  <div id="status">Aguardando sua consulta</div>
+
+  <script>
+    let hasReading = false;
+
+    function handleAction() {
+      const btn = document.getElementById("actionBtn");
+      const status = document.getElementById("status");
+
+      if (!hasReading) {
+        hasReading = true;
+        btn.textContent = "Nova Consulta";
+        btn.classList.add("secondary");
+        status.textContent = "Consulta realizada";
+      } else {
+        hasReading = false;
+        btn.textContent = "Embaralhar Cartas";
+        btn.classList.remove("secondary");
+        status.textContent = "Aguardando sua consulta";
+      }
+    }
+  </script>
+
+</body>
+</html>
