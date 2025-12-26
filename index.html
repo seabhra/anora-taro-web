@@ -87,6 +87,16 @@ body {
   font-size: 14px;
   text-align: left;
 }
+  <div id="promptBox" style="
+  margin-top:12px;
+  padding:10px;
+  background:#f0f0f5;
+  border-radius:10px;
+  font-size:13px;
+  text-align:left;
+  display:none;
+"></div>
+  
 </style>
 </head>
 
@@ -186,13 +196,22 @@ async function newReading() {
  const deck = shuffle([...Array(totalCards).keys()].map(i => i + 1));
  const selected = deck.slice(0, 3);
 
- const selectedLabels = [];
+ const drawn = [];
 
  selected.forEach((num, i) => {
    imgs[i].src = `${basePath}${pad(num)}_${cards[num-1].file}.jpg`;
    labels[i].innerText = cards[num-1].label;
-   selectedLabels.push(cards[num-1].label);
+   drawn.push(cards[num-1].label);
  });
+
+ // 👉 MOSTRAR O PROMPT AO USUÁRIO
+ const promptBox = document.getElementById('promptBox');
+ promptBox.style.display = 'block';
+ promptBox.innerHTML = `
+ <strong>Passado:</strong> ${drawn[0]}<br>
+ <strong>Presente:</strong> ${drawn[1]}<br>
+ <strong>Futuro:</strong> ${drawn[2]}
+ `;
 
  hasReading = true;
  button.innerText = 'Nova Consulta';
@@ -202,8 +221,9 @@ async function newReading() {
  loader.style.display = 'block';
  aiBox.style.display = 'none';
 
- await callAuroraAPI(selectedLabels);
+ await callAuroraAPI(drawn);
 }
+
 
 function resetReading() {
  imgs.forEach(img => img.src = backCard);
