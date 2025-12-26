@@ -57,12 +57,14 @@
       cursor: pointer;
     }
 
-    .pink {
-      background-color: #fd98be;
-    }
+    .pink { background-color: #fd98be; }
+    .blue { background-color: #64b9ea; }
 
-    .blue {
-      background-color: #64b9ea;
+    #status {
+      margin-top: 16px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #718096;
     }
   </style>
 </head>
@@ -72,30 +74,31 @@
   <!-- CARTAS -->
   <div class="cards">
     <div class="card">
-      <img id="card1" src="cards_images/back.jpg" alt="Carta Passado">
+      <img id="card1" src="cards_images/back.jpg">
       <div class="label">Passado</div>
       <div class="card-name" id="name1"></div>
     </div>
 
     <div class="card">
-      <img id="card2" src="cards_images/back.jpg" alt="Carta Presente">
+      <img id="card2" src="cards_images/back.jpg">
       <div class="label">Presente</div>
       <div class="card-name" id="name2"></div>
     </div>
 
     <div class="card">
-      <img id="card3" src="cards_images/back.jpg" alt="Carta Futuro">
+      <img id="card3" src="cards_images/back.jpg">
       <div class="label">Futuro</div>
       <div class="card-name" id="name3"></div>
     </div>
   </div>
 
   <!-- BOTÃO -->
-  <button
-    id="actionButton"
-    class="action-button pink">
+  <button id="actionButton" class="action-button pink">
     Embaralhar Cartas
   </button>
+
+  <!-- STATUS -->
+  <div id="status">Aguardando sua consulta</div>
 
   <!-- SCRIPT -->
   <script>
@@ -108,27 +111,32 @@
     const cardImgs = [
       document.getElementById('card1'),
       document.getElementById('card2'),
-      document.getElementById('card3'),
+      document.getElementById('card3')
     ];
 
     const cardNames = [
       document.getElementById('name1'),
       document.getElementById('name2'),
-      document.getElementById('name3'),
+      document.getElementById('name3')
     ];
 
     const actionButton = document.getElementById('actionButton');
+    const status = document.getElementById('status');
 
     const names = [
       'Louco','Mago','Sacerdotisa','Imperatriz','Imperador',
       'Hierofante','Amantes','Carro','Força','Eremita',
-      'Roda da Fortuna','Justiça','Enforcado','Morte','Temperança',
+      'Roda','Justiça','Enforcado','Morte','Temperança',
       'Diabo','Torre','Estrela','Lua','Sol',
       'Julgamento','Mundo'
     ];
 
     function shuffle(array) {
-      return array.sort(() => Math.random() - 0.5);
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
     }
 
     function pad(num) {
@@ -147,9 +155,9 @@
 
       hasReading = true;
       actionButton.innerText = 'Nova Consulta';
-      actionButton.classList.remove('pink');
-      actionButton.classList.add('blue');
-       status.textContent = "Consulta realizada";
+      actionButton.className = 'action-button blue';
+      status.textContent = 'Consulta realizada';
+      status.style.color = '#38a169';
     }
 
     function resetReading() {
@@ -158,14 +166,14 @@
 
       hasReading = false;
       actionButton.innerText = 'Embaralhar Cartas';
-      actionButton.classList.remove('blue');
-      actionButton.classList.add('pink');
-       status.textContent = "Aguardando sua consulta";
+      actionButton.className = 'action-button pink';
+      status.textContent = 'Aguardando sua consulta';
+      status.style.color = '#718096';
     }
 
-    actionButton.addEventListener('click', () => {
+    actionButton.onclick = () => {
       hasReading ? resetReading() : newReading();
-    });
+    };
   </script>
 
 </body>
