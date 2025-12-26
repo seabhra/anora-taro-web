@@ -252,7 +252,7 @@ Futuro: ${cardsDrawn[2]}`
    // >>> FIM DAS LINHAS ADICIONADAS <<<
 
    // O resto do código continua igual
-   aiBox.innerText = data.reply || data.message || 'Sem resposta agora.';
+   aiBox.innerText = data.result || data.reply || data.message || 'Sem resposta agora.';
 
  } catch { // Agora o bloco catch está correto
    aiBox.innerText = 'Erro ao acessar a reflexão.';
