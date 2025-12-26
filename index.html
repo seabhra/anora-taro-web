@@ -194,6 +194,11 @@ function newReading() {
   const drawnNames = shuffled.map(c => c.label);
 
   showPrompt(drawnNames);
+  
+  // Mostra o loader ANTES de chamar a API
+  loader.style.display = 'block'; 
+  aiBox.style.display = 'none'; // Esconde a resposta anterior
+
   callAuroraAPI(drawnNames);
 
   hasReading = true;
@@ -241,16 +246,15 @@ Futuro: ${cardsDrawn[2]}`
    );
 
    // >>> LINHAS ADICIONADAS PARA DEBUG <<<
-   console.log('Status da Resposta da API:', res.status); // Mostra o código de status
+   console.log('Status da Resposta da API:', res.status);
    const data = await res.json();
-   console.log('Resposta Completa da API:', data);       // Mostra o objeto JSON inteiro
+   console.log('Resposta Completa da API:', data);
    // >>> FIM DAS LINHAS ADICIONADAS <<<
 
    // O resto do código continua igual
-  
-
    aiBox.innerText = data.reply || data.message || 'Sem resposta agora.';
- } catch {
+
+ } catch { // Agora o bloco catch está correto
    aiBox.innerText = 'Erro ao acessar a reflexão.';
  }
 
