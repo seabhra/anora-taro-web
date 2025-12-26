@@ -126,11 +126,31 @@ const basePath = 'cards_images/';
 const backCard = 'cards_images/back.jpg';
 
 const names = [
- 'Louco','Mago','Sacerdotisa','Imperatriz','Imperador','Hierofante',
- 'Amantes','Carro','Força','Eremita','Roda','Justiça','Enforcado',
- 'Morte','Temperança','Diabo','Torre','Estrela','Lua','Sol',
- 'Julgamento','Mundo'
+const cards = [
+ { label:'Louco', file:'louco' },
+ { label:'Mago', file:'mago' },
+ { label:'Sacerdotisa', file:'sacerdotisa' },
+ { label:'Imperatriz', file:'imperatriz' },
+ { label:'Imperador', file:'imperador' },
+ { label:'Sacerdote', file:'sacerdote' },
+ { label:'Amantes', file:'amantes' },
+ { label:'Carro', file:'carro' },
+ { label:'Força', file:'forca' },
+ { label:'Eremita', file:'eremita' },
+ { label:'Roda', file:'roda' },
+ { label:'Justiça', file:'justica' },
+ { label:'Enforcado', file:'enforcado' },
+ { label:'Morte', file:'morte' },
+ { label:'Temperança', file:'temperanca' },
+ { label:'Diabo', file:'diabo' },
+ { label:'Torre', file:'torre' },
+ { label:'Estrela', file:'estrela' },
+ { label:'Lua', file:'lua' },
+ { label:'Sol', file:'sol' },
+ { label:'Julgamento', file:'julgamento' },
+ { label:'Mundo', file:'mundo' }
 ];
+
 
 let hasReading = false;
 
@@ -169,8 +189,8 @@ async function newReading() {
  const selected = deck.slice(0, 3);
 
  selected.forEach((num, i) => {
-   imgs[i].src = `${basePath}${pad(num)}_${names[num - 1].toLowerCase()}.jpg`;
-   labels[i].innerText = names[num - 1];
+ imgs[i].src = `${basePath}${pad(num)}_${cards[num-1].file}.jpg`;
+labels[i].innerText = cards[num-1].label;
  });
 
  hasReading = true;
