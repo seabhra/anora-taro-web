@@ -240,6 +240,15 @@ Futuro: ${cardsDrawn[2]}`
      }
    );
 
+   // >>> LINHAS ADICIONADAS PARA DEBUG <<<
+   console.log('Status da Resposta da API:', res.status); // Mostra o código de status
+   const data = await res.json();
+   console.log('Resposta Completa da API:', data);       // Mostra o objeto JSON inteiro
+   // >>> FIM DAS LINHAS ADICIONADAS <<<
+
+   // O resto do código continua igual
+  
+
    const data = await res.json();
    aiBox.innerText = data.reply || data.message || 'Sem resposta agora.';
  } catch {
