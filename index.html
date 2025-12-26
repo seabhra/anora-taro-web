@@ -249,7 +249,6 @@ Futuro: ${cardsDrawn[2]}`
    // O resto do código continua igual
   
 
-   const data = await res.json();
    aiBox.innerText = data.reply || data.message || 'Sem resposta agora.';
  } catch {
    aiBox.innerText = 'Erro ao acessar a reflexão.';
