@@ -149,6 +149,7 @@
       actionButton.innerText = 'Nova Consulta';
       actionButton.classList.remove('pink');
       actionButton.classList.add('blue');
+       status.textContent = "Consulta realizada";
     }
 
     function resetReading() {
@@ -159,6 +160,7 @@
       actionButton.innerText = 'Embaralhar Cartas';
       actionButton.classList.remove('blue');
       actionButton.classList.add('pink');
+       status.textContent = "Aguardando sua consulta";
     }
 
     actionButton.addEventListener('click', () => {
