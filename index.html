@@ -202,19 +202,6 @@ function newReading() {
   status.textContent = 'Consultando…';
 }
 
-
- loader.style.display = 'block';
- aiBox.style.display = 'none';
-
- await callAuroraAPI([
-   cards[draw[0]],
-   cards[draw[1]],
-   cards[draw[2]]
- ]);
-
- hasReading = true;
-}
-
   function showPrompt(drawn) {
   const promptBox = document.getElementById('promptBox');
   promptBox.style.display = 'block';
