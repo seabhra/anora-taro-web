@@ -124,7 +124,7 @@ body {
   animation: spin 1s linear infinite;
 }
 
-/* >>> ESTILO DO BOTÃO DE COMPARTILHAR (CENTRALIZADO) <<< */
+/* >>> ESTILO DA CAIXA DE RESPOSTA DA IA (COM O NOVO CABEÇALHO) <<< */
 #aiResponse {
   display: none;
   margin-top: 16px;
@@ -135,24 +135,40 @@ body {
   text-align: left;
 }
 
+/* >>> ESTILO DO NOVO CABEÇALHO H2 <<< */
+#aiResponse h2 {
+  text-align: center;
+  color: #6b46c1; /* Cor roxa do tema */
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Estilo do parágrafo para o texto da IA */
+#aiResponse p {
+  margin: 0;
+  line-height: 1.6;
+}
+
 #shareButton {
-  display: none; /* Escondido por padrão */
+  display: none;
   width: 100%;
   max-width: 320px;
   height: 45px;
-  margin: 12px auto 0; /* >>> MUDANÇA AQUI <<< */
+  margin: 12px auto 0;
   border: none;
   border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
   color: #fff;
-  background-color: #25D366; /* Cor oficial do WhatsApp */
+  background-color: #25D366;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 #shareButton:hover {
-  background-color: #128C7E; /* Um verde mais escuro para o hover */
+  background-color: #128C7E;
 }
 
 #promptBox {
@@ -202,12 +218,11 @@ Embaralhar Cartas
 
 <div id="promptBox"></div>
 
-<!-- CAIXA DE RESPOSTA DA IA COM O NOVO BOTÃO -->
+<!-- CAIXA DE RESPOSTA DA IA -->
 <div id="aiResponse">
-  <!-- O texto da IA será inserido aqui pelo JavaScript -->
+  <!-- O conteúdo será inserido aqui pelo JavaScript -->
 </div>
 <button id="shareButton">Compartilhar no WhatsApp</button>
-<!-- FIM DA ÁREA DE RESPOSTA -->
 
 
 <script>
@@ -257,7 +272,6 @@ const status = document.getElementById('status');
 const loader = document.getElementById('loader');
 const aiBox = document.getElementById('aiResponse');
 const promptBox = document.getElementById('promptBox');
-// PEGA O NOVO BOTÃO
 const shareButton = document.getElementById('shareButton');
 
 let hasReading = false;
@@ -280,7 +294,7 @@ function newReading() {
   
   loader.style.display = 'block'; 
   aiBox.style.display = 'none';
-  shareButton.style.display = 'none'; // Esconde o botão de compartilhar
+  shareButton.style.display = 'none';
 
   callAuroraAPI(drawnNames);
 
@@ -305,7 +319,7 @@ function resetReading() {
 
  promptBox.style.display = 'none';
  aiBox.style.display = 'none';
- shareButton.style.display = 'none'; // Esconde o botão de compartilhar
+ shareButton.style.display = 'none';
  loader.style.display = 'none';
 
  button.innerText = 'Embaralhar Cartas';
@@ -317,9 +331,9 @@ function resetReading() {
  hasReading = false;
 }
 
-// LÓGICA DO BOTÃO DE COMPARTILHAR
 function shareOnWhatsApp() {
-  const analysisText = aiBox.innerText;
+  // Pega apenas o texto da análise, sem o título, para compartilhar
+  const analysisText = document.querySelector('#aiResponse p').innerText;
   const encodedText = encodeURIComponent(analysisText);
   const whatsappUrl = `https://wa.me/?text=${encodedText}`;
   window.open(whatsappUrl, '_blank');
@@ -336,7 +350,7 @@ async function callAuroraAPI(cardsDrawn) {
          messages: [
            {
              role: "user",
-             content: `Leitura simbólica do Aplicativo Anora Tarô:
+             content: `Leitura simbólica de Tarô:
 Passado: ${cardsDrawn[0]}
 Presente: ${cardsDrawn[1]}
 Futuro: ${cardsDrawn[2]}`
@@ -350,14 +364,20 @@ Futuro: ${cardsDrawn[2]}`
    const data = await res.json();
    console.log('Resposta Completa da API:', data);
 
-   aiBox.innerText = data.choices[0].message.content || 'A IA não retornou um texto.';
+   const analysisText = data.choices[0].message.content || 'A IA não retornou um texto.';
+   
+   // >>> MUDANÇA AQUI: Usa innerHTML para criar o cabeçalho e o parágrafo <<<
+   aiBox.innerHTML = `<h2>Anora Assistente de IA</h2><p>${analysisText}</p>`;
    
    status.textContent = 'Consulta realizada';
    status.className = 'status-success';
 
  } catch (error) {
    console.error('Erro na chamada da API:', error);
-   aiBox.innerText = 'Erro ao acessar a reflexão.';
+   const errorText = 'Erro ao acessar a reflexão.';
+   
+   // >>> MUDANÇA AQUI TAMBÉM, para manter o padrão <<<
+   aiBox.innerHTML = `<h2>Anora Assistente de IA</h2><p>${errorText}</p>`;
    
    status.textContent = 'Erro de carregamento';
    status.className = 'status-error';
@@ -365,7 +385,7 @@ Futuro: ${cardsDrawn[2]}`
 
  loader.style.display = 'none';
  aiBox.style.display = 'block';
- shareButton.style.display = 'block'; // Mostra o botão de compartilhar
+ shareButton.style.display = 'block';
 }
 
 // Lógica para esconder o loader da página
@@ -378,7 +398,6 @@ window.addEventListener('load', () => {
   }, 2000);
 });
 
-// Adiciona o evento de clique ao novo botão
 shareButton.onclick = shareOnWhatsApp;
   
 button.onclick = () => hasReading ? resetReading() : newReading();
