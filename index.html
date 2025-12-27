@@ -77,7 +77,7 @@ body {
   color: #3182ce; /* Azul */
 }
 
-/* Loader da API (o antigo) */
+/* Loader da API */
 #loader {
   display: none;
   margin: 20px auto;
@@ -94,37 +94,66 @@ body {
   100% { transform: rotate(360deg); }
 }
 
-/* >>> ESTILO DO NOVO LOADER DE PÁGINA <<< */
+/* Loader da página */
 #pageLoader {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #f7f7f7; /* Cor de fundo da tela de carregamento */
+  background-color: #f7f7f7;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Fica por cima de tudo */
+  z-index: 9999;
   opacity: 1;
-  transition: opacity 0.5s ease-out; /* Efeito de sumir suavemente */
+  transition: opacity 0.5s ease-out;
 }
 
 #pageLoader.hidden {
   opacity: 0;
-  pointer-events: none; /* Impede que o usuário clique nele enquanto some */
+  pointer-events: none;
 }
 
-/* Spinner do loader da página */
 .page-spinner {
   width: 60px;
   height: 60px;
-  border: 10px solid rgba(131, 242, 212, 0.3);
-  border-top: 6px solid #83f2d4; /* Cor verde que você pediu */
+  border: 6px solid rgba(131, 242, 212, 0.3);
+  border-top: 6px solid #83f2d4;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
+/* >>> ESTILO DO NOVO BOTÃO DE COMPARTILHAR <<< */
+#aiResponse {
+  display: none;
+  margin-top: 16px;
+  padding: 14px;
+  background: #fff;
+  border-radius: 12px;
+  font-size: 14px;
+  text-align: left;
+}
+
+#shareButton {
+  display: none; /* Escondido por padrão */
+  width: 100%;
+  max-width: 320px;
+  height: 45px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #25D366; /* Cor oficial do WhatsApp */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#shareButton:hover {
+  background-color: #128C7E; /* Um verde mais escuro para o hover */
+}
 
 #promptBox {
   display: none;
@@ -136,25 +165,15 @@ body {
   text-align:left;
 }
 
-#aiResponse {
-  display: none;
-  margin-top: 16px;
-  padding: 14px;
-  background: #fff;
-  border-radius: 12px;
-  font-size: 14px;
-  text-align: left;
-}
 </style>
 </head>
 
 <body>
 
-<!-- >>> NOVO LOADER DE PÁGINA <<< -->
+<!-- Loader da página -->
 <div id="pageLoader">
   <div class="page-spinner"></div>
 </div>
-<!-- >>> FIM DO NOVO LOADER <<< -->
 
 <div class="cards">
   <div class="card">
@@ -182,7 +201,14 @@ Embaralhar Cartas
 <div id="loader"></div>
 
 <div id="promptBox"></div>
-<div id="aiResponse"></div>
+
+<!-- >>> CAIXA DE RESPOSTA DA IA COM O NOVO BOTÃO <<< -->
+<div id="aiResponse">
+  <!-- O texto da IA será inserido aqui pelo JavaScript -->
+</div>
+<button id="shareButton">Compartilhar no WhatsApp</button>
+<!-- >>> FIM DA ÁREA DE RESPOSTA <<< -->
+
 
 <script>
 const basePath = 'cards_images/';
@@ -194,7 +220,7 @@ const cards = [
   { label:'Sacerdotisa', file:'03_Sacerdotisa' },
   { label:'Imperatriz', file:'04_Imperatriz' },
   { label:'Imperador', file:'05_Imperador' },
-  { label:'Sacerdote', file:'06_Sarcedote' },
+  { label:'Sacerdote', file:'06_Sacerdote' },
   { label:'Amantes', file:'07_Amantes' },
   { label:'Carro', file:'08_Carro' },
   { label:'Força', file:'09_Forca' },
@@ -231,6 +257,8 @@ const status = document.getElementById('status');
 const loader = document.getElementById('loader');
 const aiBox = document.getElementById('aiResponse');
 const promptBox = document.getElementById('promptBox');
+// >>> PEGA O NOVO BOTÃO <<< -->
+const shareButton = document.getElementById('shareButton');
 
 let hasReading = false;
 
@@ -252,6 +280,7 @@ function newReading() {
   
   loader.style.display = 'block'; 
   aiBox.style.display = 'none';
+  shareButton.style.display = 'none'; // Esconde o botão de compartilhar
 
   callAuroraAPI(drawnNames);
 
@@ -276,6 +305,7 @@ function resetReading() {
 
  promptBox.style.display = 'none';
  aiBox.style.display = 'none';
+ shareButton.style.display = 'none'; // Esconde o botão de compartilhar
  loader.style.display = 'none';
 
  button.innerText = 'Embaralhar Cartas';
@@ -285,6 +315,19 @@ function resetReading() {
  status.className = '';
 
  hasReading = false;
+}
+
+// >>> LÓGICA DO BOTÃO DE COMPARTILHAR <<< -->
+function shareOnWhatsApp() {
+  const analysisText = aiBox.innerText;
+  // Codifica o texto para que possa ser usado em uma URL
+  const encodedText = encodeURIComponent(analysisText);
+  
+  // Cria a URL do WhatsApp com o texto pré-preenchido
+  const whatsappUrl = `https://wa.me/?text=${encodedText}`;
+  
+  // Abre a URL em uma nova aba
+  window.open(whatsappUrl, '_blank');
 }
 
 async function callAuroraAPI(cardsDrawn) {
@@ -327,18 +370,21 @@ Futuro: ${cardsDrawn[2]}`
 
  loader.style.display = 'none';
  aiBox.style.display = 'block';
+ shareButton.style.display = 'block'; // Mostra o botão de compartilhar
 }
 
-// >>> LÓGICA PARA ESCONDER O LOADER DA PÁGINA <<< -->
+// Lógica para esconder o loader da página
 window.addEventListener('load', () => {
-  // Espera 2 segundos (2000 milissegundos) depois que a página carregar
   setTimeout(() => {
     const pageLoader = document.getElementById('pageLoader');
     if (pageLoader) {
       pageLoader.classList.add('hidden');
     }
-  }, 2000); // Mude este valor para mais ou menos tempo
+  }, 2000);
 });
+
+// Adiciona o evento de clique ao novo botão
+shareButton.onclick = shareOnWhatsApp;
   
 button.onclick = () => hasReading ? resetReading() : newReading();
 </script>
