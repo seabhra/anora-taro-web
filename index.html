@@ -56,24 +56,22 @@ body {
 .pink { background:#fd98be; }
 .blue { background:#98e6ce; }
 
-/* Estilo padrão do status */
+/* ESTAS LINHAS NOVAS E CORRIGIDAS */
 #status {
   margin-top: 16px;
   font-weight: bold;
-  color: #718096; /* Cor neutra para o estado inicial */
-  transition: color 0.3s ease; /* Transição suave de cor */
+  color: #718096; /* Cor padrão */
+  transition: color 0.3s ease;
 }
 
-/* >>> NOVAS CLASSES PARA AS CORES DO STATUS <<< */
-.status-loading {
+/* Classes mais específicas para sobrescrever a cor do #status */
+#status.status-loading {
   color: #6b46c1; /* Roxo */
 }
-
-.status-success {
+#status.status-success {
   color: #38a169; /* Verde */
 }
-
-.status-error {
+#status.status-error {
   color: #3182ce; /* Azul */
 }
 
@@ -286,7 +284,7 @@ Futuro: ${cardsDrawn[2]}`
    aiBox.innerText = 'Erro ao acessar a reflexão.';
    
    // >>> MUDANÇA DE COR AQUI (Azul) <<<
-   status.textContent = 'Erro de carregamento';
+   status.textContent = 'Conteúdo temporariamente indisponível';
    status.className = 'status-error';
  }
 
