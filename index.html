@@ -36,7 +36,7 @@ body {
 }
 
 .card-name {
-  font-size: 11px; /* Reduzido para caber em uma linha */
+  font-size: 11px;
   color: #6b46c1;
   min-height: 14px;
 }
@@ -145,15 +145,20 @@ body {
   font-weight: bold;
 }
 
-/* Estilo do parágrafo para o texto da IA */
+/* >>> MUDANÇA AQUI: Estilo do parágrafo com espaçamento <<< */
 #aiResponse p {
-  margin: 0;
   line-height: 1.6;
+  margin: 0; /* Reseta a margem */
 }
 
-/* >>> ESTILO PARA OS TÍTULOS DENTRO DA ANÁLISE <<< */
+/* Adiciona espaço apenas ENTRE os parágrafos (a partir do segundo) */
+#aiResponse p:not(:first-child) {
+  margin-top: 1em;
+}
+
+/* ESTILO PARA OS TÍTULOS DENTRO DA ANÁLISE */
 #aiResponse p strong {
-  color: #6b46c1; /* Cor roxa para os títulos */
+  color: #6b46c1;
   display: block;
   margin-top: 18px;
   margin-bottom: 8px;
@@ -358,8 +363,7 @@ async function callAuroraAPI(cardsDrawn) {
          messages: [
            {
              role: "user",
-             // >>> NOVO PROMPT ESTRUTURADO AQUI <<<
-             content: `Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
+             content: `Realize uma análise profunda da situação do consulente, interpretando a sequência de cartas de forma integrada. Examine separadamente os significados do passado, do presente e do futuro e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente.Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
 
 **Passado:**
 Escreva aqui sua análise sobre a carta ${cardsDrawn[0]} e sua influência no passado do consulente.
