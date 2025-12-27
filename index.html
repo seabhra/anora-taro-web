@@ -236,7 +236,6 @@ async function callAuroraAPI(cardsDrawn) {
      {
        method: 'POST',
        headers: { 'Content-Type': 'application/json' },
-       // >>> ESTA É A PARTE CORRIGIDA <<<
        body: JSON.stringify({
          messages: [
            {
@@ -251,13 +250,12 @@ Futuro: ${cardsDrawn[2]}`
      }
    );
 
-   // As linhas de debug continuam úteis
    console.log('Status da Resposta da API:', res.status);
    const data = await res.json();
    console.log('Resposta Completa da API:', data);
 
-   // Agora vamos tentar pegar a resposta. A chave provavelmente será 'reply' ou 'content'
-   aiBox.innerText = data.reply || data.content || 'Sem resposta agora.';
+   // >>> LINHA CORRIGIDA AQUI <<<
+   aiBox.innerText = data.choices[0].message.content || 'A IA não retornou um texto.';
 
  } catch (error) {
    console.error('Erro na chamada da API:', error);
