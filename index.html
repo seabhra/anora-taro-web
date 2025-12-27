@@ -236,25 +236,31 @@ async function callAuroraAPI(cardsDrawn) {
      {
        method: 'POST',
        headers: { 'Content-Type': 'application/json' },
+       // >>> ESTA É A PARTE CORRIGIDA <<<
        body: JSON.stringify({
-         message: `Leitura simbólica de Tarô:
+         messages: [
+           {
+             role: "user",
+             content: `Leitura simbólica de Tarô:
 Passado: ${cardsDrawn[0]}
 Presente: ${cardsDrawn[1]}
 Futuro: ${cardsDrawn[2]}`
+           }
+         ]
        })
      }
    );
 
-   // >>> LINHAS ADICIONADAS PARA DEBUG <<<
+   // As linhas de debug continuam úteis
    console.log('Status da Resposta da API:', res.status);
    const data = await res.json();
    console.log('Resposta Completa da API:', data);
-   // >>> FIM DAS LINHAS ADICIONADAS <<<
 
-   // O resto do código continua igual
-   aiBox.innerText = data.result || data.reply || data.message || 'Sem resposta agora.';
+   // Agora vamos tentar pegar a resposta. A chave provavelmente será 'reply' ou 'content'
+   aiBox.innerText = data.reply || data.content || 'Sem resposta agora.';
 
- } catch { // Agora o bloco catch está correto
+ } catch (error) {
+   console.error('Erro na chamada da API:', error);
    aiBox.innerText = 'Erro ao acessar a reflexão.';
  }
 
@@ -262,7 +268,7 @@ Futuro: ${cardsDrawn[2]}`
  aiBox.style.display = 'block';
  status.textContent = 'Consulta realizada';
 }
-
+  
 button.onclick = () => hasReading ? resetReading() : newReading();
 </script>
 
