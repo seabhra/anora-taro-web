@@ -217,10 +217,10 @@ const backCard = basePath + 'back.jpg';
 const cards = [
   { label:'Louco', file:'01_Louco' },
   { label:'Mago', file:'02_Mago' },
-  { label:'Sacerdotisa', file:'03_Sarcedotisa' },
+  { label:'Sacerdotisa', file:'03_Sacerdotisa' },
   { label:'Imperatriz', file:'04_Imperatriz' },
   { label:'Imperador', file:'05_Imperador' },
-  { label:'Sacerdote', file:'06_Sacerdote' },
+  { label:'Sacerdote', file:'06_Sarcedote' },
   { label:'Amantes', file:'07_Amantes' },
   { label:'Carro', file:'08_Carro' },
   { label:'Força', file:'09_Forca' },
@@ -336,7 +336,7 @@ async function callAuroraAPI(cardsDrawn) {
          messages: [
            {
              role: "user",
-             content: `Leitura simbólica de Tarô:
+             content: `Leitura simbólica do Aplicativo Anora Tarô:
 Passado: ${cardsDrawn[0]}
 Presente: ${cardsDrawn[1]}
 Futuro: ${cardsDrawn[2]}`
