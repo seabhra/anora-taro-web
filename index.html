@@ -35,9 +35,8 @@ body {
   font-weight: bold;
 }
 
-/* >>> MUDANÇA AQUI: Reduzi o tamanho da fonte para caber em uma linha <<< */
 .card-name {
-  font-size: 11px; /* Reduzido de 13px para 11px */
+  font-size: 11px; /* Reduzido para caber em uma linha */
   color: #6b46c1;
   min-height: 14px;
 }
@@ -125,7 +124,7 @@ body {
   animation: spin 1s linear infinite;
 }
 
-/* ESTILO DA CAIXA DE RESPOSTA DA IA (COM O NOVO CABEÇALHO) */
+/* ESTILO DA CAIXA DE RESPOSTA DA IA */
 #aiResponse {
   display: none;
   margin-top: 16px;
@@ -139,7 +138,7 @@ body {
 /* ESTILO DO NOVO CABEÇALHO H2 */
 #aiResponse h2 {
   text-align: center;
-  color: #6b46c1; /* Cor roxa do tema */
+  color: #6b46c1;
   margin-top: 0;
   margin-bottom: 16px;
   font-size: 18px;
@@ -150,6 +149,15 @@ body {
 #aiResponse p {
   margin: 0;
   line-height: 1.6;
+}
+
+/* >>> ESTILO PARA OS TÍTULOS DENTRO DA ANÁLISE <<< */
+#aiResponse p strong {
+  color: #6b46c1; /* Cor roxa para os títulos */
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  font-size: 15px;
 }
 
 #shareButton {
@@ -236,7 +244,7 @@ const cards = [
   { label:'Sacerdotisa', file:'03_Sacerdotisa' },
   { label:'Imperatriz', file:'04_Imperatriz' },
   { label:'Imperador', file:'05_Imperador' },
-  { label:'Sacerdote', file:'06_Sarcedote' }, // >>> CORRIGIDO <<<
+  { label:'Sacerdote', file:'06_Sarcedote' },
   { label:'Amantes', file:'07_Amantes' },
   { label:'Carro', file:'08_Carro' },
   { label:'Força', file:'09_Forca' },
@@ -333,7 +341,6 @@ function resetReading() {
 }
 
 function shareOnWhatsApp() {
-  // Pega apenas o texto da análise, sem o título, para compartilhar
   const analysisText = document.querySelector('#aiResponse p').innerText;
   const encodedText = encodeURIComponent(analysisText);
   const whatsappUrl = `https://wa.me/?text=${encodedText}`;
@@ -351,10 +358,20 @@ async function callAuroraAPI(cardsDrawn) {
          messages: [
            {
              role: "user",
-             content: `Realize uma análise profunda da situação do consulente, interpretando a sequência de cartas de forma integrada. Examine separadamente os significados do passado, do presente e do futuro e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente:
-Passado: ${cardsDrawn[0]}
-Presente: ${cardsDrawn[1]}
-Futuro: ${cardsDrawn[2]}`
+             // >>> NOVO PROMPT ESTRUTURADO AQUI <<<
+             content: `Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
+
+**Passado:**
+Escreva aqui sua análise sobre a carta ${cardsDrawn[0]} e sua influência no passado do consulente.
+
+**Presente:**
+Escreva aqui sua análise sobre a carta ${cardsDrawn[1]} e sua influência no presente do consulente.
+
+**Futuro:**
+Escreva aqui sua análise sobre a carta ${cardsDrawn[2]} e sua influência no futuro do consulente.
+
+**Análise Final:**
+Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma orientação clara e integrada para o consulente.`
            }
          ]
        })
@@ -367,7 +384,6 @@ Futuro: ${cardsDrawn[2]}`
 
    const analysisText = data.choices[0].message.content || 'A IA não retornou um texto.';
    
-   // >>> MUDANÇA AQUI: Usa innerHTML para criar o cabeçalho e o parágrafo <<<
    aiBox.innerHTML = `<h2>Anora Assistente de IA</h2><p>${analysisText}</p>`;
    
    status.textContent = 'Consulta realizada';
@@ -377,7 +393,6 @@ Futuro: ${cardsDrawn[2]}`
    console.error('Erro na chamada da API:', error);
    const errorText = 'Erro ao acessar a reflexão.';
    
-   // >>> MUDANÇA AQUI TAMBÉM, para manter o padrão <<<
    aiBox.innerHTML = `<h2>Anora Assistente de IA</h2><p>${errorText}</p>`;
    
    status.textContent = 'Erro de carregamento';
