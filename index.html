@@ -56,11 +56,27 @@ body {
 .pink { background:#fd98be; }
 .blue { background:#98e6ce; }
 
+/* Estilo padrão do status */
 #status {
   margin-top: 16px;
   font-weight: bold;
-  color: #e32153;
+  color: #718096; /* Cor neutra para o estado inicial */
+  transition: color 0.3s ease; /* Transição suave de cor */
 }
+
+/* >>> NOVAS CLASSES PARA AS CORES DO STATUS <<< */
+.status-loading {
+  color: #6b46c1; /* Roxo */
+}
+
+.status-success {
+  color: #38a169; /* Verde */
+}
+
+.status-error {
+  color: #3182ce; /* Azul */
+}
+
 
 #loader {
   display: none;
@@ -139,7 +155,7 @@ const cards = [
   { label:'Sacerdotisa', file:'03_Sacerdotisa' },
   { label:'Imperatriz', file:'04_Imperatriz' },
   { label:'Imperador', file:'05_Imperador' },
-  { label:'Sacerdote', file:'06_Sarcedote' },
+  { label:'Sacerdote', file:'06_Sacerdote' }, // <<< CORRIGIDO AQUI
   { label:'Amantes', file:'07_Amantes' },
   { label:'Carro', file:'08_Carro' },
   { label:'Força', file:'09_Forca' },
@@ -195,16 +211,18 @@ function newReading() {
 
   showPrompt(drawnNames);
   
-  // Mostra o loader ANTES de chamar a API
   loader.style.display = 'block'; 
-  aiBox.style.display = 'none'; // Esconde a resposta anterior
+  aiBox.style.display = 'none';
 
   callAuroraAPI(drawnNames);
 
   hasReading = true;
   button.innerText = 'Nova Consulta';
   button.className = 'action-button blue';
+  
+  // >>> MUDANÇA DE COR AQUI (Roxo) <<<
   status.textContent = 'Consultando…';
+  status.className = 'status-loading';
 }
 
    function showPrompt(drawn) {
@@ -224,7 +242,10 @@ function resetReading() {
 
  button.innerText = 'Embaralhar Cartas';
  button.className = 'action-button pink';
+ 
+ // >>> RESETA A COR E O TEXTO AQUI <<<
  status.textContent = 'Aguardando sua consulta';
+ status.className = ''; // Volta para o estilo padrão
 
  hasReading = false;
 }
@@ -254,17 +275,23 @@ Futuro: ${cardsDrawn[2]}`
    const data = await res.json();
    console.log('Resposta Completa da API:', data);
 
-   // >>> LINHA CORRIGIDA AQUI <<<
    aiBox.innerText = data.choices[0].message.content || 'A IA não retornou um texto.';
+   
+   // >>> MUDANÇA DE COR AQUI (Verde) <<<
+   status.textContent = 'Consulta realizada';
+   status.className = 'status-success';
 
  } catch (error) {
    console.error('Erro na chamada da API:', error);
    aiBox.innerText = 'Erro ao acessar a reflexão.';
+   
+   // >>> MUDANÇA DE COR AQUI (Azul) <<<
+   status.textContent = 'Erro de carregamento';
+   status.className = 'status-error';
  }
 
  loader.style.display = 'none';
  aiBox.style.display = 'block';
- status.textContent = 'Consulta realizada';
 }
   
 button.onclick = () => hasReading ? resetReading() : newReading();
