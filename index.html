@@ -74,15 +74,15 @@ body {
 
 /* Classes para as cores do status */
 #status.status-loading {
-  color: #6b46c1; /* Roxo */
+  color: #6b46c1;
 }
 
 #status.status-success {
-  color: #38a169; /* Verde */
+  color: #38a169;
 }
 
 #status.status-error {
-  color: #e53e3e; /* Vermelho */
+  color: #e53e3e;
 }
 
 /* Loader da API */
@@ -115,7 +115,7 @@ body {
   align-items: center;
   z-index: 9999;
   opacity: 1;
-  transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+  transition: opacity 0.5s ease-out;
 }
 
 #pageLoader.hidden {
@@ -178,7 +178,7 @@ body {
 
 /* BOTÃO DE COMPARTILHAR */
 #shareButton {
-  display: none; /* Controlado pelo JavaScript */
+  display: none;
   width: 60px;
   height: 60px;
   margin: 16px auto 0;
@@ -332,7 +332,7 @@ function newReading() {
   
   loader.style.display = 'block'; 
   aiBox.style.display = 'none;
-  shareButton.style.display = 'none'; // Simplificado
+  shareButton.style.display = 'none';
 
   callAuroraAPI(drawnNames);
 
@@ -360,7 +360,7 @@ function resetReading() {
 
   promptBox.style.display = 'none';
   aiBox.style.display = 'none';
-  shareButton.style.display = 'none'; // Simplificado
+  shareButton.style.display = 'none';
   loader.style.display = 'none';
 
   button.innerText = '✨ Consultar Cartas';
@@ -438,40 +438,8 @@ Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma ori
 
   loader.style.display = 'none';
   aiBox.style.display = 'block';
-  shareButton.style.display = 'flex'; // Simplificado
+  shareButton.style.display = 'flex';
 }
-
-// ========================================
-// EVENTO PRINCIPAL DA PÁGINA
-// ========================================
-window.addEventListener('load', () => {
-  // 1. Esconder o loader da página
-  const pageLoader = document.getElementById('pageLoader');
-  if (pageLoader) {
-    pageLoader.classList.add('hidden');
-  }
-
-  // 2. Tentar registrar o Service Worker de forma segura
-  // Isso ativa os recursos de PWA (offline, instalar) em navegadores normais,
-  // mas não causa erros no WebViewer do App Inventor.
-  if ('serviceWorker' in navigator) {
-    try {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(() => console.log('✅ Service Worker registrado. App pode ser instalado!'))
-        .catch(err => console.error('❌ Service Worker erro:', err));
-    } catch (error) {
-      console.warn('⚠️ Ambiente não suporta Service Worker (ex: App Inventor).');
-    }
-  }
-});
-
-// Plano B: Um temporizador de segurança para o loader (funciona no App Inventor)
-setTimeout(() => {
-  const pageLoader = document.getElementById('pageLoader');
-  if (pageLoader && !pageLoader.classList.contains('hidden')) {
-    pageLoader.classList.add('hidden');
-  }
-}, 3000);
 
 // Event listeners dos botões
 shareButton.onclick = (e) => {
@@ -481,15 +449,34 @@ shareButton.onclick = (e) => {
 
 button.onclick = () => hasReading ? resetReading() : newReading();
 
+// ========================================
+// >>> ESTRATÉGIA DEFINITIVA PARA APP INVENTOR <<<
+// ========================================
 
-// Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(() => console.log('✅ Service Worker registrado'))
-      .catch(err => console.error('❌ Service Worker erro:', err));
-  });
+// Função para esconder o loader
+function hidePageLoader() {
+  const pageLoader = document.getElementById('pageLoader');
+  if (pageLoader) {
+    pageLoader.classList.add('hidden');
+  }
 }
+
+// Tenta registrar o Service Worker de forma segura (não quebra o script se der erro)
+if ('serviceWorker' in navigator) {
+  try {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(() => console.log('✅ Service Worker registrado.'))
+      .catch(err => console.error('❌ Service Worker erro:', err));
+  } catch (error) {
+    console.warn('⚠️ Ambiente não suporta Service Worker.');
+  }
+}
+
+// >>> A MUDANÇA MAIS IMPORTANTE <<<
+// Um setTimeout direto no final do script. É a forma mais "bruta" e compatível.
+// Espera meio segundo e força o loader a desaparecer.
+setTimeout(hidePageLoader, 500);
+
 </script>
   
 </body>
