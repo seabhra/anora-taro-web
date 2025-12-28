@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#6b46c1">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
 <title>Anora Tarô</title>
 
 <style>
@@ -21,8 +24,7 @@ body {
   margin-bottom: 24px;
 }
 
-.card { width: 95px;
-}
+.card { width: 90px; }
 
 .card img {
   width: 100%;
@@ -37,7 +39,7 @@ body {
 }
 
 .card-name {
-  font-size: 15px;
+  font-size: 11px;
   color: #6b46c1;
   min-height: 14px;
 }
@@ -52,56 +54,86 @@ body {
   font-weight: bold;
   color: #fff;
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.action-button:active {
+  transform: scale(0.98);
 }
 
 .pink { background:#fd98be; }
 .blue { background:#98e6ce; }
 
-/* ESTAS LINHAS NOVAS E CORRIGIDAS */
+/* Estilo padrão do status */
 #status {
   margin-top: 16px;
   font-weight: bold;
-  color: #718096; /* Cor padrão */
+  color: #718096;
   transition: color 0.3s ease;
 }
 
-/* Classes mais específicas para sobrescrever a cor do #status */
+/* Classes para as cores do status */
 #status.status-loading {
   color: #6b46c1; /* Roxo */
 }
+
 #status.status-success {
   color: #38a169; /* Verde */
 }
+
 #status.status-error {
-  color: #3182ce; /* Azul */
+  color: #e53e3e; /* Vermelho */
 }
 
-
+/* Loader da API */
 #loader {
   display: none;
   margin: 20px auto;
-  width: 46px;
-  height: 46px;
-  border: 5px solid #e2e8f0;
-  border-top: 5px solid #6b46c1;
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(131, 242, 212, 0.2);
+  border-top: 5px solid #83f2d4;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
+  0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-#promptBox {
-  display: none;
-  margin-top:12px;
-  padding:10px;
-  background:#f0f0f5;
-  border-radius:10px;
-  font-size:13px;
-  text-align:left;
+/* LOADER DA PÁGINA */
+#pageLoader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
 }
 
+#pageLoader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.page-spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(131, 242, 212, 0.3);
+  border-top: 6px solid #83f2d4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* ESTILO DA CAIXA DE RESPOSTA DA IA */
 #aiResponse {
   display: none;
   margin-top: 16px;
@@ -110,39 +142,122 @@ body {
   border-radius: 12px;
   font-size: 14px;
   text-align: left;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ESTILO DO NOVO CABEÇALHO H2 */
+#aiResponse h2 {
+  text-align: center;
+  color: #6b46c1;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Estilo do parágrafo com espaçamento */
+#aiResponse p {
+  line-height: 1.6;
+  margin: 0;
+  color: #2d3748;
+}
+
+/* Adiciona espaço apenas ENTRE os parágrafos */
+#aiResponse p:not(:first-child) {
+  margin-top: 1em;
+}
+
+/* ESTILO PARA OS TÍTULOS DENTRO DA ANÁLISE */
+#aiResponse p strong {
+  color: #6b46c1;
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+/* BOTÃO DE COMPARTILHAR */
+#shareButton {
+  display: none; /* Controlado pelo JavaScript */
+  width: 60px;
+  height: 60px;
+  margin: 16px auto 0;
+  border-radius: 50%;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  overflow: hidden;
+  background-color: #25D366;
+  justify-content: center;
+  align-items: center;
+}
+
+#shareButton:hover {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+#shareButton img {
+  width: 35px;
+  height: 35px;
+  display: block;
+}
+
+#promptBox {
+  display: none;
+  margin-top: 12px;
+  padding: 10px;
+  background: #f0f0f5;
+  border-radius: 10px;
+  font-size: 13px;
+  text-align: left;
 }
 </style>
 </head>
 
 <body>
 
+<!-- Loader da página -->
+<div id="pageLoader">
+  <div class="page-spinner"></div>
+</div>
+
 <div class="cards">
   <div class="card">
-    <img id="card1" src="cards_images/back.jpg">
+    <img id="card1" src="cards_images/back.jpg" alt="Carta 1">
     <div class="label">Passado</div>
     <div class="card-name" id="name1"></div>
   </div>
   <div class="card">
-    <img id="card2" src="cards_images/back.jpg">
+    <img id="card2" src="cards_images/back.jpg" alt="Carta 2">
     <div class="label">Presente</div>
     <div class="card-name" id="name2"></div>
   </div>
   <div class="card">
-    <img id="card3" src="cards_images/back.jpg">
+    <img id="card3" src="cards_images/back.jpg" alt="Carta 3">
     <div class="label">Futuro</div>
     <div class="card-name" id="name3"></div>
   </div>
 </div>
 
 <button id="actionButton" class="action-button pink">
-Embaralhar Cartas
+✨ Consultar Cartas
 </button>
 
 <div id="status">Aguardando sua consulta</div>
 <div id="loader"></div>
 
 <div id="promptBox"></div>
-<div id="aiResponse"></div>
+
+<!-- CAIXA DE RESPOSTA DA IA -->
+<div id="aiResponse">
+  <!-- O conteúdo será inserido aqui pelo JavaScript -->
+</div>
+
+<!-- BOTÃO DE COMPARTILHAR -->
+<a id="shareButton" href="#" target="_blank">
+  <img src="https://raw.githubusercontent.com/seabhra/anora-taro-web/main/zap.png" alt="Compartilhar no WhatsApp">
+</a>
 
 <script>
 const basePath = 'cards_images/';
@@ -173,17 +288,16 @@ const cards = [
   { label:'Mundo', file:'22_Mundo' }
 ];
 
-
 const imgs = [
- card1 = document.getElementById('card1'),
- card2 = document.getElementById('card2'),
- card3 = document.getElementById('card3')
+  document.getElementById('card1'),
+  document.getElementById('card2'),
+  document.getElementById('card3')
 ];
 
 const labels = [
- name1 = document.getElementById('name1'),
- name2 = document.getElementById('name2'),
- name3 = document.getElementById('name3')
+  document.getElementById('name1'),
+  document.getElementById('name2'),
+  document.getElementById('name3')
 ];
 
 const button = document.getElementById('actionButton');
@@ -191,15 +305,21 @@ const status = document.getElementById('status');
 const loader = document.getElementById('loader');
 const aiBox = document.getElementById('aiResponse');
 const promptBox = document.getElementById('promptBox');
+const shareButton = document.getElementById('shareButton');
 
 let hasReading = false;
 
 function shuffle(arr) {
- return arr.sort(() => Math.random() - 0.5);
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
 }
 
 function newReading() {
-  const shuffled = shuffle([...cards]).slice(0, 3);
+  const shuffled = shuffle(cards).slice(0, 3);
 
   shuffled.forEach((card, i) => {
     imgs[i].src = `${basePath}${card.file}.jpg`;
@@ -211,90 +331,166 @@ function newReading() {
   showPrompt(drawnNames);
   
   loader.style.display = 'block'; 
-  aiBox.style.display = 'none';
+  aiBox.style.display = 'none;
+  shareButton.style.display = 'none'; // Simplificado
 
   callAuroraAPI(drawnNames);
 
   hasReading = true;
-  button.innerText = 'Nova Consulta';
+  button.innerText = '🔄 Nova Consulta';
   button.className = 'action-button blue';
   
-  // >>> MUDANÇA DE COR AQUI (Roxo) <<<
-  status.textContent = 'Consultando…';
+  status.textContent = 'Consultando a IA...';
   status.className = 'status-loading';
 }
 
-   function showPrompt(drawn) {
-  const promptBox = document.getElementById('promptBox');
+function showPrompt(drawn) {
   promptBox.style.display = 'block';
- 
+  promptBox.innerHTML = `
+    <strong>📜 Cartas Selecionadas:</strong><br><br>
+    <strong>Passado:</strong> ${drawn[0]}<br>
+    <strong>Presente:</strong> ${drawn[1]}<br>
+    <strong>Futuro:</strong> ${drawn[2]}
+  `;
 }
 
-
 function resetReading() {
- imgs.forEach(img => img.src = backCard);
- labels.forEach(l => l.innerText = '');
+  imgs.forEach(img => img.src = backCard);
+  labels.forEach(l => l.innerText = '');
 
- promptBox.style.display = 'none';
- aiBox.style.display = 'none';
- loader.style.display = 'none';
+  promptBox.style.display = 'none';
+  aiBox.style.display = 'none';
+  shareButton.style.display = 'none'; // Simplificado
+  loader.style.display = 'none';
 
- button.innerText = 'Embaralhar Cartas';
- button.className = 'action-button pink';
- 
- // >>> RESETA A COR E O TEXTO AQUI <<<
- status.textContent = 'Aguardando sua consulta';
- status.className = ''; // Volta para o estilo padrão
+  button.innerText = '✨ Consultar Cartas';
+  button.className = 'action-button pink';
+  
+  status.textContent = 'Aguardando sua consulta';
+  status.className = '';
 
- hasReading = false;
+  hasReading = false;
+}
+
+function shareOnWhatsApp() {
+  const analysisText = document.querySelector('#aiResponse p').innerText;
+  const encodedText = encodeURIComponent(analysisText);
+  const whatsappUrl = `https://wa.me/?text=${encodedText}`;
+  window.open(whatsappUrl, '_blank');
 }
 
 async function callAuroraAPI(cardsDrawn) {
- try {
-   const res = await fetch(
-     'https://aurora-api-final-2025.vercel.app/api/chat',
-     {
-       method: 'POST',
-       headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({
-         messages: [
-           {
-             role: "user",
-             content: `Leitura simbólica de Tarô:
-Passado: ${cardsDrawn[0]}
-Presente: ${cardsDrawn[1]}
-Futuro: ${cardsDrawn[2]}`
-           }
-         ]
-       })
-     }
-   );
+  try {
+    const res = await fetch(
+      'https://aurora-api-final-2025.vercel.app/api/chat',
+      {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            {
+              role: "user",
+              content: `Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
 
-   console.log('Status da Resposta da API:', res.status);
-   const data = await res.json();
-   console.log('Resposta Completa da API:', data);
+**Passado:**
+Escreva aqui sua análise sobre a carta ${cardsDrawn[0]} e sua influência no passado do consulente.
 
-   aiBox.innerText = data.choices[0].message.content || 'A IA não retornou um texto.';
-   
-   // >>> MUDANÇA DE COR AQUI (Verde) <<<
-   status.textContent = 'Consulta realizada';
-   status.className = 'status-success';
+**Presente:**
+Escreva aqui sua análise sobre a carta ${cardsDrawn[1]} e sua influência no presente do consulente.
 
- } catch (error) {
-   console.error('Erro na chamada da API:', error);
-   aiBox.innerText = 'Erro ao acessar a reflexão.';
-   
-   // >>> MUDANÇA DE COR AQUI (Azul) <<<
-   status.textContent = 'Conteúdo temporariamente indisponível';
-   status.className = 'status-error';
- }
+**Futuro:**
+Escreva aqui sua análise sobre a carta ${cardsDrawn[2]} e sua influência no futuro do consulente.
 
- loader.style.display = 'none';
- aiBox.style.display = 'block';
+**Análise Final:**
+Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma orientação clara e integrada para o consulente.`
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 500
+        })
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`Erro HTTP: ${res.status}`);
+    }
+
+    const data = await res.json();
+    const analysisText = data.choices?.[0]?.message?.content || 'A IA não retornou nenhuma análise.';
+    
+    aiBox.innerHTML = `<h2>🔮 Anora Assistente de IA</h2><p>${analysisText}</p>`;
+    
+    status.textContent = '✅ Consulta realizada';
+    status.className = 'status-success';
+
+  } catch (error) {
+    const errorText = `Erro ao consultar a IA: ${error.message}`;
+    aiBox.innerHTML = `<h2>⚠️ Erro</h2><p>${errorText}</p>`;
+    
+    status.textContent = '❌ Erro ao consultar';
+    status.className = 'status-error';
+  }
+
+  loader.style.display = 'none';
+  aiBox.style.display = 'block';
+  shareButton.style.display = 'flex'; // Simplificado
 }
-  
-button.onclick = () => hasReading ? resetReading() : newReading();
-</script>
 
+// ========================================
+// EVENTO PRINCIPAL DA PÁGINA
+// ========================================
+window.addEventListener('load', () => {
+  // 1. Esconder o loader da página
+  const pageLoader = document.getElementById('pageLoader');
+  if (pageLoader) {
+    pageLoader.classList.add('hidden');
+  }
+
+  // 2. Tentar registrar o Service Worker de forma segura
+  // Isso ativa os recursos de PWA (offline, instalar) em navegadores normais,
+  // mas não causa erros no WebViewer do App Inventor.
+  if ('serviceWorker' in navigator) {
+    try {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(() => console.log('✅ Service Worker registrado. App pode ser instalado!'))
+        .catch(err => console.error('❌ Service Worker erro:', err));
+    } catch (error) {
+      console.warn('⚠️ Ambiente não suporta Service Worker (ex: App Inventor).');
+    }
+  }
+});
+
+// Plano B: Um temporizador de segurança para o loader (funciona no App Inventor)
+setTimeout(() => {
+  const pageLoader = document.getElementById('pageLoader');
+  if (pageLoader && !pageLoader.classList.contains('hidden')) {
+    pageLoader.classList.add('hidden');
+  }
+}, 3000);
+
+// Event listeners dos botões
+shareButton.onclick = (e) => {
+  e.preventDefault();
+  shareOnWhatsApp();
+};
+
+button.onclick = () => hasReading ? resetReading() : newReading();
+
+
+// Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(() => console.log('✅ Service Worker registrado'))
+      .catch(err => console.error('❌ Service Worker erro:', err));
+  });
+}
+</script>
+  
 </body>
 </html>
