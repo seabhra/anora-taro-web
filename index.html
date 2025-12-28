@@ -417,7 +417,7 @@ Escreva aqui sua análise sobre a carta ${cardsDrawn[1]} e sua influência no pr
 **Futuro:**
 Escreva aqui sua análise sobre a carta ${cardsDrawn[2]} e sua influência no futuro do consulente.
 
-**Análise Final:**
+**Analizando o contexto:**
 Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma orientação clara e integrada para o consulente.`
             }
           ],
@@ -459,32 +459,26 @@ Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma ori
 }
 
 // ========================================
-// REMOVER LOADER DA PÁGINA - CORRIGIDO
+// REMOVER LOADER DA PÁGINA - MÚLTIPLOS EVENTOS PARA WEBVIEW
 // ========================================
+
 function hidePageLoader() {
+  const pageLoader = document.getElementById('pageLoader');
   if (pageLoader) {
-    console.log('✅ Removendo loader da página');
     pageLoader.classList.add('hidden');
-    
-    // Remover completamente do DOM após animação
-    setTimeout(() => {
-      if (pageLoader.parentNode) {
-        pageLoader.parentNode.removeChild(pageLoader);
-      }
-    }, 500);
+    console.log('Page loader hidden');
   }
 }
 
-// Executar assim que o DOM estiver pronto
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', hidePageLoader);
-} else {
-  // DOM já está pronto
-  hidePageLoader();
-}
+// Tenta múltiplas formas de remover o loader
+setTimeout(hidePageLoader, 1000); // Força esconder após 1s
+setTimeout(hidePageLoader, 3000); // Backup após 3s
 
-// Fallback: remover após 1 segundo se algo der errado
-setTimeout(hidePageLoader, 1000);
+window.addEventListener('load', hidePageLoader);
+window.addEventListener('DOMContentLoaded', hidePageLoader);
+document.addEventListener('readystatechange', () => {
+  if (document.readyState === 'complete') hidePageLoader();
+});
 
 // Event listeners
 shareButton.onclick = (e) => {
