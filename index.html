@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { label:'Sacerdotisa', file:'03_Sacerdotisa' },
     { label:'Imperatriz', file:'04_Imperatriz' },
     { label:'Imperador', file:'05_Imperador' },
-    { label:'Sacerdote', file:'06_Sarcedote' },
+    { label:'Sacerdote', file:'06_Sacerdote' }, // >>> CORRIGIDO AQUI <<<
     { label:'Amantes', file:'07_Amantes' },
     { label:'Carro', file:'08_Carro' },
     { label:'Força', file:'09_Forca' },
@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showPrompt(drawnNames);
     loader.style.display = 'block'; 
     aiBox.style.display = 'none;
-    shareButton.style.display = 'none';
+    shareButton.style.display = 'none'; // Simplificado
     callAuroraAPI(drawnNames);
     hasReading = true;
     button.innerText = '🔄 Nova Consulta';
@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
     labels.forEach(l => l.innerText = '');
     promptBox.style.display = 'none';
     aiBox.style.display = 'none';
-    shareButton.style.display = 'none';
+    shareButton.style.display = 'none'; // Simplificado
     loader.style.display = 'none';
     button.innerText = '✨ Consultar Cartas';
     button.className = 'action-button pink';
@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     loader.style.display = 'none';
     aiBox.style.display = 'block';
-    shareButton.style.display = 'flex';
+    shareButton.style.display = 'flex'; // Simplificado
   }
 
   shareButton.onclick = (e) => { e.preventDefault(); shareOnWhatsApp(); };
