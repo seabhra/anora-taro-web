@@ -116,6 +116,12 @@ body {
 #pageLoader.hidden {
   opacity: 0;
   pointer-events: none;
+  visibility: hidden; /* adicionado para maior compatibilidade */
+}
+
+/* Após esconder, vamos remover do fluxo (via JS) para garantir que não bloqueie */
+#pageLoader.removed {
+  display: none !important;
 }
 
 .page-spinner {
@@ -256,6 +262,8 @@ Embaralhar Cartas
 
 
 <script>
+console.log('[anora] script carregado');
+
 const basePath = 'cards_images/';
 const backCard = basePath + 'back.jpg';
 
@@ -265,7 +273,7 @@ const cards = [
   { label:'Sacerdotisa', file:'03_Sacerdotisa' },
   { label:'Imperatriz', file:'04_Imperatriz' },
   { label:'Imperador', file:'05_Imperador' },
-  { label:'Sacerdote', file:'06_Sarcedote' }, // >>> CORRIGIDO AQUI TAMBÉM <<<
+  { label:'Sacerdote', file:'06_Sarcedote' },
   { label:'Amantes', file:'07_Amantes' },
   { label:'Carro', file:'08_Carro' },
   { label:'Força', file:'09_Forca' },
@@ -286,15 +294,15 @@ const cards = [
 
 
 const imgs = [
- card1 = document.getElementById('card1'),
- card2 = document.getElementById('card2'),
- card3 = document.getElementById('card3')
+  document.getElementById('card1'),
+  document.getElementById('card2'),
+  document.getElementById('card3')
 ];
 
 const labels = [
- name1 = document.getElementById('name1'),
- name2 = document.getElementById('name2'),
- name3 = document.getElementById('name3')
+  document.getElementById('name1'),
+  document.getElementById('name2'),
+  document.getElementById('name3')
 ];
 
 const button = document.getElementById('actionButton');
@@ -324,7 +332,7 @@ function newReading() {
   
   loader.style.display = 'block'; 
   aiBox.style.display = 'none';
-  shareButton.style.display = 'none'; // >>> CORRIGIDO AQUI (ASPAS ADICIONADAS) <<<
+  shareButton.style.display = 'none';
 
   callAuroraAPI(drawnNames);
 
@@ -336,10 +344,10 @@ function newReading() {
   status.className = 'status-loading';
 }
 
-   function showPrompt(drawn) {
-  const promptBox = document.getElementById('promptBox');
+function showPrompt(drawn) {
   promptBox.style.display = 'block';
- 
+  // opcional: mostrar nomes no prompt
+  promptBox.textContent = 'Cartas: ' + drawn.join(', ');
 }
 
 
@@ -362,7 +370,8 @@ function resetReading() {
 }
 
 function shareOnWhatsApp() {
-  const analysisText = document.querySelector('#aiResponse p').innerText;
+  const p = document.querySelector('#aiResponse p');
+  const analysisText = p ? p.innerText : '';
   const encodedText = encodeURIComponent(analysisText);
   const whatsappUrl = `https://wa.me/?text=${encodedText}`;
   window.open(whatsappUrl, '_blank');
@@ -402,7 +411,7 @@ Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma ori
    const data = await res.json();
    console.log('Resposta Completa da API:', data);
 
-   const analysisText = data.choices[0].message.content || 'A IA não retornou nenhuma análise.';
+   const analysisText = data.choices?.[0]?.message?.content || 'A IA não retornou nenhuma análise.';
    
    aiBox.innerHTML = `<h2>Anora Assistente de IA</h2><p>${analysisText}</p>`;
    
@@ -424,22 +433,47 @@ Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma ori
  shareButton.style.display = 'flex';
 }
 
-// Lógica para esconder o loader da página
-window.addEventListener('load', () => {
+// Substitui o listener simples por uma rotina mais robusta com fallback
+(function hidePageLoaderSoon() {
+  const pageLoader = document.getElementById('pageLoader');
+  if (!pageLoader) return;
+  function hide() {
+    if (!pageLoader) return;
+    console.log('[anora] escondendo pageLoader');
+    pageLoader.classList.add('hidden');
+    // depois da transição, remova display para garantir que não bloqueie nada
+    setTimeout(() => {
+      pageLoader.classList.add('removed');
+      // opcional: remover do DOM
+      try { pageLoader.remove(); } catch(e) {}
+    }, 700);
+  }
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    // já carregado ou quase carregado
+    hide();
+  } else {
+    document.addEventListener('DOMContentLoaded', hide);
+    window.addEventListener('load', hide);
+  }
+
+  // fallback: hide mesmo se algo travar (5s)
   setTimeout(() => {
-    const pageLoader = document.getElementById('pageLoader');
-    if (pageLoader) {
-      pageLoader.classList.add('hidden');
-    }
-  }, 2000);
-});
+    console.warn('[anora] fallback: esconder pageLoader após timeout');
+    hide();
+  }, 5000);
+})();
 
 shareButton.onclick = shareOnWhatsApp;
-  
 button.onclick = () => hasReading ? resetReading() : newReading();
+
 </script>
+  
 <script>
+// (Desative temporariamente o service worker se estiver tendo problemas)
+// Se precisar testar, comente o bloco abaixo.
 if ('serviceWorker' in navigator) {
+  // para debug: registre somente se necessário. Comente a linha abaixo para desativar o SW.
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/service-worker.js')
       .then(() => console.log('SW registrado'))
