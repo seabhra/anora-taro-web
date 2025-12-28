@@ -64,7 +64,6 @@ body {
 .pink { background:#fd98be; }
 .blue { background:#98e6ce; }
 
-/* Estilo padrão do status */
 #status {
   margin-top: 16px;
   font-weight: bold;
@@ -72,20 +71,10 @@ body {
   transition: color 0.3s ease;
 }
 
-/* Classes para as cores do status */
-#status.status-loading {
-  color: #6b46c1;
-}
+#status.status-loading { color: #6b46c1; }
+#status.status-success { color: #38a169; }
+#status.status-error { color: #e53e3e; }
 
-#status.status-success {
-  color: #38a169;
-}
-
-#status.status-error {
-  color: #e53e3e;
-}
-
-/* Loader da API */
 #loader {
   display: none;
   margin: 20px auto;
@@ -102,7 +91,6 @@ body {
   100% { transform: rotate(360deg); }
 }
 
-/* LOADER DA PÁGINA */
 #pageLoader {
   position: fixed;
   top: 0;
@@ -133,7 +121,6 @@ body {
   animation: spin 1s linear infinite;
 }
 
-/* ESTILO DA CAIXA DE RESPOSTA DA IA */
 #aiResponse {
   display: none;
   margin-top: 16px;
@@ -145,7 +132,6 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* ESTILO DO NOVO CABEÇALHO H2 */
 #aiResponse h2 {
   text-align: center;
   color: #6b46c1;
@@ -155,19 +141,16 @@ body {
   font-weight: bold;
 }
 
-/* Estilo do parágrafo com espaçamento */
 #aiResponse p {
   line-height: 1.6;
   margin: 0;
   color: #2d3748;
 }
 
-/* Adiciona espaço apenas ENTRE os parágrafos */
 #aiResponse p:not(:first-child) {
   margin-top: 1em;
 }
 
-/* ESTILO PARA OS TÍTULOS DENTRO DA ANÁLISE */
 #aiResponse p strong {
   color: #6b46c1;
   display: block;
@@ -176,7 +159,6 @@ body {
   font-size: 15px;
 }
 
-/* BOTÃO DE COMPARTILHAR */
 #shareButton {
   display: none;
   width: 60px;
@@ -217,7 +199,6 @@ body {
 
 <body>
 
-<!-- Loader da página -->
 <div id="pageLoader">
   <div class="page-spinner"></div>
 </div>
@@ -246,25 +227,16 @@ body {
 
 <div id="status">Aguardando sua consulta</div>
 <div id="loader"></div>
-
 <div id="promptBox"></div>
 
-<!-- CAIXA DE RESPOSTA DA IA -->
-<div id="aiResponse">
-  <!-- O conteúdo será inserido aqui pelo JavaScript -->
-</div>
+<div id="aiResponse"></div>
 
-<!-- BOTÃO DE COMPARTILHAR -->
-  <a id="shareButton" href="#" target="_blank">
+<a id="shareButton" href="#" target="_blank">
   <img src="cards_images/zap.png" alt="Compartilhar no WhatsApp">
 </a>
-  
-<script>
-// ========================================
-// >>> ESTRATÉGIA DEFINITIVA PARA APP INVENTOR <<<
-// ========================================
 
-// 1. Função para esconder o loader (fora de qualquer evento)
+<script>
+// Função para esconder o loader
 function hidePageLoader() {
   console.log("Tentando esconder o loader...");
   const pageLoader = document.getElementById('pageLoader');
@@ -274,10 +246,10 @@ function hidePageLoader() {
   }
 }
 
-// 2. Um temporizador de SEGURANÇA. Se tudo mais falhar, este irá funcionar.
-setTimeout(hidePageLoader, 6000); // Espera 3 segundos
+// Um temporizador de SEGURANÇA.
+setTimeout(hidePageLoader, 3000);
 
-// 3. Todo o resto do código é executado APENAS quando o DOM está pronto.
+// Todo o resto do código é executado APENAS quando o DOM está pronto.
 document.addEventListener('DOMContentLoaded', () => {
   console.log("DOM carregado. Iniciando o aplicativo.");
 
@@ -290,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { label:'Sacerdotisa', file:'03_Sacerdotisa' },
     { label:'Imperatriz', file:'04_Imperatriz' },
     { label:'Imperador', file:'05_Imperador' },
-    { label:'Sacerdote', file:'06_Sarcedote' }, // Corrigido
+    { label:'Sacerdote', file:'06_Sarcedote' },
     { label:'Amantes', file:'07_Amantes' },
     { label:'Carro', file:'08_Carro' },
     { label:'Força', file:'09_Forca' },
@@ -341,25 +313,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function newReading() {
     const shuffled = shuffle(cards).slice(0, 3);
-
     shuffled.forEach((card, i) => {
       imgs[i].src = `${basePath}${card.file}.jpg`;
       labels[i].innerText = card.label;
     });
-
     const drawnNames = shuffled.map(c => c.label);
     showPrompt(drawnNames);
-    
     loader.style.display = 'block'; 
     aiBox.style.display = 'none;
     shareButton.style.display = 'none';
-
     callAuroraAPI(drawnNames);
-
     hasReading = true;
     button.innerText = '🔄 Nova Consulta';
     button.className = 'action-button blue';
-    
     status.textContent = 'Consultando a IA...';
     status.className = 'status-loading';
   }
@@ -377,18 +343,14 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetReading() {
     imgs.forEach(img => img.src = backCard);
     labels.forEach(l => l.innerText = '');
-
     promptBox.style.display = 'none';
     aiBox.style.display = 'none';
     shareButton.style.display = 'none';
     loader.style.display = 'none';
-
     button.innerText = '✨ Consultar Cartas';
     button.className = 'action-button pink';
-    
     status.textContent = 'Aguardando sua consulta';
     status.className = '';
-
     hasReading = false;
   }
 
@@ -410,31 +372,25 @@ document.addEventListener('DOMContentLoaded', () => {
           temperature: 0.7, max_tokens: 500
         })
       });
-
       if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
       const data = await res.json();
       const analysisText = data.choices?.[0]?.message?.content || 'A IA não retornou nenhuma análise.';
       aiBox.innerHTML = `<h2>🔮 Anora Assistente de IA</h2><p>${analysisText}</p>`;
       status.textContent = '✅ Consulta realizada';
       status.className = 'status-success';
-
     } catch (error) {
       const errorText = `Erro ao consultar a IA: ${error.message}`;
       aiBox.innerHTML = `<h2>⚠️ Erro</h2><p>${errorText}</p>`;
       status.textContent = '❌ Erro ao consultar';
       status.className = 'status-error';
     }
-
     loader.style.display = 'none';
     aiBox.style.display = 'block';
     shareButton.style.display = 'flex';
   }
 
-  // Event listeners dos botões
   shareButton.onclick = (e) => { e.preventDefault(); shareOnWhatsApp(); };
   button.onclick = () => hasReading ? resetReading() : newReading();
-
-  // Tenta esconder o loader assim que o DOM estiver pronto (plano A)
   hidePageLoader();
 });
 </script>
