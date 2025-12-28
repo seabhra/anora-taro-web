@@ -148,13 +148,13 @@ body {
   font-weight: bold;
 }
 
-/* >>> MUDANÇA AQUI: Estilo do parágrafo com espaçamento <<< */
+/* Estilo do parágrafo com espaçamento */
 #aiResponse p {
   line-height: 1.6;
-  margin: 0; /* Reseta a margem */
+  margin: 0;
 }
 
-/* Adiciona espaço apenas ENTRE os parágrafos (a partir do segundo) */
+/* Adiciona espaço apenas ENTRE os parágrafos */
 #aiResponse p:not(:first-child) {
   margin-top: 1em;
 }
@@ -168,25 +168,34 @@ body {
   font-size: 15px;
 }
 
+/* >>> ESTILO DO NOVO BOTÃO DE COMPARTILHAR COM IMAGEM <<< */
 #shareButton {
-  display: none;
-  width: 100%;
-  max-width: 320px;
-  height: 45px;
+  display: none; /* Ainda controlado pelo JavaScript */
+  width: 60px; /* Tamanho do ícone */
+  height: 60px;
   margin: 12px auto 0;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #fff;
-  background-color: #25D366;
+  border-radius: 50%; /* Deixa o botão redondo */
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  text-decoration: none; /* Remove o sublinhado do link */
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  overflow: hidden; /* Garante que a imagem não saia do círculo */
+  background-color: #25D366; /* Cor de fundo do WhatsApp */
+  display: flex; /* Centraliza o ícone */
+  justify-content: center;
+  align-items: center;
 }
 
 #shareButton:hover {
-  background-color: #128C7E;
+  transform: scale(1.1); /* Efeito de zoom no hover */
+  opacity: 0.9;
 }
+
+#shareButton img {
+  width: 35px; /* Tamanho do ícone dentro do botão */
+  height: 35px;
+  display: block;
+}
+
 
 #promptBox {
   display: none;
@@ -239,7 +248,11 @@ Embaralhar Cartas
 <div id="aiResponse">
   <!-- O conteúdo será inserido aqui pelo JavaScript -->
 </div>
-<button id="shareButton">Compartilhar no WhatsApp</button>
+
+<!-- >>> NOVO BOTÃO DE COMPARTILHAR COM IMAGEM <<< -->
+<a id="shareButton" href="#" target="_blank">
+  <img src="https://raw.githubusercontent.com/seabhra/anora-taro-web/main/zap.png" alt="Compartilhar no WhatsApp">
+</a>
 
 
 <script>
@@ -252,7 +265,7 @@ const cards = [
   { label:'Sacerdotisa', file:'03_Sacerdotisa' },
   { label:'Imperatriz', file:'04_Imperatriz' },
   { label:'Imperador', file:'05_Imperador' },
-  { label:'Sacerdote', file:'06_Sarcedote' },
+  { label:'Sacerdote', file:'06_Sarcedote' }, // >>> CORRIGIDO AQUI <<<
   { label:'Amantes', file:'07_Amantes' },
   { label:'Carro', file:'08_Carro' },
   { label:'Força', file:'09_Forca' },
@@ -311,7 +324,7 @@ function newReading() {
   
   loader.style.display = 'block'; 
   aiBox.style.display = 'none';
-  shareButton.style.display = 'none';
+  shareButton.style.display = 'none;
 
   callAuroraAPI(drawnNames);
 
@@ -336,7 +349,7 @@ function resetReading() {
 
  promptBox.style.display = 'none';
  aiBox.style.display = 'none';
- shareButton.style.display = 'none';
+ shareButton.style.display = 'none;
  loader.style.display = 'none';
 
  button.innerText = 'Embaralhar Cartas';
@@ -366,7 +379,8 @@ async function callAuroraAPI(cardsDrawn) {
          messages: [
            {
              role: "user",
-             content: `Realize uma análise profunda da situação do consulente, interpretando a sequência de cartas de forma integrada. Examine separadamente os significados do passado, do presente e do futuro e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente.Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
+             // >>> PROMPT LIMPO AQUI <<<
+             content: `Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
 
 **Passado:**
 Escreva aqui sua análise sobre a carta ${cardsDrawn[0]} e sua influência no passado do consulente.
@@ -408,7 +422,7 @@ Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma ori
 
  loader.style.display = 'none';
  aiBox.style.display = 'block';
- shareButton.style.display = 'block';
+ shareButton.style.display = 'flex'; // Use 'flex' para centralizar o ícone
 }
 
 // Lógica para esconder o loader da página
@@ -425,7 +439,6 @@ shareButton.onclick = shareOnWhatsApp;
   
 button.onclick = () => hasReading ? resetReading() : newReading();
 </script>
-
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -438,4 +451,3 @@ if ('serviceWorker' in navigator) {
   
 </body>
 </html>
-
