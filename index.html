@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showPrompt(drawnNames);
     loader.style.display = 'block'; 
     aiBox.style.display = 'none';
-    shareButton.style.display = 'none'; // Simplificado
+    shareButton.style.display = 'none';
     callAuroraAPI(drawnNames);
     hasReading = true;
     button.innerText = '🔄 Nova Consulta';
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
     labels.forEach(l => l.innerText = '');
     promptBox.style.display = 'none';
     aiBox.style.display = 'none';
-    shareButton.style.display = 'none'; // Simplificado
+    shareButton.style.display = 'none';
     loader.style.display = 'none';
     button.innerText = '✨ Consultar Cartas';
     button.className = 'action-button pink';
@@ -298,21 +298,28 @@ document.addEventListener('DOMContentLoaded', () => {
     hasReading = false;
   }
 
-  // >>> FUNÇÃO DE COMPARTILHAR ATUALIZADA <<<
   function shareOnWhatsApp() {
-    // 1. Pega o texto do título (h2)
-    const titleText = document.querySelector('#aiResponse h2').innerText;
-    
-    // 2. Pega o texto da análise (p)
-    const analysisText = document.querySelector('#aiResponse p').innerText;
-    
-    // 3. Junta tudo em uma única string, com quebras de linha para ficar bem formatado
+    console.log("Botão de compartilhar clicado.");
+    const titleElement = document.querySelector('#aiResponse h2');
+    const titleText = titleElement ? titleElement.innerText : 'Título não encontrado';
+    console.log("Título encontrado:", titleText);
+    const analysisElement = document.querySelector('#aiResponse p');
+    const analysisText = analysisElement ? analysisElement.innerText : 'Análise não encontrada';
+    console.log("Análise encontrada:", analysisText);
     const fullText = `${titleText}\n\n${analysisText}`;
-    
-    // 4. Codifica e abre o WhatsApp
+    console.log("Texto completo para compartilhar:", fullText);
     const encodedText = encodeURIComponent(fullText);
     const whatsappUrl = `https://wa.me/?text=${encodedText}`;
-    window.open(whatsappUrl, '_blank');
+    try {
+      const newWindow = window.open(whatsappUrl, '_blank');
+      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        console.warn("window.open foi bloqueado. Usando fallback (location.href).");
+        location.href = whatsappUrl;
+      }
+    } catch (error) {
+      console.error("Erro ao tentar abrir o link. Usando fallback (location.href).", error);
+      location.href = whatsappUrl;
+    }
   }
 
   async function callAuroraAPI(cardsDrawn) {
@@ -340,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     loader.style.display = 'none';
     aiBox.style.display = 'block';
-    shareButton.style.display = 'flex'; // Simplificado
+    shareButton.style.display = 'flex';
   }
 
   shareButton.onclick = (e) => { e.preventDefault(); shareOnWhatsApp(); };
