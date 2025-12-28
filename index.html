@@ -313,29 +313,46 @@ status.className = '';
 hasReading = false;
 }
 
-// >>> FUNÇÃO DE COMPARTILHAR ATUALIZADA (MÉTODO SEGURO) <<<
-function shareOnWhatsApp() {
-// 1. Pega o texto do título e da análise
-const titleText = document.querySelector('#aiResponse h2').innerText;
-const analysisText = document.querySelector('#aiResponse p').innerText;
-const fullText = `${titleText}\n\n${analysisText}`;
+// >>> FUNÇÃO DE COMPARTILHAR ATUALIZADA <<<
+async function shareOnWhatsApp() {
+  const title = document.querySelector('#aiResponse h2')?.innerText || '';
+  const analysis = document.querySelector('#aiResponse p')?.innerText || '';
 
-// 2. Cria um elemento de input temporário e o esconde fora da tela
-const tempInput = document.createElement('input');
-tempInput.value = fullText;
-document.body.appendChild(tempInput);
-tempInput.select();
-tempInput.setSelectionRange(0, 99999); // Seleciona todo o texto
+  const message = `${title}\n\n${analysis}\n\n🔮 Gerado por Anora Tarô`;
+  const encodedMessage = encodeURIComponent(message);
 
-// 3. Executa o comando de copiar
-document.execCommand('copy');
+  // Link oficial do WhatsApp
+  const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
 
-// 4. Remove o elemento temporário
-document.body.removeChild(tempInput);
+  try {
+    // 1️⃣ Copia para a área de transferência (moderno)
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(message);
+    } else {
+      // 2️⃣ Fallback seguro
+      const textarea = document.createElement('textarea');
+      textarea.value = message;
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
 
-// 5. Mostra uma mensagem de feedback para o usuário
-showCopyAlert();
+    // 3️⃣ Abre o WhatsApp
+    window.open(whatsappUrl, '_blank');
+
+    // 4️⃣ Feedback
+    showCopyAlert('Mensagem copiada e WhatsApp aberto ✨');
+
+  } catch (err) {
+    console.error('Erro ao compartilhar:', err);
+    alert('Não foi possível compartilhar. Copie manualmente.');
+  }
 }
+
 
 function showCopyAlert() {
 copyAlert.classList.add('show');
