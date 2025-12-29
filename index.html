@@ -250,9 +250,12 @@ Embaralhar Cartas
 <!-- O conteúdo será inserido aqui pelo JavaScript -->
 </div>
 
-<button id="shareButton" aria-label="Compartilhar no WhatsApp">
-  <img src="cards_images/zap.png" alt="">
-</button>
+
+
+
+<button id="shareButton">Compartilhar no WhatsApp</button>
+ 
+
 
 <script>
 const basePath = 'cards_images/';
@@ -430,9 +433,9 @@ console.log('Status da Resposta da API:', res.status);
 const data = await res.json();
 console.log('Resposta Completa da API:', data);
 
-const analysisText = data.choices[0].message.content || 'A IA não retornou um texto.';
+const analysisText = data.choices[0].message.content || 'A IA não retornou nenhuma análise.';
 
-aiBox.innerHTML = `<h2>Anora Assistente de IA</h2><p>${analysisText}</p>`;
+aiBox.innerHTML = `<h2>🔮Anora Assistente de IA</h2><p>${analysisText}</p>`;
 
 status.textContent = 'Consulta realizada';
 status.className = 'status-success';
