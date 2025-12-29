@@ -346,42 +346,50 @@ hasReading = false;
 
  <!-- BOTÃO DE COMPARTILHAR WHATSAAP -->
 
-function shareOnWhatsApp() {
-  // 1. Pega o título e o texto da análise
-  const title = document.querySelector('#aiResponse h2')?.innerText || 'Análise do Tarô';
+async function shareOnWhatsApp() {
+  // 1. Captura dos dados
+  const title = document.querySelector('#aiResponse h2')?.innerText || 'Anora Tarô';
   const analysisText = document.querySelector('#aiResponse p')?.innerText || '';
 
   if (!analysisText) {
-    console.error('Nenhum texto para compartilhar');
+    alert('Nenhuma análise encontrada para compartilhar.');
     return;
   }
 
-  // 2. Prepara a mensagem completa
   const message = `${title}\n\n${analysisText}\n\n🔮 Gerado por Anora Tarô App`;
 
-  // 3. Copia o texto para a área de transferência (opcional)
-  navigator.clipboard.writeText(message).then(() => {
-    console.log('Texto copiado com sucesso!');
-    // Mostra feedback visual se a função existir
-    if (typeof showCopyAlert === 'function') {
-      showCopyAlert();
+  // 2. Tentar copiar (dentro de um try/catch para não travar o resto)
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(message);
+      console.log('Copiado para a área de transferência');
     }
-  }).catch(err => {
-    console.error('Erro ao copiar:', err);
-  });
+  } catch (err) {
+    console.warn('Falha ao copiar texto: ', err);
+    // Seguimos em frente mesmo se falhar
+  }
 
-  // 4. Redireciona para o WhatsApp (usando a mensagem completa)
-  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+  // 3. Executar o Compartilhamento
   
-  // Para App Inventor: envia via WebViewString
+  // Se estiver no App Inventor
   if (window.AppInventor) {
-    window.AppInventor.setWebViewString('WHATSAPP_SHARE:' + message);
+    // Envia a string para o App Inventor processar nos blocos
+    window.AppInventor.setWebViewString('SHARE:' + message);
   } else {
-    // Para navegador normal
-    window.open(whatsappUrl, '_blank');
+    // Se estiver no navegador comum
+    // Usamos api.whatsapp para maior compatibilidade com dispositivos móveis
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+    
+    // Tentativa de abertura direta
+    const win = window.open(whatsappUrl, '_blank');
+    
+    // Se o win for null, o pop-up foi bloqueado
+    if (!win) {
+      window.location.href = whatsappUrl; // Redireciona na mesma aba como plano B
+    }
   }
 }
- 
+  
 async function callAuroraAPI(cardsDrawn) {
 try {
 const res = await fetch(
@@ -418,7 +426,7 @@ console.log('Resposta Completa da API:', data);
 
 const analysisText = data.choices[0].message.content || 'A IA não retornou nenhuma análise.';
 
-aiBox.innerHTML = `<h2>🔮Anora Assistente de IA</h2><p>${analysisText}</p>`;
+aiBox.innerHTML = `<h2>🔮 Anora Assistente de IA</h2><p>${analysisText}</p>`;
 
 status.textContent = 'Consulta realizada';
 status.className = 'status-success';
