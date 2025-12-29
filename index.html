@@ -341,7 +341,6 @@ promptBox.style.display = 'block';
 
 }
 
-
 function resetReading() {
 imgs.forEach(img => img.src = backCard);
 labels.forEach(l => l.innerText = '');
@@ -363,7 +362,7 @@ hasReading = false;
  function shareOnWhatsApp() {
   // 1. Pega o texto da análise
 
-  const title = document.querySelector('#aiResponse h2')?.innerText;
+  const title = document.querySelector('#aiResponse h2').innerText;
   const message = `${title}\n\n${analysis}\n\n🔮 Gerado por Anora Tarô App`;
   const analysisText = document.querySelector('#aiResponse p').innerText;
 
@@ -382,8 +381,6 @@ hasReading = false;
   window.open(whatsappUrl, '_blank');
 }
  
-
-
 async function callAuroraAPI(cardsDrawn) {
 try {
 const res = await fetch(
