@@ -208,17 +208,6 @@ font-size: 15px;
   flex-shrink: 0;
 }
 
-
-#promptBox {
-display: none;
-margin-top:12px;
-padding:10px;
-background:#f0f0f5;
-border-radius:10px;
-font-size:13px;
-text-align:left;
-}
-
 </style>
 </head>
 
@@ -369,17 +358,6 @@ status.textContent = 'Aguardando sua consulta';
 status.className = '';
 hasReading = false;
 }
-
-function showPrompt(drawn) {
-promptBox.style.display = 'block';
-promptBox.innerHTML = `
-<strong>Cartas Selecionadas:</strong><br><br>
-<strong>Passado:</strong> ${drawn[0]}<br>
-<strong>Presente:</strong> ${drawn[1]}<br>
-<strong>Futuro:</strong> ${drawn[2]}
-`;
-}
-
 
  async function shareOnWhatsApp() {
   const title = document.querySelector('#aiResponse h2')?.innerText || '';
