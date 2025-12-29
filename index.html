@@ -345,51 +345,27 @@ hasReading = false;
 }
 
  <!-- BOTÃO DE COMPARTILHAR WHATSAAP -->
+function shareOnWhatsApp() {
+    // 1. Captura o conteúdo
+    const title = document.querySelector('#aiResponse h2')?.innerText || 'Anora Tarô';
+    const analysisText = document.querySelector('#aiResponse p')?.innerText || '';
 
-async function shareOnWhatsApp() {
-  // 1. Captura dos dados
-  const title = document.querySelector('#aiResponse h2')?.innerText || 'Anora Tarô';
-  const analysisText = document.querySelector('#aiResponse p')?.innerText || '';
+    if (!analysisText) return;
 
-  if (!analysisText) {
-    alert('Nenhuma análise encontrada para compartilhar.');
-    return;
-  }
+    // 2. Monta a mensagem
+    const message = `${title}\n\n${analysisText}\n\n🔮 Gerado por Anora Tarô App`;
 
-  const message = `${title}\n\n${analysisText}\n\n🔮 Gerado por Anora Tarô App`;
-
-  // 2. Tentar copiar (dentro de um try/catch para não travar o resto)
-  try {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      await navigator.clipboard.writeText(message);
-      console.log('Copiado para a área de transferência');
+    // 3. COMUNICAÇÃO COM APP INVENTOR (O Pulo do Gato)
+    if (window.AppInventor) {
+        // Envia o texto para o Bloco "WebViewString" do App Inventor
+        window.AppInventor.setWebViewString(message);
+    } else {
+        // Fallback apenas para teste no PC/Navegador comum
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
     }
-  } catch (err) {
-    console.warn('Falha ao copiar texto: ', err);
-    // Seguimos em frente mesmo se falhar
-  }
-
-  // 3. Executar o Compartilhamento
-  
-  // Se estiver no App Inventor
-  if (window.AppInventor) {
-    // Envia a string para o App Inventor processar nos blocos
-    window.AppInventor.setWebViewString('SHARE:' + message);
-  } else {
-    // Se estiver no navegador comum
-    // Usamos api.whatsapp para maior compatibilidade com dispositivos móveis
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-    
-    // Tentativa de abertura direta
-    const win = window.open(whatsappUrl, '_blank');
-    
-    // Se o win for null, o pop-up foi bloqueado
-    if (!win) {
-      window.location.href = whatsappUrl; // Redireciona na mesma aba como plano B
-    }
-  }
 }
-  
+
+  <!-- CHAMA AS CARTAS SELECIONADAS E O CONTEÚDO DO PROMPT -->
 async function callAuroraAPI(cardsDrawn) {
 try {
 const res = await fetch(
