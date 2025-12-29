@@ -169,44 +169,27 @@ font-size: 15px;
 }
 
  /* ESTILO PARA BOTÃO WHATSAPP */
+
 #shareButton {
-  display: none; /* Estado padrão (escondido) */
-  width: 60px;
-  height: 60px;
-  margin: 16px auto 0;
-  border-radius: 50%;
-  background-color: #25D366;
-  
-  /* Centralização absoluta da imagem */
- 
-  justify-content: center; /* Centraliza horizontal */
-  align-items: center; /* Centraliza vertical */
-  
-  /* Remove espaçamentos indesejados */
-  box-sizing: border-box;
-  padding: 0;
-  border: none;
-  
-  /* Animação suave */
-  transition: background-color 0.2s ease;
+display: none;
+width: 100%;
+max-width: 320px;
+height: 45px;
+margin: 12px auto 0;
+border: none;
+border-radius: 8px;
+font-size: 16px;
+font-weight: bold;
+color: #fff;
+background-color: #25D366;
+cursor: pointer;
+transition: background-color 0.2s ease;
 }
 
 #shareButton:hover {
-  background-color: #128C7E;
+background-color: #128C7E;
 }
 
-#shareButton img {
-  width: 45px; /* Ligeiramente menor que o botão */
-  height: 45px;
-  display: block; /* Remove espaços embaixo da imagem */
-  
-  /* Garante que não há margens */
-  margin: 0 ;
-  padding: 0;
-  
-  /* Opcional: impede a imagem de encolher */
-  flex-shrink: 0;
-}
 
 </style>
 </head>
