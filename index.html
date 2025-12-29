@@ -6,13 +6,13 @@
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#6b46c1">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
-
 <title>Anora Tarô</title>
+
 <style>
 body {
 margin: 0;
 padding: 20px;
-font-family: Arial, sans-serif;
+font-family: Arial, Helvetica, sans-serif;
 background: #f7f7f7;
 text-align: center;
 }
@@ -32,9 +32,17 @@ border-radius: 10px;
 box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-.label { margin-top: 6px; font-size: 13px; font-weight: bold; }
+.label {
+margin-top: 6px;
+font-size: 13px;
+font-weight: bold;
+}
 
-.card-name { font-size: 11px; color: #6b46c1; min-height: 14px; }
+.card-name {
+font-size: 11px;
+color: #6b46c1;
+min-height: 14px;
+}
 
 .action-button {
 width: 100%;
@@ -46,24 +54,33 @@ font-size: 18px;
 font-weight: bold;
 color: #fff;
 cursor: pointer;
-transition: transform 0.2s ease;
 }
 
-.action-button:active { transform: scale(0.98); }
 .pink { background:#fd98be; }
 .blue { background:#98e6ce; }
 
+/* Estilo padrão do status */
 #status {
 margin-top: 16px;
 font-weight: bold;
 color: #718096;
+transition: color 0.3s ease;
 }
 
-#status.status-loading { color: #6b46c1; }
-#status.success { color: #38a169; }
-#status.error { color: #e53e3e; }
+/* Classes para as cores do status */
+#status.status-loading {
+color: #6b46c1; /* Roxo */
+}
 
-/* Loader de consulta à API */
+#status.status-success {
+color: #38a169; /* Verde */
+}
+
+#status.status-error {
+color: #3182ce; /* Azul */
+}
+
+/* Loader da API */
 #loader {
 display: none;
 margin: 20px auto;
@@ -75,7 +92,12 @@ border-radius: 50%;
 animation: spin 1s linear infinite;
 }
 
-/* Loader Inicial da Página */
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
+
+/* Loader da página */
 #pageLoader {
 position: fixed;
 top: 0;
@@ -87,13 +109,13 @@ display: flex;
 justify-content: center;
 align-items: center;
 z-index: 9999;
+opacity: 1;
+transition: opacity 0.5s ease-out;
 }
 
-.hidden { display: none !important; }
-
-@keyframes spin {
-0% { transform: rotate(0deg); }
-100% { transform: rotate(360deg); }
+#pageLoader.hidden {
+opacity: 0;
+pointer-events: none;
 }
 
 .page-spinner {
@@ -105,6 +127,7 @@ border-radius: 50%;
 animation: spin 1s linear infinite;
 }
 
+/* ESTILO DA CAIXA DE RESPOSTA DA IA */
 #aiResponse {
 display: none;
 margin-top: 16px;
@@ -113,143 +136,152 @@ background: #fff;
 border-radius: 12px;
 font-size: 14px;
 text-align: left;
-box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-#aiResponse h2 { text-align: center; color: #6b46c1; font-size: 18px; margin-top: 0; }
-#aiResponse p { line-height: 1.6; color: #2d3748; }
+/* ESTILO DO NOVO CABEÇALHO H2 */
+#aiResponse h2 {
+text-align: center;
+color: #6b46c1;
+margin-top: 0;
+margin-bottom: 16px;
+font-size: 18px;
+font-weight: bold;
+}
+
+/* >>> MUDANÇA AQUI: Estilo do parágrafo com espaçamento <<< */
+#aiResponse p {
+line-height: 1.6;
+margin: 0; /* Reseta a margem */
+}
+
+/* Adiciona espaço apenas ENTRE os parágrafos (a partir do segundo) */
+#aiResponse p:not(:first-child) {
+margin-top: 1em;
+}
+
+/* ESTILO PARA OS TÍTULOS DENTRO DA ANÁLISE */
+#aiResponse p strong {
+color: #6b46c1;
+display: block;
+margin-top: 18px;
+margin-bottom: 8px;
+font-size: 15px;
+}
 
 #shareButton {
 display: none;
-width: 60px;
-height: 60px;
-margin: 16px auto 0;
-border-radius: 50%;
+width: 100%;
+max-width: 320px;
+height: 45px;
+margin: 12px auto 0;
+border: none;
+border-radius: 8px;
+font-size: 16px;
+font-weight: bold;
+color: #fff;
 background-color: #25D366;
-justify-content: center;
-align-items: center;
-text-decoration: none;
+cursor: pointer;
+transition: background-color 0.2s ease;
 }
 
-#shareButton img { width: 55px; height: 55px; }
+#shareButton:hover {
+background-color: #128C7E;
+}
 
 #promptBox {
 display: none;
-margin-top: 12px;
-padding: 10px;
-background: #f0f0f5;
-border-radius: 10px;
-font-size: 13px;
-text-align: left;
+margin-top:12px;
+padding:10px;
+background:#f0f0f5;
+border-radius:10px;
+font-size:13px;
+text-align:left;
 }
 
-/* Estilo para a mensagem de "copiado" */
-#copyAlert {
-position: fixed;
-top: 20px;
-left: 50%;
-transform: translateX(-50%);
-background-color: #333;
-color: white;
-padding: 10px 20px;
-border-radius: 8px;
-font-size: 14px;
-font-family: Arial, sans-serif;
-z-index: 10000;
-opacity: 0;
-visibility: hidden;
-transition: opacity 0.3s ease-in-out;
-}
-
-#copyAlert.show {
-opacity: 1;
-visibility: visible;
-}
 </style>
 </head>
+
 <body>
 
+<!-- Loader da página -->
 <div id="pageLoader">
 <div class="page-spinner"></div>
 </div>
 
-<!-- Caixa de alerta para o feedback -->
-<div id="copyAlert">Texto copiado!</div>
-
 <div class="cards">
 <div class="card">
-<img id="card1" src="cards_images/back.jpg" alt="Carta 1">
+<img id="card1" src="cards_images/back.jpg">
 <div class="label">Passado</div>
 <div class="card-name" id="name1"></div>
 </div>
 <div class="card">
-<img id="card2" src="cards_images/back.jpg" alt="Carta 2">
+<img id="card2" src="cards_images/back.jpg">
 <div class="label">Presente</div>
 <div class="card-name" id="name2"></div>
 </div>
 <div class="card">
-<img id="card3" src="cards_images/back.jpg" alt="Carta 3">
+<img id="card3" src="cards_images/back.jpg">
 <div class="label">Futuro</div>
 <div class="card-name" id="name3"></div>
 </div>
 </div>
 
-<button id="actionButton" class="action-button pink">✨ Consultar Cartas</button>
+<button id="actionButton" class="action-button pink">
+Embaralhar Cartas
+</button>
 
 <div id="status">Aguardando sua consulta</div>
 <div id="loader"></div>
-<div id="promptBox"></div>
-<div id="aiResponse"></div>
 
-<!-- Botão de compartilhar -->
-<button id="shareButton" aria-label="Compartilhar no WhatsApp">
-  <img src="cards_images/zap.png" alt="">
-</button>
+<div id="promptBox"></div>
+
+<!-- CAIXA DE RESPOSTA DA IA -->
+<div id="aiResponse">
+<!-- O conteúdo será inserido aqui pelo JavaScript -->
+</div>
+<button id="shareButton">Compartilhar no WhatsApp</button>
 
 
 <script>
-// Função para esconder o loader
-function hidePageLoader() {
-const pageLoader = document.getElementById('pageLoader');
-if (pageLoader) {
-pageLoader.classList.add('hidden');
-}
-}
-
-// Um temporizador de SEGURANÇA.
-setTimeout(hidePageLoader, 3000);
-
-// Todo o resto do código é executado APENAS quando o DOM está pronto.
-document.addEventListener('DOMContentLoaded', () => {
-console.log("DOM carregado. Iniciando o aplicativo.");
-
 const basePath = 'cards_images/';
 const backCard = basePath + 'back.jpg';
 
 const cards = [
-{ label:'Louco', file:'01_Louco' }, { label:'Mago', file:'02_Mago' },
-{ label:'Sacerdotisa', file:'03_Sacerdotisa' }, { label:'Imperatriz', file:'04_Imperatriz' },
-{ label:'Imperador', file:'05_Imperador' }, { label:'Sacerdote', file:'06_Sacerdote' },
-{ label:'Amantes', file:'07_Amantes' }, { label:'Carro', file:'08_Carro' },
-{ label:'Força', file:'09_Forca' }, { label:'Eremita', file:'10_Eremita' },
-{ label:'Roda da Fortuna', file:'11_Roda' }, { label:'Justiça', file:'12_Justica' },
-{ label:'Enforcado', file:'13_Enforcado' }, { label:'Morte', file:'14_Morte' },
-{ label:'Temperança', file:'15_Temperanca' }, { label:'Diabo', file:'16_Diabo' },
-{ label:'Torre', file:'17_Torre' }, { label:'Estrela', file:'18_Estrela' },
-{ label:'Lua', file:'19_Lua' }, { label:'Sol', file:'20_Sol' },
-{ label:'Julgamento', file:'21_Julgamento' }, { label:'Mundo', file:'22_Mundo' }
+{ label:'Louco', file:'01_Louco' },
+{ label:'Mago', file:'02_Mago' },
+{ label:'Sacerdotisa', file:'03_Sacerdotisa' },
+{ label:'Imperatriz', file:'04_Imperatriz' },
+{ label:'Imperador', file:'05_Imperador' },
+{ label:'Sacerdote', file:'06_Sarcedote' },
+{ label:'Amantes', file:'07_Amantes' },
+{ label:'Carro', file:'08_Carro' },
+{ label:'Força', file:'09_Forca' },
+{ label:'Eremita', file:'10_Eremita' },
+{ label:'Roda da Fortuna', file:'11_Roda' },
+{ label:'Justiça', file:'12_Justica' },
+{ label:'Enforcado', file:'13_Enforcado' },
+{ label:'Morte', file:'14_Morte' },
+{ label:'Temperança', file:'15_Temperanca' },
+{ label:'Diabo', file:'16_Diabo' },
+{ label:'Torre', file:'17_Torre' },
+{ label:'Estrela', file:'18_Estrela' },
+{ label:'Lua', file:'19_Lua' },
+{ label:'Sol', file:'20_Sol' },
+{ label:'Julgamento', file:'21_Julgamento' },
+{ label:'Mundo', file:'22_Mundo' }
 ];
 
+
 const imgs = [
-document.getElementById('card1'),
-document.getElementById('card2'),
-document.getElementById('card3')
+card1 = document.getElementById('card1'),
+card2 = document.getElementById('card2'),
+card3 = document.getElementById('card3')
 ];
 
 const labels = [
-document.getElementById('name1'),
-document.getElementById('name2'),
-document.getElementById('name3')
+name1 = document.getElementById('name1'),
+name2 = document.getElementById('name2'),
+name3 = document.getElementById('name3')
 ];
 
 const button = document.getElementById('actionButton');
@@ -257,116 +289,151 @@ const status = document.getElementById('status');
 const loader = document.getElementById('loader');
 const aiBox = document.getElementById('aiResponse');
 const promptBox = document.getElementById('promptBox');
-const copyAlert = document.getElementById('copyAlert');
-
-  const shareButton = document.getElementById('shareButton');
-.addEventListener('click', shareOnWhatsApp);
+const shareButton = document.getElementById('shareButton');
 
 let hasReading = false;
 
 function shuffle(arr) {
-const shuffled = [...arr];
-for (let i = shuffled.length - 1; i > 0; i--) {
-const j = Math.floor(Math.random() * (i + 1));
-[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-}
-return shuffled;
+return arr.sort(() => Math.random() - 0.5);
 }
 
 function newReading() {
-const shuffled = shuffle(cards).slice(0, 3);
+const shuffled = shuffle([...cards]).slice(0, 3);
+
 shuffled.forEach((card, i) => {
 imgs[i].src = `${basePath}${card.file}.jpg`;
 labels[i].innerText = card.label;
 });
+
 const drawnNames = shuffled.map(c => c.label);
+
 showPrompt(drawnNames);
+
 loader.style.display = 'block';
 aiBox.style.display = 'none';
-shareButton.style.display = 'flex';
+shareButton.style.display = 'none';
+
 callAuroraAPI(drawnNames);
+
 hasReading = true;
-button.innerText = '🔄 Nova Consulta';
+button.innerText = 'Nova Consulta';
 button.className = 'action-button blue';
-status.textContent = 'Consultando a IA...';
+
+status.textContent = 'Consultando…';
 status.className = 'status-loading';
 }
 
 function showPrompt(drawn) {
+const promptBox = document.getElementById('promptBox');
 promptBox.style.display = 'block';
-promptBox.innerHTML = `
-<strong>📜 Cartas Selecionadas:</strong><br><br>
-<strong>Passado:</strong> ${drawn[0]}<br>
-<strong>Presente:</strong> ${drawn[1]}<br>
-<strong>Futuro:</strong> ${drawn[2]}
-`;
+
 }
+
 
 function resetReading() {
 imgs.forEach(img => img.src = backCard);
 labels.forEach(l => l.innerText = '');
+
 promptBox.style.display = 'none';
 aiBox.style.display = 'none';
 shareButton.style.display = 'none';
 loader.style.display = 'none';
-button.innerText = '✨ Consultar Cartas';
+
+button.innerText = 'Embaralhar Cartas';
 button.className = 'action-button pink';
+
 status.textContent = 'Aguardando sua consulta';
 status.className = '';
+
 hasReading = false;
 }
-<!-- função share whatsapp -->
-  
-async function shareOnWhatsApp() {
-  const title = document.querySelector('#aiResponse h2')?.innerText || '';
-  const analysis = document.querySelector('#aiResponse p')?.innerText || '';
-  const message = `${title}\n\n${analysis}\n\n🔮 Gerado por Anora Tarô App`;
-  const encodedMessage = encodeURIComponent(message);
-  const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
-  window.open(whatsappUrl, '_blank');
-    }
 
-
-
-function showCopyAlert() {
-copyAlert.classList.add('show');
-setTimeout(() => {
-copyAlert.classList.remove('show');
-}, 2000); // A mensagem some após 2 segundos
+function shareOnWhatsApp() {
+const analysisText = document.querySelector('#aiResponse p').innerText;
+const encodedText = encodeURIComponent(analysisText);
+const whatsappUrl = `https://wa.me/?text=${encodedText}`;
+window.open(whatsappUrl, '_blank');
 }
 
 async function callAuroraAPI(cardsDrawn) {
 try {
-const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
+const res = await fetch(
+'https://aurora-api-final-2025.vercel.app/api/chat',
+{
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({
-model: 'llama-3.3-70b-versatile',
-messages: [{ role: "user", content: `Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura: **Passado:** Escreva aqui sua análise sobre a carta ${cardsDrawn[0]} e sua influência no passado do consulente. **Presente:** Escreva aqui sua análise sobre a carta ${cardsDrawn[1]} e sua influência no presente do consulente. **Futuro:** Escreva aqui sua análise sobre a carta ${cardsDrawn[2]} e sua influência no futuro do consulente. **Análise Final:** Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma orientação clara e integrada para o consulente.` }],
-temperature: 0.7, max_tokens: 500
-})
-});
-if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
-const data = await res.json();
-const analysisText = data.choices?.[0]?.message?.content || 'A IA não retornou nenhuma análise.';
-aiBox.innerHTML = `<h2>🔮 Anora Assistente de IA</h2><p>${analysisText}</p>`;
-status.textContent = '✅ Consulta realizada';
-status.className = 'success';
-} catch (error) {
-const errorText = `Erro ao consultar a IA: ${error.message}`;
-aiBox.innerHTML = `<h2>⚠️ Erro</h2><p>${errorText}</p>`;
-status.textContent = 'Erro ao consultar';
-status.className = 'error';
+messages: [
+{
+role: "user",
+content: `Realize uma análise profunda da situação do consulente, interpretando a sequência de cartas de forma integrada. Examine separadamente os significados do passado, do presente e do futuro e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente.Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
+
+**Passado:**
+Escreva aqui sua análise sobre a carta ${cardsDrawn[0]} e sua influência no passado do consulente.
+
+**Presente:**
+Escreva aqui sua análise sobre a carta ${cardsDrawn[1]} e sua influência no presente do consulente.
+
+**Futuro:**
+Escreva aqui sua análise sobre a carta ${cardsDrawn[2]} e sua influência no futuro do consulente.
+
+**Análise Final:**
+Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma orientação clara e integrada para o consulente.`
 }
-loader.style.display = 'none';
-aiBox.style.display = 'block';
-shareButton.style.display = 'flex';
+]
+})
+}
+);
+
+console.log('Status da Resposta da API:', res.status);
+const data = await res.json();
+console.log('Resposta Completa da API:', data);
+
+const analysisText = data.choices[0].message.content || 'A IA não retornou um texto.';
+
+aiBox.innerHTML = `<h2>Anora Assistente de IA</h2><p>${analysisText}</p>`;
+
+status.textContent = 'Consulta realizada';
+status.className = 'status-success';
+
+} catch (error) {
+console.error('Erro na chamada da API:', error);
+const errorText = 'Erro ao acessar a reflexão.';
+
+aiBox.innerHTML = `<h2>Anora Assistente de IA</h2><p>${errorText}</p>`;
+
+status.textContent = 'Erro de carregamento';
+status.className = 'status-error';
 }
 
-shareButton.onclick = shareOnWhatsApp;
-button.onclick = () => hasReading ? resetReading() : newReading();
-hidePageLoader();
+loader.style.display = 'none';
+aiBox.style.display = 'block';
+shareButton.style.display = 'block';
+}
+
+// Lógica para esconder o loader da página
+window.addEventListener('load', () => {
+setTimeout(() => {
+const pageLoader = document.getElementById('pageLoader');
+if (pageLoader) {
+pageLoader.classList.add('hidden');
+}
+}, 2000);
 });
+
+shareButton.onclick = shareOnWhatsApp;
+
+button.onclick = () => hasReading ? resetReading() : newReading();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+window.addEventListener('load', () => {
+navigator.serviceWorker.register('/service-worker.js')
+.then(() => console.log('SW registrado'))
+.catch(err => console.error('SW erro:', err));
+});
+}
 </script>
 
 </body>
