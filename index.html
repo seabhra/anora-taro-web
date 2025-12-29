@@ -359,26 +359,41 @@ hasReading = false;
 }
 
  <!-- BOTÃO DE COMPARTILHAR WHATSAAP -->
- function shareOnWhatsApp() {
-  // 1. Pega o texto da análise
 
-  const title = document.querySelector('#aiResponse h2').innerText;
-  const message = `${title}\n\n${analysis}\n\n🔮 Gerado por Anora Tarô App`;
-  const analysisText = document.querySelector('#aiResponse p').innerText;
+function shareOnWhatsApp() {
+  // 1. Pega o título e o texto da análise
+  const title = document.querySelector('#aiResponse h2')?.innerText || 'Análise do Tarô';
+  const analysisText = document.querySelector('#aiResponse p')?.innerText || '';
 
-  // 2. Copia o texto para a área de transferência
-  navigator.clipboard.writeText(analysisText).then(() => {
-    // 3. Mostra uma mensagem de sucesso
-    if (copySuccess) {
-        console.log("Texto copiado com sucesso!");
-        // Mostra um feedback visual para o usuário
-        showCopyAlert(); // Reutiliza a função que já existe no seu código.
+  if (!analysisText) {
+    console.error('Nenhum texto para compartilhar');
+    return;
+  }
+
+  // 2. Prepara a mensagem completa
+  const message = `${title}\n\n${analysisText}\n\n🔮 Gerado por Anora Tarô App`;
+
+  // 3. Copia o texto para a área de transferência (opcional)
+  navigator.clipboard.writeText(message).then(() => {
+    console.log('Texto copiado com sucesso!');
+    // Mostra feedback visual se a função existir
+    if (typeof showCopyAlert === 'function') {
+      showCopyAlert();
     }
+  }).catch(err => {
+    console.error('Erro ao copiar:', err);
   });
 
-  // 4. Redireciona o usuário para o WhatsApp Web ou para o app do WhatsApp
-  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(analysisText)`;
-  window.open(whatsappUrl, '_blank');
+  // 4. Redireciona para o WhatsApp (usando a mensagem completa)
+  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+  
+  // Para App Inventor: envia via WebViewString
+  if (window.AppInventor) {
+    window.AppInventor.setWebViewString('WHATSAPP_SHARE:' + message);
+  } else {
+    // Para navegador normal
+    window.open(whatsappUrl, '_blank');
+  }
 }
  
 async function callAuroraAPI(cardsDrawn) {
