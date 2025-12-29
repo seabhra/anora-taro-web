@@ -196,8 +196,8 @@ font-size: 15px;
 }
 
 #shareButton img {
-  width: 55px; /* Ligeiramente menor que o botão */
-  height: 55px;
+  width: 45px; /* Ligeiramente menor que o botão */
+  height: 45px;
   display: block; /* Remove espaços embaixo da imagem */
   
   /* Garante que não há margens */
@@ -367,16 +367,29 @@ button.className = 'action-button pink';
 
 status.textContent = 'Aguardando sua consulta';
 status.className = '';
-
 hasReading = false;
 }
 
-function shareOnWhatsApp() {
-const analysisText = document.querySelector('#aiResponse p').innerText;
-const encodedText = encodeURIComponent(analysisText);
-const whatsappUrl = `https://wa.me/?text=${encodedText}`;
-window.open(whatsappUrl, '_blank');
+function showPrompt(drawn) {
+promptBox.style.display = 'block';
+promptBox.innerHTML = `
+<strong>Cartas Selecionadas:</strong><br><br>
+<strong>Passado:</strong> ${drawn[0]}<br>
+<strong>Presente:</strong> ${drawn[1]}<br>
+<strong>Futuro:</strong> ${drawn[2]}
+`;
 }
+
+
+ async function shareOnWhatsApp() {
+  const title = document.querySelector('#aiResponse h2')?.innerText || '';
+  const analysis = document.querySelector('#aiResponse p')?.innerText || '';
+  const message = `${title}\n\n${analysis}\n\n🔮 Gerado por Anora Tarô App`;
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+   window.open(whatsappUrl, '_blank');
+    }
+
 
 async function callAuroraAPI(cardsDrawn) {
 try {
@@ -445,7 +458,6 @@ pageLoader.classList.add('hidden');
 });
 
 shareButton.onclick = shareOnWhatsApp;
-
 
 button.onclick = () => hasReading ? resetReading() : newReading();
 </script>
