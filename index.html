@@ -170,22 +170,31 @@ font-size: 15px;
 
   /* ESTILO PARA BOTÃO WHATSAPP */
 #shareButton {
-display: none;
-width: 60px;
-height: 60px;
-margin: 16px auto 0;
-border-radius: 50%;
-background-color: #25D366;
-justify-content: center;
-align-items: center;
-text-decoration: none;
-transition: background-color 0.2s ease;
+  display: none;            /* continua escondido por padrão */
+  width: 60px;
+  height: 60px;
+  margin: 16px auto 0;
+  border-radius: 50%;
+  background-color: #25D366;
+
+  display: flex;            /* 🔑 ISSO É O QUE FALTAVA */
+  justify-content: center;  /* centraliza horizontal */
+  align-items: center;      /* centraliza vertical */
+
+  text-decoration: none;
+  transition: background-color 0.2s ease;
 }
+
 #shareButton:hover {
-background-color: #128C7E;
+  background-color: #128C7E;
 }
-#shareButton img { width: 50px; height: 50px; 
+
+#shareButton img {
+  width: 35px;              /* melhor proporção visual */
+  height: 35px;
+  display: block;           /* evita espaçamentos fantasmas */
 }
+
 
 
 #promptBox {
