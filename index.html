@@ -168,25 +168,25 @@ margin-bottom: 8px;
 font-size: 15px;
 }
 
+  /* ESTILO PARA BOTÃO WHATSAPP */
 #shareButton {
 display: none;
-width: 100%;
-max-width: 320px;
-height: 45px;
-margin: 12px auto 0;
-border: none;
-border-radius: 8px;
-font-size: 16px;
-font-weight: bold;
-color: #fff;
+width: 60px;
+height: 60px;
+margin: 16px auto 0;
+border-radius: 50%;
 background-color: #25D366;
-cursor: pointer;
+justify-content: center;
+align-items: center;
+text-decoration: none;
 transition: background-color 0.2s ease;
 }
-
 #shareButton:hover {
 background-color: #128C7E;
 }
+#shareButton img { width: 50px; height: 50px; 
+}
+
 
 #promptBox {
 display: none;
@@ -239,8 +239,10 @@ Embaralhar Cartas
 <div id="aiResponse">
 <!-- O conteúdo será inserido aqui pelo JavaScript -->
 </div>
-<button id="shareButton">Compartilhar no WhatsApp</button>
 
+<button id="shareButton" aria-label="Compartilhar no WhatsApp">
+  <img src="cards_images/zap.png" alt="">
+</button>
 
 <script>
 const basePath = 'cards_images/';
