@@ -168,18 +168,22 @@ margin-bottom: 8px;
 font-size: 15px;
 }
 
-  /* ESTILO PARA BOTÃO WHATSAPP */
-  #shareButton {
+ 
+ /* ESTILO PARA BOTÃO WHATSAPP */
+#shareButton {
   display: none;            /* continua escondido por padrão */
   width: 60px;
   height: 60px;
   margin: 16px auto 0;
   border-radius: 50%;
   background-color: #25D366;  
+  display: flex;            /* ✅ ADICIONE ESTA LINHA */
   justify-content: center;  /* centraliza horizontal */
   align-items: center;      /* centraliza vertical */
   text-decoration: none;
   transition: background-color 0.2s ease;
+  position: relative;       /* ajuda no posicionamento */
+  overflow: hidden;         /* evita overflow da imagem */
 }
 
 #shareButton:hover {
@@ -187,10 +191,12 @@ font-size: 15px;
 }
 
 #shareButton img {
-  width: 55px;              /* melhor proporção visual */
-  height: 55px;
-  display: block;           /* evita espaçamentos fantasmas */
+  width: 35px;              /* tamanho ideal para botão 60px */
+  height: 35px;
+  display: block;
+  flex-shrink: 0;           /* impede que a imagem encolha */
 }
+
 
 
 
