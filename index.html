@@ -131,7 +131,7 @@ align-items: center;
 text-decoration: none;
 }
 
-#shareButton img { width: 50px; height: 50px; }
+#shareButton img { width: 55px; height: 55px; }
 
 #promptBox {
 display: none;
@@ -201,10 +201,11 @@ visibility: visible;
 <div id="promptBox"></div>
 <div id="aiResponse"></div>
 
-<!-- Botão de compartilhar, agora é um div para ter mais controle -->
-<div id="shareButton" onclick="shareOnWhatsApp()">
-<img src="cards_images/zap.png" alt="WhatsApp">
-</div>
+<!-- Botão de compartilhar -->
+<button id="shareButton" aria-label="Compartilhar no WhatsApp">
+  <img src="cards_images/zap.png" alt="">
+</button>
+
 
 <script>
 // Função para esconder o loader
@@ -256,8 +257,10 @@ const status = document.getElementById('status');
 const loader = document.getElementById('loader');
 const aiBox = document.getElementById('aiResponse');
 const promptBox = document.getElementById('promptBox');
-const shareButton = document.getElementById('shareButton');
 const copyAlert = document.getElementById('copyAlert');
+
+  const shareButton = document.getElementById('shareButton');
+.addEventListener('click', shareOnWhatsApp);
 
 let hasReading = false;
 
@@ -312,46 +315,17 @@ status.textContent = 'Aguardando sua consulta';
 status.className = '';
 hasReading = false;
 }
-
-// >>> FUNÇÃO DE COMPARTILHAR ATUALIZADA <<<
+<!-- função share whatsapp -->
+  
 async function shareOnWhatsApp() {
   const title = document.querySelector('#aiResponse h2')?.innerText || '';
   const analysis = document.querySelector('#aiResponse p')?.innerText || '';
-
-  const message = `${title}\n\n${analysis}\n\n🔮 Gerado por Anora Tarô`;
+  const message = `${title}\n\n${analysis}\n\n🔮 Gerado por Anora Tarô App`;
   const encodedMessage = encodeURIComponent(message);
-
-  // Link oficial do WhatsApp
   const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
-
-  try {
-    // 1️⃣ Copia para a área de transferência (moderno)
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(message);
-    } else {
-      // 2️⃣ Fallback seguro
-      const textarea = document.createElement('textarea');
-      textarea.value = message;
-      textarea.style.position = 'fixed';
-      textarea.style.left = '-9999px';
-      document.body.appendChild(textarea);
-      textarea.focus();
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
+  window.open(whatsappUrl, '_blank');
     }
 
-    // 3️⃣ Abre o WhatsApp
-    window.open(whatsappUrl, '_blank');
-
-    // 4️⃣ Feedback
-    showCopyAlert('Mensagem copiada e WhatsApp aberto ✨');
-
-  } catch (err) {
-    console.error('Erro ao compartilhar:', err);
-    alert('Não foi possível compartilhar. Copie manualmente.');
-  }
-}
 
 
 function showCopyAlert() {
