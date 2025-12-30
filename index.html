@@ -354,7 +354,7 @@ shareButton.style.display = 'none';
 
  callAuroraAPI(shuffled.map(c => c.label));
   hasReading = true;
-  button.innerText = '🔄 Nova Consulta';
+  button.innerText = '🔄  Nova Consulta';
   button.className = 'action-button blue';
   status.textContent = '🤖 Consultando com IA…';
   status.className = 'status-loading';
@@ -375,7 +375,7 @@ promptBox.style.display = 'block';
   aiBox.style.display = 'none';
   shareButton.style.display = 'none';
   document.getElementById('florBox').style.display = 'flex';
-  button.innerText = '🔮 Embaralhar Cartas';
+  button.innerText = '🔮  Embaralhar Cartas';
   button.className = 'action-button pink';
   status.textContent = 'Aguardando sua consulta';
   status.className = '';
@@ -451,7 +451,7 @@ aiBox.innerHTML = `
   <p>${analysisText}</p>
 `;
 
-status.textContent = '✅ Consulta realizada';
+status.textContent = '✅  Consulta realizada com sucesso';
 status.className = 'status-success';
 
 } catch (error) {
