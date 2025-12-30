@@ -286,6 +286,10 @@ Embaralhar Cartas
 <button id="shareButton">Compartilhar no WhatsApp</button>
  
 <script>
+
+const shuffleAudio = new Audio('Audio_app/slots_machine.mp3');
+shuffleAudio.preload = 'auto';
+  
 const basePath = 'cards_images/';
 const backCard = basePath + 'back.jpg';
 
@@ -344,13 +348,44 @@ return arr.sort(() => Math.random() - 0.5);
 
 <!-- FUNÇÃO EMBARALHAR CARTAS -->
 function newReading() {
-  document.getElementById('florBox').style.display = 'none';
+  // estado inicial
+  document.getElementById('florBox')?.style.display = 'none';
   loader.style.display = 'block';
+  aiBox.style.display = 'none';
+  shareButton.style.display = 'none';
+
+  status.textContent = 'Consultando a IA...';
+  status.className = 'status-loading';
+
+  // toca o som
+  shuffleAudio.currentTime = 0;
+  shuffleAudio.play().catch(() => {});
+
+  // inicia rotação
+  startCardRotation();
+
+  // sorteia cartas
   const shuffled = shuffle([...cards]).slice(0, 3);
-  shuffled.forEach((card, i) => {
-    imgs[i].src = `${basePath}${card.file}.jpg`;
-    labels[i].innerText = card.label;
-  });  
+
+  // pequeno delay para o efeito visual
+  setTimeout(() => {
+    shuffled.forEach((card, i) => {
+      imgs[i].src = `${basePath}${card.file}.jpg`;
+      labels[i].innerText = card.label;
+    });
+
+    const drawnNames = shuffled.map(c => c.label);
+
+    showPrompt(drawnNames);
+    callAuroraAPI(drawnNames);
+
+    hasReading = true;
+    button.innerText = '🔄\u00A0\u00A0Nova Consulta';
+    button.className = 'action-button blue';
+
+  }, 600); // tempo do giro
+}
+
 
 
 
