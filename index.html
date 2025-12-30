@@ -398,17 +398,24 @@ function newReading() {
             imgs[i].classList.remove('card-spinning'); // Remove animação
         });
 
-        // 6. Finalizar e chamar a IA
-        showPrompt(drawnNames);
-        loader.style.display = 'block'; 
-        status.textContent = 'Consultando a IA...';
-        status.className = 'status-loading';
-        
-        callAuroraAPI(drawnNames);
+const drawnNames = shuffled.map(c => c.label);
+      
+showPrompt(drawnNames);
+loader.style.display = 'block';
+aiBox.style.display = 'none';
+shareButton.style.display = 'none';
+status.textContent = 'Consultando a IA...';
 
-        hasReading = true;
-        button.innerText = '🔄 Nova Consulta';
-        button.className = 'action-button blue';
+            
+ callAuroraAPI(shuffled.map(c => c.label));
+   hasReading = true;
+  button.innerText = '🔄\u00A0\u00A0\u00A0Nova Consulta';
+  button.className = 'action-button blue';
+  status.textContent = '🤖\u00A0\u00A0\u00A0Consultando a IA…';
+  status.className = 'status-loading';
+}
+
+      
         
     }, 3000); // 3000 = 3 segundos de "giro"
 }
@@ -417,19 +424,15 @@ function newReading() {
 
 
 
-const drawnNames = shuffled.map(c => c.label);
-showPrompt(drawnNames);
-loader.style.display = 'block';
-aiBox.style.display = 'none';
-shareButton.style.display = 'none';
 
- callAuroraAPI(shuffled.map(c => c.label));
-  hasReading = true;
-  button.innerText = '🔄\u00A0\u00A0\u00A0Nova Consulta';
-  button.className = 'action-button blue';
-  status.textContent = '🤖\u00A0\u00A0\u00A0Consultando com IA…';
-  status.className = 'status-loading';
-}
+
+    
+      
+        
+
+  
+
+
 
 
 function showPrompt(drawn) {
