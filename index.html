@@ -465,7 +465,15 @@ status.className = 'status-success';
 console.error('Erro na chamada da API:', error);
 const errorText = 'Erro ao acessar a reflexão.';
 
-aiBox.innerHTML = `<h2>Anora Assistente de IA</h2><p>${errorText}</p>`;
+
+  aiBox.innerHTML = `
+  <h2 class="ai-title">
+    <img src="cards_images/marca_anora.png" alt="Anora Tarô" class="ai-logo">
+    Anora Assistente de IA
+  </h2>
+  <p>${analysisText}</p>
+`;
+
 
 status.textContent = 'Erro de carregamento';
 status.className = 'status-error';
