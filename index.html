@@ -357,88 +357,76 @@ function shuffle(arr) {
 
 <!-- FUNÇÃO EMBARALHAR CARTAS -->
 
-function newReading() {
+  function newReading() {
     // 1. Preparação inicial
     const florBox = document.getElementById('florBox');
     if (florBox) florBox.style.display = 'none';
     
+    // Resetar interface para o novo sorteio
     aiBox.style.display = 'none';
     shareButton.style.display = 'none';
     promptBox.style.display = 'none';
-    loader.style.display = 'none'; // Esconde o loader durante o giro
+    loader.style.display = 'none';
 
     // 2. Iniciar Áudio
-    shuffleAudio.currentTime = 0;
-    shuffleAudio.play().catch(e => console.log("Erro ao tocar áudio:", e));
+    if (shuffleAudio) {
+        shuffleAudio.currentTime = 0;
+        shuffleAudio.play().catch(e => console.log("Erro ao tocar áudio:", e));
+    }
 
     // 3. Iniciar Animação Visual
     imgs.forEach(img => img.classList.add('card-spinning'));
     labels.forEach(l => l.innerText = "Sorteando...");
 
-    // 4. Efeito de Roleta (troca imagens rápido)
+    // 4. Efeito de Roleta (troca imagens rapidamente)
     const spinInterval = setInterval(() => {
         imgs.forEach(img => {
             const randomCard = cards[Math.floor(Math.random() * cards.length)];
             img.src = `${basePath}${randomCard.file}.jpg`;
         });
-    }, 100); // Troca a cada 0.1 segundos
+    }, 100); 
 
-    // 5. Parar após o tempo determinado (Ex: 3 segundos)
+    // 5. Finalizar após 3 segundos
     setTimeout(() => {
-        clearInterval(spinInterval); // Para a troca aleatória
-        shuffleAudio.pause(); // Para o som
+        clearInterval(spinInterval); // Para a roleta visual
+        if (shuffleAudio) shuffleAudio.pause(); // Para o som
         
-        // Selecionar as 3 cartas finais reais
+        // Selecionar as 3 cartas finais
         const finalSelection = shuffle([...cards]).slice(0, 3);
         const drawnNames = finalSelection.map(c => c.label);
 
+        // Atualizar as imagens e remover animação
         finalSelection.forEach((card, i) => {
             imgs[i].src = `${basePath}${card.file}.jpg`;
             labels[i].innerText = card.label;
-            imgs[i].classList.remove('card-spinning'); // Remove animação
+            imgs[i].classList.remove('card-spinning');
         });
 
-const drawnNames = shuffled.map(c => c.label);
-      
-showPrompt (drawnNames)
-loader.style.display = 'block';
-aiBox.style.display = 'none';
-shareButton.style.display = 'none';
-status.textContent = 'Consultando a IA...';
+        // 6. Chamar as funções de interface e API
+        showPrompt(drawnNames);
+        
+        loader.style.display = 'block';
+        status.textContent = '🤖   Consultando a IA...';
+        status.className = 'status-loading';
+        
+        // Chama a API com os nomes das cartas
+        callAuroraAPI(drawnNames);
 
-            
- callAuroraAPI (drawnNames)
-   hasReading = true;
-  button.innerText = '🔄\u00A0\u00A0\u00A0Nova Consulta';
-  button.className = 'action-button blue';
-  status.textContent = '🤖\u00A0\u00A0\u00A0Consultando a IA…';
-  status.className = 'status-loading';
+        // 7. Atualizar estado do botão
+        hasReading = true;
+        button.innerText = '🔄   Nova Consulta';
+        button.className = 'action-button blue';
+
+    }, 3000); 
 }
 
-      
-        
-    }, 3000); // 3000 = 3 segundos de "giro"
-}
-
-
-
-
-
-
-
-    
-      
-        
-
-  
-
-
-
-
+// Mantenha a função showPrompt fora da newReading para organização
 function showPrompt(drawn) {
-const promptBox = document.getElementById('promptBox');
-promptBox.style.display = 'block';
-
+    const pBox = document.getElementById('promptBox');
+    if (pBox) {
+        pBox.style.display = 'block';
+        pBox.innerHTML = `<strong>📜 Cartas:</strong> ${drawn.join(' | ')}`;
+    }
 }
 
   function resetReading() {
