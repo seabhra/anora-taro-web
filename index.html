@@ -34,19 +34,26 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 
 
 .flors {
-display: flex;
-justify-content: center;
-gap: 12px;
-margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px 0;
 }
- 
-.flor {width: 50px; }
+
+.flor {
+  width: 70px;
+  height: auto;
+}
 
 .flor img {
-width: 100%;
-border-radius: 10px;
-box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  width: 100%;
+  height: auto;
+  display: block;
+  box-shadow: none;
+  border-radius: 0;
+  background: transparent;
 }
+
   
 .label {
 margin-top: 6px;
@@ -241,9 +248,11 @@ Embaralhar Cartas
 
 <div id="status">Aguardando sua consulta</div>
  
-<div class="flors"></div> 
-<div class="flor">
-<img id="flor" src="cards_images/liz.png">
+<div class="flors" id="florBox">
+  <div class="flor">
+    <img src="cards_images/liz.png" alt="Flor simbólica">
+  </div>
+</div>
  
 <div id="loader"></div>
 <div id="promptBox"></div>
