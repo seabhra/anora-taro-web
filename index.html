@@ -340,51 +340,21 @@ const shareButton = document.getElementById('shareButton');
 
 let hasReading = false;
 
+
 function shuffle(arr) {
-return arr.sort(() => Math.random() - 0.5);
+  return arr.sort(() => Math.random() - 0.5);
 }
-
-
 
 <!-- FUNÇÃO EMBARALHAR CARTAS -->
 function newReading() {
-  // estado inicial
-  document.getElementById('florBox')?.style.display = 'none';
+  document.getElementById('florBox').style.display = 'none';
   loader.style.display = 'block';
-  aiBox.style.display = 'none';
-  shareButton.style.display = 'none';
-
-  status.textContent = 'Consultando a IA...';
-  status.className = 'status-loading';
-
-  // toca o som
-  shuffleAudio.currentTime = 0;
-  shuffleAudio.play().catch(() => {});
-
-  // inicia rotação
-  startCardRotation();
-
-  // sorteia cartas
   const shuffled = shuffle([...cards]).slice(0, 3);
+  shuffled.forEach((card, i) => {
+    imgs[i].src = `${basePath}${card.file}.jpg`;
+    labels[i].innerText = card.label;
+  });  
 
-  // pequeno delay para o efeito visual
-  setTimeout(() => {
-    shuffled.forEach((card, i) => {
-      imgs[i].src = `${basePath}${card.file}.jpg`;
-      labels[i].innerText = card.label;
-    });
-
-    const drawnNames = shuffled.map(c => c.label);
-
-    showPrompt(drawnNames);
-    callAuroraAPI(drawnNames);
-
-    hasReading = true;
-    button.innerText = '🔄\u00A0\u00A0Nova Consulta';
-    button.className = 'action-button blue';
-
-  }, 600); // tempo do giro
-}
 
 
 
@@ -418,7 +388,7 @@ promptBox.style.display = 'block';
   shareButton.style.display = 'none';
   loader.style.display = 'none';
   button.innerText = '🔮\u00A0\u00A0\u00A0Embaralhar Cartas';
-  button.className = 'button pink';
+  button.className = 'action-button pink';
   status.textContent = 'Aguardando sua consulta';
   status.className = '';
   hasReading = false;
@@ -435,11 +405,14 @@ function shareOnWhatsApp() {
     if (!analysisText) return;
 
     // 2. Monta a mensagem
-    const message = `${title}\n\n${analysisText}\n\n
+
+
+  const message = `${title}\n\n${analysisText}\n\n
 
 🔮 Anora Tarô — leitura assistida por IA
 ⚡ Powered by Geraldo A. Seabra`;
-
+  
+  
     // 3. COMUNICAÇÃO COM APP INVENTOR (O Pulo do Gato)
     if (window.AppInventor) {
         // Envia o texto para o Bloco "WebViewString" do App Inventor
