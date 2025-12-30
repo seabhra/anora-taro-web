@@ -343,66 +343,15 @@ return arr.sort(() => Math.random() - 0.5);
 
 
 <!-- FUNÇÃO EMBARALHAR CARTAS -->
-  function newReading() {
-  // 1. Em vez de embaralhar, primeiro, faça as cartas girar por 2 segundos.
-  // Isso dá tempo para o usuário ver as cartas se movem antes da análise aparecer.
-  
-  // 2. Em seguida, mostre as cartas na posição final.
-  // 3. Depois do tempo, as cartas se movem para a posição final.
-  
-  // 4. Só então, a análise da IA é exibida.
-  
-  // 5. Por fim, o botão de "Nova Consulta" volta a ser "Embaralhar Cartas".
-
-  // 1. Inicia o efeito de girar as cartas
-  cards.forEach((card, i) => {
+function newReading() {
+  document.getElementById('florBox').style.display = 'none';
+  loader.style.display = 'block';
+  const shuffled = shuffle([...cards]).slice(0, 3);
+  shuffled.forEach((card, i) => {
     imgs[i].src = `${basePath}${card.file}.jpg`;
     labels[i].innerText = card.label;
-  });
+  });  
 
-  // 2. Inicia o temporizador para girar as cartas por 2 segundos.
-  setTimeout(() => {
-    // 2. Após 2 segundos, as cartas começar a girar.
-  }, 2000); // 2000 milisegundos = 2 segundos.
-
-  // 3. Depois que o tempo acabar, as cartas se movem para a posição final.
-  setTimeout(() => {
-    // 3. Mova as cartas para a posição final.
-    shuffled.forEach((card, i) => {
-      const finalPosition = card.element.getBoundingClientRect(); // Pega a posição atual da carta
-      const finalPosition = {
-        x: finalPosition.x,
-        y: finalPosition.y
-      };
-      
-      // Animação suave da posição inicial
-      const initialPosition = {
-        x: finalPosition.x - 100, // Move a carta 100px para a esquerda.
-        y: finalPosition.y + 100; // Move a carta 100px para baixo.
-      
-      // Move a carta para a posição final
-      card.element.style.transform = `translate(${finalPosition.x}px, ${finalPosition.y}px)`;
-    });
-  }, 2000); // 2000 milisegundos = 2 segundos
-
-  // 4. Mostra o loader e a análise.
-  loader.style.display = 'block';
-  aiBox.style.display = 'flip' para o loader girar, mas não mostra a análise ainda.
-  
-  // 5. Depois que o tempo de girar, mostre a análise.
-  setTimeout(() => {
-    loader.style.display = 'none';
-    aiBox.style.display = 'block';
-    shareButton.style.display = 'flex';
-  }, 2000); // 2 segundos após o início da rotação
-
-  // 6. Finalmente, exiba a análise e o botão de compartilhar.
-  hasReading = true;
-  button.innerText = '🔄 Nova Consulta';
-  button.className = 'button blue';
-  status.textContent = 'Consultando…';
-  status.className = 'status-loading';
-}
 
 
 const drawnNames = shuffled.map(c => c.label);
