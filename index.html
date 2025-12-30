@@ -386,7 +386,7 @@ function shuffle(arr) {
         });
     }, 100); 
 
-    // 5. Finalizar após 3 segundos
+    // 5. Finalizar após 5 segundos
     setTimeout(() => {
         clearInterval(spinInterval); // Para a roleta visual
         if (shuffleAudio) shuffleAudio.pause(); // Para o som
@@ -406,7 +406,7 @@ function shuffle(arr) {
         showPrompt(drawnNames);
         
         loader.style.display = 'block';
-        status.textContent = '🤖   Consultando a IA...';
+        status.textContent = '🤖\u00A0\u00A0\u00A0Consultando a IA...';
         status.className = 'status-loading';
         
         // Chama a API com os nomes das cartas
@@ -414,10 +414,10 @@ function shuffle(arr) {
 
         // 7. Atualizar estado do botão
         hasReading = true;
-        button.innerText = '🔄   Nova Consulta';
+        button.innerText = '🔄\u00A0\u00A0\u00A0Nova Consulta';
         button.className = 'action-button blue';
 
-    }, 3000); 
+    }, 5000); 
 }
 
 // Mantenha a função showPrompt fora da newReading para organização
@@ -481,7 +481,7 @@ body: JSON.stringify({
 messages: [
 {
 role: "user",
-content: `Faça uma pequena introdução antes de iniciar a interpretação da sequência de cartas. Realize uma análise profunda da situação do consulente, em parágrafos separados, os significados do passado, do presente e do futuro de forma integrada e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente.Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
+content: `Faça uma pequena introdução antes de iniciar a interpretação da sequência de cartas. Agora, realize uma análise profunda da situação do consulente, em parágrafos separados, os significados do passado, do presente e do futuro de forma integrada e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente.Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
 
 **Passado:**
 Escreva aqui sua análise sobre a carta ${cardsDrawn[0]} e sua influência no passado do consulente.
@@ -521,9 +521,11 @@ status.className = 'status-success';
 console.error('Erro na chamada da API:', error);
 const errorText = 'Erro ao acessar a reflexão.';
 
-
   
 aiBox.innerHTML = `<h2>Anora Assistente de IA</h2><p>${errorText}</p>`;
+
+const logoHtml = '<img src="cards_images/marca_anora.png" alt="Anora Tarô" class="ai-logo">';
+aiBox.innerHTML = `${logoHtml}<h2>Anora Assistente de IA</h2><p>${analysisText}</p>`;
 
 
 status.textContent = 'Erro de carregamento';
