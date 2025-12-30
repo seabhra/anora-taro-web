@@ -262,13 +262,8 @@ Embaralhar Cartas
 <!-- O conteúdo será inserido aqui pelo JavaScript -->
 </div>
 
-
-
-
 <button id="shareButton">Compartilhar no WhatsApp</button>
  
-
-
 <script>
 const basePath = 'cards_images/';
 const backCard = basePath + 'back.jpg';
@@ -345,9 +340,9 @@ shareButton.style.display = 'none';
 
  callAuroraAPI(shuffled.map(c => c.label));
   hasReading = true;
-  button.innerText = 'Nova Consulta';
+  button.innerText = '🔄 Nova Consulta';
   button.className = 'action-button blue';
-  status.textContent = 'Consultando…';
+  status.textContent = '🤖 Consultando com IA…';
   status.className = 'status-loading';
 }
 
@@ -366,7 +361,7 @@ promptBox.style.display = 'block';
   aiBox.style.display = 'none';
   shareButton.style.display = 'none';
   document.getElementById('florBox').style.display = 'flex';
-  button.innerText = 'Embaralhar Cartas';
+  button.innerText = '🔮 Embaralhar Cartas';
   button.className = 'action-button pink';
   status.textContent = 'Aguardando sua consulta';
   status.className = '';
@@ -406,7 +401,7 @@ body: JSON.stringify({
 messages: [
 {
 role: "user",
-content: `Realize uma análise profunda da situação do consulente, interpretando a sequência de cartas de forma integrada. Examine separadamente os significados do passado, do presente e do futuro e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente.Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
+content: `Faça uma pequena introdução antes de iniciar a interpretação da sequência de cartas. Realize uma análise profunda da situação do consulente, em parágrafos separados, os significados do passado, do presente e do futuro de forma integrada e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente.Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
 
 **Passado:**
 Escreva aqui sua análise sobre a carta ${cardsDrawn[0]} e sua influência no passado do consulente.
@@ -433,7 +428,7 @@ const analysisText = data.choices[0].message.content || 'A IA não retornou nenh
 
 aiBox.innerHTML = `<h2>🔮 Anora Assistente de IA</h2><p>${analysisText}</p>`;
 
-status.textContent = 'Consulta realizada';
+status.textContent = '✅ Consulta realizada';
 status.className = 'status-success';
 
 } catch (error) {
