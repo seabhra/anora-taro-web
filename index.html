@@ -339,17 +339,14 @@ function newReading() {
 const drawnNames = shuffled.map(c => c.label);
 
 showPrompt(drawnNames);
-
 loader.style.display = 'block';
 aiBox.style.display = 'none';
 shareButton.style.display = 'none';
 
  callAuroraAPI(shuffled.map(c => c.label));
-
   hasReading = true;
   button.innerText = 'Nova Consulta';
   button.className = 'action-button blue';
-
   status.textContent = 'Consultando…';
   status.className = 'status-loading';
 }
@@ -361,21 +358,19 @@ promptBox.style.display = 'block';
 
 }
 
-function resetReading() {
-imgs.forEach(img => img.src = backCard);
-labels.forEach(l => l.innerText = '');
 
-promptBox.style.display = 'none';
-aiBox.style.display = 'none';
-shareButton.style.display = 'none';
-loader.style.display = 'none';
-
-button.innerText = 'Embaralhar Cartas';
-button.className = 'action-button pink';
-
-status.textContent = 'Aguardando sua consulta';
-status.className = '';
-hasReading = false;
+  function resetReading() {
+  imgs.forEach(img => img.src = backCard);
+  labels.forEach(l => l.innerText = '');
+  loader.style.display = 'none';
+  aiBox.style.display = 'none';
+  shareButton.style.display = 'none';
+  document.getElementById('florBox').style.display = 'flex';
+  button.innerText = 'Embaralhar Cartas';
+  button.className = 'action-button pink';
+  status.textContent = 'Aguardando sua consulta';
+  status.className = '';
+  hasReading = false;
 }
 
  <!-- BOTÃO DE COMPARTILHAR WHATSAAP -->
