@@ -32,6 +32,22 @@ border-radius: 10px;
 box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
+
+.flors {
+display: flex;
+justify-content: center;
+gap: 12px;
+margin-bottom: 24px;
+}
+ 
+.flor {width: 50px; }
+
+.flor img {
+width: 100%;
+border-radius: 10px;
+box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+  
 .label {
 margin-top: 6px;
 font-size: 13px;
@@ -224,8 +240,12 @@ Embaralhar Cartas
 </button>
 
 <div id="status">Aguardando sua consulta</div>
+ 
+<div class="flors"></div> 
+<div class="flor">
+<img id="flor" src="cards_images/liz.png">
+ 
 <div id="loader"></div>
-
 <div id="promptBox"></div>
 
 <!-- CAIXA DE RESPOSTA DA IA -->
