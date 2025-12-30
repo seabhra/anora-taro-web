@@ -325,12 +325,16 @@ return arr.sort(() => Math.random() - 0.5);
 }
 
 function newReading() {
-const shuffled = shuffle([...cards]).slice(0, 3);
+  document.getElementById('florBox').style.display = 'none';
+  loader.style.display = 'block';
 
-shuffled.forEach((card, i) => {
-imgs[i].src = `${basePath}${card.file}.jpg`;
-labels[i].innerText = card.label;
-});
+  const shuffled = shuffle([...cards]).slice(0, 3);
+
+  shuffled.forEach((card, i) => {
+    imgs[i].src = `${basePath}${card.file}.jpg`;
+    labels[i].innerText = card.label;
+  });  
+
 
 const drawnNames = shuffled.map(c => c.label);
 
@@ -340,15 +344,16 @@ loader.style.display = 'block';
 aiBox.style.display = 'none';
 shareButton.style.display = 'none';
 
-callAuroraAPI(drawnNames);
+ callAuroraAPI(shuffled.map(c => c.label));
 
-hasReading = true;
-button.innerText = 'Nova Consulta';
-button.className = 'action-button blue';
+  hasReading = true;
+  button.innerText = 'Nova Consulta';
+  button.className = 'action-button blue';
 
-status.textContent = 'Consultando…';
-status.className = 'status-loading';
+  status.textContent = 'Consultando…';
+  status.className = 'status-loading';
 }
+
 
 function showPrompt(drawn) {
 const promptBox = document.getElementById('promptBox');
