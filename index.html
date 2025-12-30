@@ -82,6 +82,20 @@ cursor: pointer;
 .pink { background:#fd98be; }
 .blue { background:#98e6ce; }
 
+/* Estilo marca anora na mensagem compartilhada */
+  
+  .ai-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ai-logo {
+  width: 24px;
+  height: 24px;
+}
+
 /* Estilo padrão do status */
 #status {
 margin-top: 16px;
@@ -377,7 +391,10 @@ function shareOnWhatsApp() {
     if (!analysisText) return;
 
     // 2. Monta a mensagem
-    const message = `${title}\n\n${analysisText}\n\n🔮 Gerado por Anora Tarô App`;
+    const message = `${title}\n\n${analysisText}\n\n
+
+🔮 Anora Tarô — leitura assistida por IA
+⚡ Powered by Geraldo A. Seabra`;
 
     // 3. COMUNICAÇÃO COM APP INVENTOR (O Pulo do Gato)
     if (window.AppInventor) {
@@ -426,7 +443,13 @@ console.log('Resposta Completa da API:', data);
 
 const analysisText = data.choices[0].message.content || 'A IA não retornou nenhuma análise.';
 
-aiBox.innerHTML = `<h2>🔮 Anora Assistente de IA</h2><p>${analysisText}</p>`;
+aiBox.innerHTML = `
+  <h2 class="ai-title">
+    <img src="cards_images/marca_anora.png" alt="Anora Tarô" class="ai-logo">
+    Anora Assistente de IA
+  </h2>
+  <p>${analysisText}</p>
+`;
 
 status.textContent = '✅ Consulta realizada';
 status.className = 'status-success';
