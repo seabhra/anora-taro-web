@@ -400,14 +400,14 @@ function newReading() {
 
 const drawnNames = shuffled.map(c => c.label);
       
-showPrompt(shuffled.map(c => c.label));
+showPrompt (drawnNames)
 loader.style.display = 'block';
 aiBox.style.display = 'none';
 shareButton.style.display = 'none';
 status.textContent = 'Consultando a IA...';
 
             
- callAuroraAPI(shuffled.map(c => c.label));
+ callAuroraAPI (drawnNames)
    hasReading = true;
   button.innerText = '🔄\u00A0\u00A0\u00A0Nova Consulta';
   button.className = 'action-button blue';
