@@ -400,7 +400,7 @@ function newReading() {
 
 const drawnNames = shuffled.map(c => c.label);
       
-showPrompt(drawnNames);
+showPrompt(shuffled.map(c => c.label));
 loader.style.display = 'block';
 aiBox.style.display = 'none';
 shareButton.style.display = 'none';
