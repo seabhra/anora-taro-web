@@ -253,7 +253,7 @@ background-color: #128C7E;
  /* CONTROLE DE ESPAÇO EMOJI DENTRO DO JS */
   
 .status-emoji {
-  margin-right: 10px;
+  margin-right: 8px;
   display: inline-block;
 }
 .status-text {
@@ -401,7 +401,7 @@ function shuffle(arr) {
         });
     }, 100); 
 
-    // 5. Finalizar após 6 segundos
+    // 5. Finalizar após 7 segundos
     setTimeout(() => {
         clearInterval(spinInterval); // Para a roleta visual
         if (shuffleAudio) shuffleAudio.pause(); // Para o som
@@ -432,10 +432,12 @@ function shuffle(arr) {
 
         // 7. Atualizar estado do botão
         hasReading = true;
-        button.innerText = '🔄\u00A0\u00A0\u00A0Nova Consulta';
-        button.className = 'action-button blue';
-
-    }, 6000); 
+        button.innerText = 
+ <span class="status-emoji">🔄</span>
+  <span class="status-text">Nova Consulta</span>
+`;
+         
+    }, 7000); 
 }
 
 // Mantenha a função showPrompt fora da newReading para organização
@@ -454,7 +456,11 @@ function showPrompt(drawn) {
   aiBox.style.display = 'none';
   shareButton.style.display = 'none';
   loader.style.display = 'none';
-  button.innerText = '🔮\u00A0\u00A0\u00A0Embaralhar Cartas';
+ 
+    button.innerText = 
+    <span class="status-emoji">🔮</span>
+  <span class="status-text">Embaralhar Cartas</span>
+`;
   button.className = 'action-button pink';
   status.textContent = 'Aguardando sua consulta';
   status.className = '';
@@ -532,15 +538,16 @@ aiBox.innerHTML = `
   <p>${analysisText}</p>
 `;
 
-status.textContent = '✅\u00A0\u00A0\u00A0Consulta realizada com sucesso';
+status.textContent = 
+  <span class="status-emoji">✅</span>
+  <span class="status-text">Consulta realizada com sucesso</span>
+`;
+  
 status.className = 'status-success';
 
 } catch (error) {
 console.error('Erro na chamada da API:', error);
 const errorText = 'Erro ao acessar a reflexão.';
-
-  
-aiBox.innerHTML = `<h2>🔮\u00A0\u00A0\u00A0Anora Assistente de IA</h2><p>${errorText}</p>`;
 
 const logoHtml = '<img src="cards_images/marca_anora.png" alt="Anora Tarô" class="ai-logo">';
 aiBox.innerHTML = `${logoHtml}<h2>Anora Assistente de IA</h2><p>${title}</p>`;
