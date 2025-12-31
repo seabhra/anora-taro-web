@@ -259,6 +259,7 @@ background-color: #128C7E;
 .status-text {
  vertical-align: middle;
 }
+  
 </style>
 </head>
 
@@ -432,9 +433,10 @@ function shuffle(arr) {
 
         // 7. Atualizar estado do botão
         hasReading = true;
+
       
-        button.innerText = 
- <span class="status-emoji">🔄</span>
+   button.innerHTML = `
+  <span class="status-emoji">🔄</span>
   <span class="status-text">Nova Consulta</span>
 `;
          
@@ -458,10 +460,11 @@ function showPrompt(drawn) {
   shareButton.style.display = 'none';
   loader.style.display = 'none';
  
-    button.innerText = 
+    button.innerText = `
     <span class="status-emoji">🔮</span>
   <span class="status-text">Embaralhar Cartas</span>
 `;
+
   button.className = 'action-button pink';
   status.textContent = 'Aguardando sua consulta';
   status.className = '';
@@ -539,7 +542,7 @@ aiBox.innerHTML = `
   <p>${analysisText}</p>
 `;
 
-status.textContent = 
+status.textContent = `
   <span class="status-emoji">✅</span>
   <span class="status-text">Consulta realizada com sucesso</span>
 `;
