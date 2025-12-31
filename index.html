@@ -245,12 +245,20 @@ background-color: #128C7E;
     50% { transform: translateY(5px); }
     100% { transform: translateY(-5px); }
 }
- /* CONTROLE DE ESPAÇO EMOJI */
+ /* CONTROLE DE ESPAÇO EMOJI FORA JS */
 
  .btn-emoji {
   margin-right: 10px;
 }
+ /* CONTROLE DE ESPAÇO EMOJI DENTRO DO JS */
   
+.status-emoji {
+  margin-right: 10px;
+  display: inline-block;
+}
+.status-text {
+ vertical-align: middle;
+}
 </style>
 </head>
 
@@ -413,8 +421,11 @@ function shuffle(arr) {
         showPrompt(drawnNames);
         
         loader.style.display = 'block';
-        status.textContent = '🤖\u00A0\u00A0\u00A0Consultando a IA...';
-        status.className = 'status-loading';
+        status.innerHTML = `
+  <span class="status-emoji">🤖</span>
+  <span class="status-text">Consultando a IA...</span>
+`;
+      status.className = 'status-loading';
         
         // Chama a API com os nomes das cartas
         callAuroraAPI(drawnNames);
