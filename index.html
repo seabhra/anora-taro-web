@@ -101,7 +101,17 @@ cursor: pointer;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
+  /* Muda cor roxa em sorteando suas cartas */
+#status-roxo {
+  margin-top: 12px;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
 
+.status-purple {
+  color: #7b3fe4; /* roxo místico, sem exagero */
+  font-weight: 600;
+}
   
 /* Estilo padrão do status */
 #status {
@@ -310,7 +320,11 @@ background-color: #128C7E;
 </div>
 
 <button id="shareButton">Compartilhar no WhatsApp</button>
+
+  
  
+/* CORPO DO JS DO APLICATIVO */
+  
 <script>
 
 const shuffleAudio = new Audio('Audio_app/slots_machine.mp3');
@@ -358,6 +372,8 @@ name3 = document.getElementById('name3')
 ];
 
 const button = document.getElementById('actionButton');
+const status = document.getElementById('status-roxo');
+  
 const status = document.getElementById('status');
 const loader = document.getElementById('loader');
 const aiBox = document.getElementById('aiResponse');
@@ -366,6 +382,15 @@ const shareButton = document.getElementById('shareButton');
 
 let hasReading = false;
 
+  button.addEventListener('click', () => {
+    
+   status.innerHTML = `
+  <span class="status-emoji">🌀</span>
+  <span class="status-text">Sorteando suas cartas</span>
+`;
+    
+  status.classList.add('status-purple');
+});
 
 function shuffle(arr) {
   return arr.sort(() => Math.random() - 0.5);
@@ -542,6 +567,7 @@ aiBox.innerHTML = `
   <p>${analysisText}</p>
 `;
 
+  
   status.innerHTML = `
   <span class="status-emoji">✅</span>
   <span class="status-text">Consulta realizada com sucesso</span>
