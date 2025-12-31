@@ -386,7 +386,7 @@ function shuffle(arr) {
         });
     }, 100); 
 
-    // 5. Finalizar após 5 segundos
+    // 5. Finalizar após 6 segundos
     setTimeout(() => {
         clearInterval(spinInterval); // Para a roleta visual
         if (shuffleAudio) shuffleAudio.pause(); // Para o som
@@ -417,7 +417,7 @@ function shuffle(arr) {
         button.innerText = '🔄\u00A0\u00A0\u00A0Nova Consulta';
         button.className = 'action-button blue';
 
-    }, 5000); 
+    }, 6000); 
 }
 
 // Mantenha a função showPrompt fora da newReading para organização
@@ -444,8 +444,8 @@ function showPrompt(drawn) {
 }
 
  
-
  <!-- BOTÃO DE COMPARTILHAR WHATSAAP -->
+   
 function shareOnWhatsApp() {
     // 1. Captura o conteúdo
     const title = document.querySelector('#aiResponse h2')?.innerText || 'Anora Tarô';
@@ -481,18 +481,18 @@ body: JSON.stringify({
 messages: [
 {
 role: "user",
-content: `Faça uma pequena introdução antes de iniciar a interpretação da sequência de cartas. Agora, realize uma análise profunda da situação do consulente, em parágrafos separados, os significados do passado, do presente e do futuro de forma integrada e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente.Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
+content: `Faça uma pequena introdução interpretativa da sequência de cartas antes de iniciar a análise de cada ítem. Depois realize uma análise profunda da situação do consulente, em parágrafos separados, os significados do passado, do presente e do futuro de forma integrada e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente.Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
 
-**Passado:**
+**Situação do Consulente no Passado:**
 Escreva aqui sua análise sobre a carta ${cardsDrawn[0]} e sua influência no passado do consulente.
 
-**Presente:**
+**Situação do Consulente no Presente:**
 Escreva aqui sua análise sobre a carta ${cardsDrawn[1]} e sua influência no presente do consulente.
 
-**Futuro:**
+**Situação do Consulente no Futuro:**
 Escreva aqui sua análise sobre a carta ${cardsDrawn[2]} e sua influência no futuro do consulente.
 
-**Análise Final:**
+**Análise Contextualizada do Consulente:**
 Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma orientação clara e integrada para o consulente.`
 }
 ]
@@ -522,10 +522,10 @@ console.error('Erro na chamada da API:', error);
 const errorText = 'Erro ao acessar a reflexão.';
 
   
-aiBox.innerHTML = `<h2>Anora Assistente de IA</h2><p>${errorText}</p>`;
+aiBox.innerHTML = `<h2>🔮\u00A0\u00A0\u00A0Anora Assistente de IA</h2><p>${errorText}</p>`;
 
 const logoHtml = '<img src="cards_images/marca_anora.png" alt="Anora Tarô" class="ai-logo">';
-aiBox.innerHTML = `${logoHtml}<h2>Anora Assistente de IA</h2><p>${analysisText}</p>`;
+aiBox.innerHTML = `${logoHtml}<h2>Anora Assistente de IA</h2><p>${title}</p>`;
 
 
 status.textContent = 'Erro de carregamento';
