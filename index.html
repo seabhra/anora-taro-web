@@ -382,15 +382,7 @@ const shareButton = document.getElementById('shareButton');
 
 let hasReading = false;
 
-  button.addEventListener('click', () => {
-    
-   status.innerHTML = `
-  <span class="status-emoji">🌀</span>
-  <span class="status-text">Sorteando suas cartas</span>
-`;
-    
-  status.classList.add('status-purple');
-});
+  
 
 function shuffle(arr) {
   return arr.sort(() => Math.random() - 0.5);
