@@ -112,10 +112,7 @@ font-weight: bold;
 color: #718096;
 transition: color 0.3s ease;
 }
-.status-purple {
-  color: #7b3fe4; /* roxo místico */
-  font-weight: 600;
-}
+
 
 /* Classes para as cores do status */
 #status.status-loading {
@@ -379,13 +376,7 @@ const promptBox = document.getElementById('promptBox');
 const shareButton = document.getElementById('shareButton');
 
 
-  button.addEventListener('click', () => {
-  status.innerHTML = `
-    <span class="status-emoji">🌀</span>
-    <span class="status-text">Sorteando suas cartas</span>
-  `;
-  status.classList.add('status-purple');
-});
+ 
 
 let hasReading = false;
 
