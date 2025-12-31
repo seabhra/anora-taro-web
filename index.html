@@ -245,6 +245,12 @@ background-color: #128C7E;
     50% { transform: translateY(5px); }
     100% { transform: translateY(-5px); }
 }
+ /* CONTROLE DE ESPAÇO EMOJI */
+
+ .btn-emoji {
+  margin-right: 10px;
+}
+  
 </style>
 </head>
 
@@ -273,7 +279,9 @@ background-color: #128C7E;
 </div>
 </div>
 
-<button id="actionButton" class="action-button pink">🔮 Embaralhar Cartas
+<button id="actionButton" class="action-button pink">
+  <span class="btn-emoji">🔮</span>
+  <span>Embaralhar Cartas</span>
 </button>
 
 <div id="status">Aguardando sua consulta</div>
