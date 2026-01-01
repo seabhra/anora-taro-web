@@ -521,7 +521,8 @@ function showPrompt(drawn) {
     const analysisText = document.querySelector('#aiResponse p')?.innerText || '';
     if (!analysisText) return;
       // 2. Monta a mensagem
-  const message = `✨${title}\n\n${analysisText}\n\n
+       const message = ✨`${title}\n\n${analysisText}${WHATSAPP_FOOTER}`;
+
 🔮 Anora Tarô — leitura assistida por IA
 ⚡ Powered by Geraldo A. Seabra`;
       // 3. COMUNICAÇÃO COM APP INVENTOR (O Pulo do Gato)
