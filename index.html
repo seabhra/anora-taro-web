@@ -293,10 +293,11 @@ background-color: #128C7E;
   <span>Embaralhar Cartas</span>
 </button>
 
+  <!-- LABEL AGUARDANDO SUA CONSULTA -->
   <div id="status">
-  <span class="status-emoji">⏳</span>
-  <span class="status-text">Aguardando sua consulta</span>
-</div>
+  <span class="status-emoji"></span>
+  <span class="status-text">Aguardando sua consulta...</span>
+  </div>
   
  <!-- LOCAL DA FLOR DE LIZ -->
   
@@ -481,7 +482,13 @@ function showPrompt(drawn) {
 `;
 
   button.className = 'action-button pink';
-  status.textContent = 'Aguardando sua consulta';
+
+  <!-- LABEL AGUARDANDO SUA CONSULTA -->
+  <div id="status">
+  <span class="status-emoji"></span>
+  <span class="status-text">Aguardando sua consulta...</span>
+  </div>  
+    
   status.className = '';
   hasReading = false;
 }
