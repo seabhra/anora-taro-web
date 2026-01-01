@@ -80,6 +80,7 @@ cursor: pointer;
 }
 
 .pink { background:#fd98be; }
+.roxo { background:#c92fd7; }
 .blue { background:#98e6ce; }
 
 /* Estilo marca anora na mensagem compartilhada */
@@ -109,7 +110,6 @@ font-weight: bold;
 color: #718096;
 transition: color 0.3s ease;
 }
-
 
 /* Classes para as cores do status */
 #status.status-loading {
@@ -199,6 +199,7 @@ margin: 0; /* Reseta a margem */
 }
 
 /* Adiciona espaço apenas ENTRE os parágrafos (a partir do segundo) */
+  
 #aiResponse p:not(:first-child) {
 margin-top: 1em;
 }
@@ -392,9 +393,9 @@ function shuffle(arr) {
     <!-- CENTRALIZA IMG FLOR DE LIZ  -->
       
    const florBox = document.getElementById('florBox');
-    
     if (florBox) florBox.style.display = 'none';
-    florBox.style.display = 'flex';
+    
+  florBox.style.display = 'flex';
   florBox.style.justifyContent = 'center';
   florBox.style.alignItems = 'center';
     
@@ -410,6 +411,11 @@ function shuffle(arr) {
         shuffleAudio.play().catch(e => console.log("Erro ao tocar áudio:", e));
     }
 
+     button.className = 'action-button roxo';
+   button.innerHTML = `
+  <span class="status-emoji">🌀</span>
+  <span class="status-text">Sorteando Suas Cartas</span>
+`;
     // 3. Iniciar Animação Visual
     imgs.forEach(img => img.classList.add('card-spinning'));
     labels.forEach(l => l.innerText = "Sorteando...");
