@@ -391,8 +391,11 @@ function shuffle(arr) {
 
    const florBox = document.getElementById('florBox');
 
-    
+    florBox.style.display = 'flex';
+  florBox.style.justifyContent = 'center';
+  florBox.style.alignItems = 'center';
     if (florBox) florBox.style.display = 'block';
+    
     
     // Resetar interface para o novo sorteio
     aiBox.style.display = 'none';
@@ -455,7 +458,7 @@ function shuffle(arr) {
   <span class="status-emoji">🔄</span>
   <span class="status-text">Nova Consulta</span>
 `;
-         
+         florBox.style.display = 'block';
     }, 7000); 
 }
 
