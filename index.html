@@ -515,27 +515,44 @@ function showPrompt(drawn) {
  
  <!-- BOTÃO DE COMPARTILHAR WHATSAAP -->
    
-   function shareOnWhatsApp() {
-    // 1. Captura o conteúdo
-    const title = document.querySelector('#aiResponse h2')?.innerText || 'Anora Tarô';
-    const analysisText = document.querySelector('#aiResponse p')?.innerText || '';
-    if (!analysisText) return;
-      // 2. Monta a mensagem
-       const message = ✨`${title}\n\n${analysisText}${WHATSAPP_FOOTER}`;
+  // --- CONFIGURAÇÃO ---
+// Defina o rodapé aqui. Fica fácil de editar!
+const WHATSAPP_FOOTER = "\n\n🔮 Anora Tarô — leitura assistida por IA\n⚡ Powered by Geraldo A. Seabra";
+const DEFAULT_SHARE_TITLE = 'Anora Tarô';
 
-🔮 Anora Tarô — leitura assistida por IA
-⚡ Powered by Geraldo A. Seabra`;
-      // 3. COMUNICAÇÃO COM APP INVENTOR (O Pulo do Gato)
-    if (window.AppInventor) {
-        // Envia o texto para o Bloco "WebViewString" do App Inventor
-        window.AppInventor.setWebViewString(message);
+/**
+ * Compartilha a leitura atual no WhatsApp ou a envia para o App Inventor.
+ */
+function shareOnWhatsApp() {
+  // 1. Captura o conteúdo de forma segura
+  const title = document.querySelector('#aiResponse h2')?.innerText?.trim() || DEFAULT_SHARE_TITLE;
+  const analysisText = document.querySelector('#aiResponse p')?.innerText?.trim() || '';
+
+  // 2. Se não houver texto da análise, não faz nada
+  if (!analysisText) {
+    console.warn('Nenhum texto de análise encontrado para compartilhar.');
+    return;
+  }
+
+  // 3. Monta a mensagem final de forma organizada
+  // O rodapé (com os emojis) é adicionado por último.
+  const message = `✨ ${title}\n\n${analysisText}${WHATSAPP_FOOTER}`;
+
+  // 4. Lógica de envio (para App Inventor ou navegador)
+  try {
+    if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
+      // Envia para o App Inventor
+      window.AppInventor.setWebViewString(message);
     } else {
-        // Fallback apenas para teste no PC/Navegador comum
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
+      // Abre o WhatsApp Web (fallback para testes)
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;
+      window.open(whatsappUrl, '_blank');
     }
-} 
-
-
+  } catch (error) {
+    console.error("Erro ao tentar compartilhar no WhatsApp:", error);
+  }
+}
    
    
 
