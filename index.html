@@ -111,15 +111,17 @@ color: #718096;
 transition: color 0.3s ease;
 }
 
-/* Classes para as cores do status */
+/* status da mudança de cores da label abaixo do botão*/
+
+#status.status-process {
+color: #46b7c1; /* Roxo */
+}
 #status.status-loading {
 color: #6b46c1; /* Roxo */
 }
-
 #status.status-success {
 color: #38a169; /* Verde */
 }
-
 #status.status-error {
 color: #3182ce; /* Azul */
 }
@@ -414,8 +416,10 @@ function shuffle(arr) {
      button.className = 'action-button roxo';
    button.innerHTML = `
   <span class="status-emoji">🌀</span>
-  <span class="status-text">Sorteando Suas Cartas</span>
+  <span class="status-text">Embaralhando Cartas</span>
 `;
+    status.textContent = 'Sua previsão em andamento...';
+    
     // 3. Iniciar Animação Visual
     imgs.forEach(img => img.classList.add('card-spinning'));
     labels.forEach(l => l.innerText = "Sorteando...");
