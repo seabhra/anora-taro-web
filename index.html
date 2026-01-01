@@ -369,9 +369,7 @@ name2 = document.getElementById('name2'),
 name3 = document.getElementById('name3')
 ];
 
-const button = document.getElementById('actionButton');
-
-  
+const button = document.getElementById('actionButton');  
 const status = document.getElementById('status');
 const loader = document.getElementById('loader');
 const aiBox = document.getElementById('aiResponse');
@@ -380,13 +378,13 @@ const shareButton = document.getElementById('shareButton');
 
 
 let hasReading = false;
-  
+
+
+  <!-- FUNÇÃO EMBARALHAR CARTAS -->
 
 function shuffle(arr) {
   return arr.sort(() => Math.random() - 0.5);
 }
-
-<!-- FUNÇÃO EMBARALHAR CARTAS -->
 
   function newReading() {
     // 1. Preparação inicial
@@ -449,7 +447,7 @@ function shuffle(arr) {
         // 7. Atualizar estado do botão
         hasReading = true;
 
-      
+   button.className = 'action-button blue';
    button.innerHTML = `
   <span class="status-emoji">🔄</span>
   <span class="status-text">Nova Consulta</span>
@@ -477,7 +475,7 @@ function showPrompt(drawn) {
   loader.style.display = 'none';
 
     button.innerText = '🔮\u00A0\u00A0\u00A0Embaralhar Cartas';
-    button.className = 'action-button azul';
+    button.className = 'action-button pink';
 
   <!-- LABEL AGUARDANDO SUA CONSULTA -->
   status.textContent = 'Aguardando sua consulta';
@@ -556,7 +554,6 @@ aiBox.innerHTML = `
   </h2>
   <p>${analysisText}</p>
 `;
-
   
   status.innerHTML = `
   <span class="status-emoji">✅</span>
@@ -571,8 +568,6 @@ const errorText = 'Erro ao acessar a reflexão.';
 
   
 aiBox.innerHTML = `<h2>🔮\u00A0\u00A0\u00A0Anora Assistente de IA</h2><p>${errorText}</p>`;
-
-
 
 
 status.textContent = 'Erro de carregamento';
