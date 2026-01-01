@@ -388,7 +388,11 @@ function shuffle(arr) {
 
   function newReading() {
     // 1. Preparação inicial
-    const florBox = document.getElementById('florBox');
+
+   const florBox = document.getElementById('florBox');
+  florBox.style.display = 'none';
+  florBox.classList.remove('flors');
+    
     if (florBox) florBox.style.display = 'none';
     
     // Resetar interface para o novo sorteio
@@ -475,6 +479,7 @@ function showPrompt(drawn) {
   loader.style.display = 'none';
 
   document.getElementById('florBox').style.display = 'block';
+    
     button.innerText = '🔮\u00A0\u00A0\u00A0Embaralhar Cartas';
     button.className = 'action-button pink';
 
