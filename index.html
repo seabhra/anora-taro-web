@@ -4,14 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- Meta Tags para Compartilhamento (Open Graph) -->
-  <meta property="og:title" content="Anora Tarô — Leitura assistida por IA">
-  <meta property="og:description" content="Descubra insights poderosos com uma leitura de tarô assistida por inteligência artificial.">
-  <meta property="og:image" content="https://seabhra.github.io/anora-taro-web/cards_images/marca_anora.png">
-  <meta property="og:image:alt" content="Logo da Anora Tarô">
-  <meta property="og:url" content="https://seabhra.github.io/anora-taro-web/">
-  <meta property="og:type" content="website">
-  
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#6b46c1">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
@@ -523,43 +515,46 @@ function showPrompt(drawn) {
 
  
  <!-- BOTÃO DE COMPARTILHAR WHATSAAP -->
-
-// --- CONFIGURAÇÃO ---
-const WHATSAPP_FOOTER = "\n\n🔮 Anora Tarô — leitura assistida por IA\n⚡ Powered by Geraldo A. Seabra";
-const DEFAULT_SHARE_TITLE = 'Anora Tarô';
-// Use a URL principal do seu projeto, não a da imagem direta
-const PROJECT_URL = 'https://seabhra.github.io/anora-taro-web/';
-
-/**
- * Compartilha a leitura atual no WhatsApp ou a envia para o App Inventor.
- */
 function shareOnWhatsApp() {
+  // 1. CAPTURA O CONTEÚDO DE FORMA SEGURA
+  // Usa optional chaining (?.) para evitar erros se o elemento não for encontrado.
   const titleElement = document.querySelector('#aiResponse h2');
   const analysisElement = document.querySelector('#aiResponse p');
 
   const title = titleElement?.innerText?.trim() || DEFAULT_SHARE_TITLE;
   const analysisText = analysisElement?.innerText?.trim() || '';
 
+  // 2. VALIDAÇÃO ESSENCIAL
+  // Se não houver texto da análise, não há o que compartilhar.
   if (!analysisText) {
     console.warn('Nenhum texto de análise encontrado para compartilhar.');
-    return;
+    return; // Interrompe a função
   }
 
   // 3. MONTA A MENSAGEM FINAL
-  // A URL do projeto vai primeiro para ativar a pré-visualização.
-  const message = `${PROJECT_URL}\n\n✨ ${title}\n\n${analysisText}${WHATSAPP_FOOTER}`;
+  // A URL da logo não renderiza como imagem no corpo do texto do WhatsApp,
+  // mas pode gerar uma pré-visualização de link se o app suportar.
+  // O mais seguro é focar no texto.
+  const message = `✨ ${title}\n\n${analysisText}${WHATSAPP_FOOTER}`;
 
-  // 4. LÓGICA DE ENVIO (sem mudanças aqui)
+  // 4. LÓGICA DE ENVIO COM TRATAMENTO DE ERRO
   try {
     if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
+      // --- AMBIENTE APP INVENTOR ---
+      // Envia o texto para o bloco "WebViewString" do App Inventor.
       window.AppInventor.setWebViewString(message);
     } else {
+      // --- AMBIENTE NAVEGADOR (Fallback para testes) ---
+      // Abre o WhatsApp Web com a mensagem pré-preenchida.
       const encodedMessage = encodeURIComponent(message);
       const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;
       window.open(whatsappUrl, '_blank');
     }
   } catch (error) {
+    // Se algo der errado (ex: window.AppInventor não for o esperado), loga o erro.
     console.error("Erro ao tentar compartilhar no WhatsApp:", error);
+    // Opcional: mostrar um alerta para o usuário
+    // alert('Não foi possível compartilhar a mensagem no momento.');
   }
 }
 
