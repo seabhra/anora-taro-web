@@ -389,13 +389,14 @@ function shuffle(arr) {
   function newReading() {
     // 1. Preparação inicial
 
+    <!-- CENTRALIZA IMG FLOR DE LIZ  -->
+      
    const florBox = document.getElementById('florBox');
-
+    
+    if (florBox) florBox.style.display = 'none';
     florBox.style.display = 'flex';
   florBox.style.justifyContent = 'center';
   florBox.style.alignItems = 'center';
-    if (florBox) florBox.style.display = 'none';
-    
     
     // Resetar interface para o novo sorteio
     aiBox.style.display = 'none';
@@ -479,9 +480,9 @@ function showPrompt(drawn) {
   aiBox.style.display = 'none';
   shareButton.style.display = 'none';
   loader.style.display = 'none';
-
-  const florBox = document.getElementById('florBox'); 
-  
+    
+  <!-- CENTRALIZA IMG FLOR DE LIZ  -->
+  const florBox = document.getElementById('florBox');   
   florBox.style.display = 'flex';
   florBox.style.justifyContent = 'center';
   florBox.style.alignItems = 'center';
