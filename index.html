@@ -514,29 +514,58 @@ function showPrompt(drawn) {
 
  
  <!-- BOTÃO DE COMPARTILHAR WHATSAAP -->
-   
+
+
+// --- CONFIGURAÇÃO (Facilita alterar textos depois) ---
+const WHATSAPP_FOOTER = "\n\n🔮 Anora Tarô — leitura assistida por IA\n⚡ Powered by Geraldo A. Seabra";
+const DEFAULT_SHARE_TITLE = 'Anora Tarô';
+
+/**
+ * Compartilha a leitura atual no WhatsApp ou a envia para o App Inventor.
+ */
 function shareOnWhatsApp() {
-    // 1. Captura o conteúdo
-    const title = document.querySelector('#aiResponse h2')?.innerText || 'Anora Tarô';
-    const analysisText = document.querySelector('#aiResponse p')?.innerText || '';
+  // 1. CAPTURA O CONTEÚDO DE FORMA SEGURA
+  // Usa optional chaining (?.) para evitar erros se o elemento não for encontrado.
+  const titleElement = document.querySelector('#aiResponse h2');
+  const analysisElement = document.querySelector('#aiResponse p');
 
-    if (!analysisText) return;
+  const title = titleElement?.innerText?.trim() || DEFAULT_SHARE_TITLE;
+  const analysisText = analysisElement?.innerText?.trim() || '';
 
-    // 2. Monta a mensagem
-  const message = `${title}\n\n${analysisText}\n\n
-🔮 Anora Tarô — leitura assistida por IA
-⚡ Powered by Geraldo A. Seabra`;
-  
-  
-    // 3. COMUNICAÇÃO COM APP INVENTOR (O Pulo do Gato)
-    if (window.AppInventor) {
-        // Envia o texto para o Bloco "WebViewString" do App Inventor
-        window.AppInventor.setWebViewString(message);
+  // 2. VALIDAÇÃO ESSENCIAL
+  // Se não houver texto da análise, não há o que compartilhar.
+  if (!analysisText) {
+    console.warn('Nenhum texto de análise encontrado para compartilhar.');
+    return; // Interrompe a função
+  }
+
+  // 3. MONTA A MENSAGEM FINAL
+  // A URL da logo não renderiza como imagem no corpo do texto do WhatsApp,
+  // mas pode gerar uma pré-visualização de link se o app suportar.
+  // O mais seguro é focar no texto.
+  const message = `✨ ${title}\n\n${analysisText}${WHATSAPP_FOOTER}`;
+
+  // 4. LÓGICA DE ENVIO COM TRATAMENTO DE ERRO
+  try {
+    if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
+      // --- AMBIENTE APP INVENTOR ---
+      // Envia o texto para o bloco "WebViewString" do App Inventor.
+      window.AppInventor.setWebViewString(message);
     } else {
-        // Fallback apenas para teste no PC/Navegador comum
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
+      // --- AMBIENTE NAVEGADOR (Fallback para testes) ---
+      // Abre o WhatsApp Web com a mensagem pré-preenchida.
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;
+      window.open(whatsappUrl, '_blank');
     }
+  } catch (error) {
+    // Se algo der errado (ex: window.AppInventor não for o esperado), loga o erro.
+    console.error("Erro ao tentar compartilhar no WhatsApp:", error);
+    // Opcional: mostrar um alerta para o usuário
+    // alert('Não foi possível compartilhar a mensagem no momento.');
+  }
 }
+   
 
   <!-- CHAMA AS CARTAS SELECIONADAS E O CONTEÚDO DO PROMPT -->
 async function callAuroraAPI(cardsDrawn) {
