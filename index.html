@@ -474,13 +474,14 @@ function showPrompt(drawn) {
   shareButton.style.display = 'none';
   loader.style.display = 'none';
 
+  document.getElementById('florBox').style.display = 'block';
     button.innerText = '🔮\u00A0\u00A0\u00A0Embaralhar Cartas';
     button.className = 'action-button pink';
 
   <!-- LABEL AGUARDANDO SUA CONSULTA -->
   status.textContent = 'Aguardando sua consulta';
    
-  status.className = 'flors';
+  status.className = '';
   hasReading = false;
 }
 
