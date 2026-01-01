@@ -475,13 +475,9 @@ function showPrompt(drawn) {
   aiBox.style.display = 'none';
   shareButton.style.display = 'none';
   loader.style.display = 'none';
- 
-    button.innerText = `
-    <span class="status-emoji">🔮</span>
-  <span class="status-text">Embaralhar Cartas</span>
-`;
 
-  button.className = 'action-button pink';
+    button.innerText = '🔮\u00A0\u00A0\u00A0Embaralhar Cartas';
+    button.className = 'action-button azul';
 
   <!-- LABEL AGUARDANDO SUA CONSULTA -->
   status.textContent = 'Aguardando sua consulta';
