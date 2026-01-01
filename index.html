@@ -477,8 +477,13 @@ function showPrompt(drawn) {
   shareButton.style.display = 'none';
   loader.style.display = 'none';
 
-  document.getElementById('florsBox').style.display = 'block';
-  florBox.classList.remove('flors');
+  const florBox = document.getElementById('florBox'); // Corrigido de 'florsBox'
+
+  // 1. Torna o elemento visível
+  florBox.style.display = 'block'; // ou 'flex', se for o caso
+
+  // 2. ADICIONA (ou mantém) a classe de centralização 'flors'
+  florBox.classList.add('flors');
     
     button.innerText = '🔮\u00A0\u00A0\u00A0Embaralhar Cartas';
     button.className = 'action-button pink';
