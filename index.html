@@ -477,9 +477,8 @@ function showPrompt(drawn) {
   shareButton.style.display = 'none';
   loader.style.display = 'none';
 
-  const florBox = document.getElementById('florBox'); // Corrigido de 'florsBox'
-
-  // 2. ADICIONA (ou mantém) a classe de centralização 'flors'
+  const florBox = document.getElementById('florBox'); 
+  florBox.style.display = 'block'; 
   florBox.classList.add('flors');
     
     button.innerText = '🔮\u00A0\u00A0\u00A0Embaralhar Cartas';
