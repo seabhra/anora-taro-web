@@ -101,9 +101,6 @@ cursor: pointer;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-
-
-
   
 /* Estilo padrão do status */
 #status {
@@ -195,7 +192,7 @@ font-size: 18px;
 font-weight: bold;
 }
 
-/* >>> MUDANÇA AQUI: Estilo do parágrafo com espaçamento <<< */
+/* Estilo do parágrafo com espaçamento <<< */
 #aiResponse p {
 line-height: 1.6;
 margin: 0; /* Reseta a margem */
@@ -300,7 +297,9 @@ background-color: #128C7E;
   <span class="status-emoji">⏳</span>
   <span class="status-text">Aguardando sua consulta</span>
 </div>
- 
+  
+ <!-- LOCAL DA FLOR DE LIZ -->
+  
 <div class="flors" id="florBox">
   <div class="flor">
     <img src="cards_images/liz.png" alt="Flor simbólica">
@@ -308,6 +307,8 @@ background-color: #128C7E;
 </div>
  
 <div id="loader"></div>
+
+  /* LOCAL DO PROMPT DA IA */ 
 <div id="promptBox"></div>
 
 <!-- CAIXA DE RESPOSTA DA IA -->
@@ -376,10 +377,7 @@ const promptBox = document.getElementById('promptBox');
 const shareButton = document.getElementById('shareButton');
 
 
- 
-
 let hasReading = false;
-
   
 
 function shuffle(arr) {
@@ -459,6 +457,7 @@ function shuffle(arr) {
 }
 
 // Mantenha a função showPrompt fora da newReading para organização
+  
 function showPrompt(drawn) {
     const pBox = document.getElementById('promptBox');
     if (pBox) {
@@ -572,8 +571,7 @@ const errorText = 'Erro ao acessar a reflexão.';
   
 aiBox.innerHTML = `<h2>🔮\u00A0\u00A0\u00A0Anora Assistente de IA</h2><p>${errorText}</p>`;
 
-const logoHtml = '<img src="cards_images/marca_anora.png" alt="Anora Tarô" class="ai-logo">';
-aiBox.innerHTML = `${logoHtml}<h2>Anora Assistente de IA</h2><p>${title}</p>`;
+
 
 
 status.textContent = 'Erro de carregamento';
