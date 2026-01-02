@@ -381,9 +381,10 @@ font-size: 15px;
 
 <!-- LOCAL Compartilhar no WhatsApp e Anúncio -->
 
- <div id="aiBox" style="display: none;">
-  <!-- Conteúdo da IA entra aqui via JS -->
+<div id="aiBox" style="display: none;">
+  <!-- conteúdo da IA entra aqui -->
 
+  <!-- 👇 FICA FIXO, NÃO É RECRIADO -->
   <div id="ad-container">
     <ins class="adsbygoogle"
          style="display:block"
@@ -393,7 +394,7 @@ font-size: 15px;
          data-full-width-responsive="true">
     </ins>
   </div>
-</div>
+</div
 
 
 
@@ -558,7 +559,9 @@ florBox && (florBox.style.display = 'flex');
   status.innerHTML = `<span class="status-text">Aguardando sua consulta...</span>`;
   status.className = '';
 
-  const adContainer = document.getElementById('ad-container');
+aiBox.style.display = 'none';
+
+const adContainer = document.getElementById('ad-container');
 if (adContainer) {
   adContainer.style.display = 'none';
 }
@@ -652,16 +655,30 @@ if (adContainer) {
   </button>
 `;
 
-  const adContainer = document.getElementById('ad-container');
-  if (adContainer) {
-    adContainer.style.display = 'block';
-    try {
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.error("Erro ao tentar carregar o anúncio:", e);
-    }
+aiBox.innerHTML = `
+  <h2 class="ai-title">
+    <img src="cards_images/marca_anora.png" class="ai-logo">
+    Anora Assistente de IA
+  </h2>
+  <p>${text}</p>
+  <button id="shareButton" class="action-button">
+    Compartilhar no WhatsApp
+  </button>
+`;
+
+aiBox.style.display = 'block';
+
+const adContainer = document.getElementById('ad-container');
+if (adContainer) {
+  adContainer.style.display = 'block';
+
+  try {
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  } catch (e) {
+    console.warn('AdMob ainda não pronto:', e);
   }
 }
+
 
 // ---------------- EVENTOS ----------------
 if (button) {
