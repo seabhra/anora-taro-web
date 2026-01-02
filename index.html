@@ -283,7 +283,7 @@ background-color: #128C7E;
  /* CONTROLE DE ESPAÇO EMOJI DENTRO DO JS */
   
 .status-emoji {
-  margin-right: 5px;
+  margin-right: 8px;
   display: inline-block;
 }
 .status-text {
@@ -433,7 +433,7 @@ const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
 function newReading() {
   florBox && (florBox.style.display = 'none');
-  cabalaBox && (cabalaBox.style.display = 'block'); // Linha agora funciona, pois a variável foi declarada
+  cabalaBox && (cabalaBox.style.display = 'none');
   aiBox.style.display = 'none';
   promptBox.style.display = 'none';
   loader.style.display = 'none';
@@ -478,7 +478,7 @@ function newReading() {
     button.className = 'action-button blue';
     button.innerHTML = `<span class="status-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
     cabalaBox && (cabalaBox.style.display = 'none'); // Esconde a cabala ao final do sorteio
-    promptBox && (promptBox.style.display = 'flex');
+    promptBox && (promptBox.style.display = 'block');
   }, 6500);
 }
 
