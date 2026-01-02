@@ -430,101 +430,117 @@ function shuffle(arr) {
   return arr.sort(() => Math.random() - 0.5);
 }
 
-  function newReading() {
-    // 1. Preparação inicial
+function newReading() {
+  // 1. Preparação inicial
 
-    <!-- CENTRALIZA IMG FLOR DE LIZ  -->
-      
-   const florBox = document.getElementById('florBox');
+  // Comentários em JavaScript usam //, não <!-- -->
+  // Centraliza e esconde a flor de Liz no início
+  const florBox = document.getElementById('florBox');
+  if (florBox) {
+    florBox.style.display = 'flex';
+    florBox.style.justifyContent = 'center';
+    florBox.style.alignItems = 'center';
+  }
+
+  // Resetar interface para o novo sorteio
+  aiBox.style.display = 'none';
+  shareButton.style.display = 'none';
+  promptBox.style.display = 'none';
+  loader.style.display = 'none'; // O loader começa escondido
+
+  // 2. Iniciar Áudio
+  if (shuffleAudio) {
+    shuffleAudio.currentTime = 0;
+    shuffleAudio.play().catch(e => console.log("Erro ao tocar áudio:", e));
+  }
+
+  // Status, cor do botão e label "Embaralhando Cartas"
+  button.className = 'action-button roxo';
+  button.innerHTML = `
+    <span class="status-emoji">🌀</span>
+    <span class="status-text">Embaralhando Cartas</span>
+  `;
+  status.textContent = 'Sua previsão em andamento...';
+  status.className = 'status-process';
+
+  // 3. Inicia animação visual das cartas
+  imgs.forEach(img => img.classList.add('card-spinning'));
+  labels.forEach(l => l.innerText = "Sorteando...");
+
+  // 4. Efeito de Roleta (troca imagens rapidamente)
+  const spinInterval = setInterval(() => {
+    imgs.forEach(img => {
+      const randomCard = cards[Math.floor(Math.random() * cards.length)];
+      img.src = `${basePath}${randomCard.file}.jpg`;
+    });
+  }, 80);
+
+  // 5. Finalizar após 7 segundos
+  setTimeout(() => {
+    clearInterval(spinInterval); // Para a roleta visual
+    if (shuffleAudio) shuffleAudio.pause(); // Para o som
+
+    // Selecionar as 3 cartas finais
+    const finalSelection = shuffle([...cards]).slice(0, 3);
+    const drawnNames = finalSelection.map(c => c.label);
+
+    // Atualizar as imagens e remover animação
+    finalSelection.forEach((card, i) => {
+      imgs[i].src = `${basePath}${card.file}.jpg`;
+      labels[i].innerText = card.label;
+      imgs[i].classList.remove('card-spinning');
+    });
+
+    // 6. Prepara a interface para a análise da IA
+    // Mostra o loader enquanto a IA trabalha
+    loader.style.display = 'block';
+    status.innerHTML = `
+      <span class="status-emoji">🤖</span>
+      <span class="status-text">Processando consulta com IA...</span>
+    `;
+    status.className = 'status-loading';
+
+    // Esconde a flor, pois a leitura começou
     if (florBox) florBox.style.display = 'none';
-    
-  florBox.style.display = 'flex';
-  florBox.style.justifyContent = 'center';
-  florBox.style.alignItems = 'center';
-    
-    // Resetar interface para o novo sorteio
-    aiBox.style.display = 'none';
-    shareButton.style.display = 'none';
-    promptBox.style.display = 'none';
-    loader.style.display = 'none';
 
-    // 2. Iniciar Áudio
-    if (shuffleAudio) {
-        shuffleAudio.currentTime = 0;
-        shuffleAudio.play().catch(e => console.log("Erro ao tocar áudio:", e));
-    }
+    // Chama a API com os nomes das cartas.
+    // A função `callAuroraAPI` deve ser responsável por:
+    // 1. Receber a resposta da IA.
+    // 2. Preencher o conteúdo da `aiBox`.
+    // 3. Chamar uma função para mostrar os resultados finais.
+    callAuroraAPI(drawnNames);
 
-    <!-- STATUS COR DO BOTÃO E LABEL EMBARALHANDO CARTAS  -->
-     button.className = 'action-button roxo';
-   button.innerHTML = `
-  <span class="status-emoji">🌀</span>
-  <span class="status-text">Embaralhando Cartas</span>
-`;
-    status.textContent = 'Sua previsão em andamento...';
-    status.className = 'status-process';
-    
-    // 3. INCIA ANIMAÇÃO VISUAL DAS CARTAS
-    imgs.forEach(img => img.classList.add('card-spinning'));
-    labels.forEach(l => l.innerText = "Sorteando...");
+    // 7. Atualizar estado do botão principal
+    hasReading = true;
+    button.className = 'action-button blue';
+    button.innerHTML = `
+      <span class="status-emoji">🔄</span>
+      <span class="status-text">Nova Consulta</span>
+    `;
+  }, 7000);
+}
 
-    // 4. Efeito de Roleta (troca imagens rapidamente)
-    const spinInterval = setInterval(() => {
-        imgs.forEach(img => {
-            const randomCard = cards[Math.floor(Math.random() * cards.length)];
-            img.src = `${basePath}${randomCard.file}.jpg`;
-        });
-    }, 80); 
+// >>> CRIE ESTA NOVA FUNÇÃO <<<
+// Esta função será chamada DENTRO da sua callAuroraAPI, após a IA responder
+function showFinalResults() {
+  // Esconde o loader de processamento da IA
+  loader.style.display = 'none';
 
-    // 5. Finalizar após 7 segundos
-    setTimeout(() => {
-        clearInterval(spinInterval); // Para a roleta visual
-        if (shuffleAudio) shuffleAudio.pause(); // Para o som
-        
-        // Selecionar as 3 cartas finais
-        const finalSelection = shuffle([...cards]).slice(0, 3);
-        const drawnNames = finalSelection.map(c => c.label);
+  // Mostra a caixa com a análise completa
+  aiBox.style.display = 'block';
 
-        // Atualizar as imagens e remover animação
-        finalSelection.forEach((card, i) => {
-            imgs[i].src = `${basePath}${card.file}.jpg`;
-            labels[i].innerText = card.label;
-            imgs[i].classList.remove('card-spinning');
-        });
+  // Mostra o botão de compartilhar
+  shareButton.style.display = 'flex';
 
-        //  MOSTRAR BOTÃO WHATSAPP E ANUNCIO ADMOB
-      shareButton.style.display = 'flex';
-      adContainer.style.display = 'block'; // Mostra o anúncio
+  // Mostra o container do anúncio
+  adContainer.style.display = 'block';
 
-    // Tenta carregar o anúncio agora que o container está visível
-    try {
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.error("Erro ao tentar carregar o anúncio:", e);
-    }          
-
-        // 6. Chamar as funções de interface e API
-        showPrompt(drawnNames);
-        
-        loader.style.display = 'block';
-        status.innerHTML = `
-  <span class="status-emoji">🤖</span>
-  <span class="status-text">Processando consulta com IA...</span>
-`;
-      status.className = 'status-loading';
-        
-        // Chama a API com os nomes das cartas
-        callAuroraAPI(drawnNames);
-
-        // 7. Atualizar estado do botão
-        hasReading = true;
-
-   button.className = 'action-button blue';
-   button.innerHTML = `
-  <span class="status-emoji">🔄</span>
-  <span class="status-text">Nova Consulta</span>
-`;
-         florBox.style.display = 'none';
-    }, 7000); 
+  // Tenta carregar o anúncio agora que o container está visível
+  try {
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  } catch (e) {
+    console.error("Erro ao tentar carregar o anúncio:", e);
+  }
 }
 
 // Mantenha a função showPrompt fora da newReading para organização
