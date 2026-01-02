@@ -429,192 +429,187 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   // ---------------- FUNÇÕES ----------------
-  const shuffle = arr => arr.sort(() => Math.random() - 0.5);
+const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
-  function newReading() {
-    florBox && (florBox.style.display = 'none');
-    camalaBox && (camalaBox.style.display = 'block');    
-    aiBox.style.display = 'none';
-    promptBox.style.display = 'none';
-    loader.style.display = 'none';
+function newReading() {
+  florBox && (florBox.style.display = 'none');
+  camalaBox && (camalaBox.style.display = 'block'); // Linha agora funciona, pois a variável foi declarada
+  aiBox.style.display = 'none';
+  promptBox.style.display = 'none';
+  loader.style.display = 'none';
 
-    shuffleAudio.currentTime = 0;
-    shuffleAudio.play().catch(() => {});
+  shuffleAudio.currentTime = 0;
+  shuffleAudio.play().catch(() => {});
 
-    button.className = 'action-button roxo';
-    button.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
+  button.className = 'action-button roxo';
+  button.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
 
-    status.textContent = 'Sua previsão em andamento...';
-    status.className = 'status-process';
+  status.textContent = 'Sua previsão em andamento...';
+  status.className = 'status-process';
 
-        
-// 3. INCIA ANIMAÇÃO VISUAL DAS CARTAS
-    
+  // 3. INCIA ANIMAÇÃO VISUAL DAS CARTAS
+  imgs.forEach(img => img.classList.add('card-spinning'));
+  labels.forEach(l => l.innerText = 'Sorteando');
 
-    imgs.forEach(img => img.classList.add('card-spinning'));
-    labels.forEach(l => l.innerText = 'Sorteando');
+  const spin = setInterval(() => {
+    imgs.forEach(img => {
+      const r = cards[Math.floor(Math.random() * cards.length)];
+      img.src = `${basePath}${r.file}.jpg`;
+    });
+  }, 80);
 
-    const spin = setInterval(() => {
-      imgs.forEach(img => {
-        const r = cards[Math.floor(Math.random() * cards.length)];
-        img.src = `${basePath}${r.file}.jpg`;
-      });
-    }, 80);
+  setTimeout(() => {
+    clearInterval(spin);
+    shuffleAudio.pause();
 
-    setTimeout(() => {
-      clearInterval(spin);
-      shuffleAudio.pause();
+    const drawn = shuffle([...cards]).slice(0, 3);
+    drawn.forEach((c, i) => {
+      imgs[i].src = `${basePath}${c.file}.jpg`;
+      labels[i].innerText = c.label;
+      imgs[i].classList.remove('card-spinning');
+    });
 
-      const drawn = shuffle([...cards]).slice(0, 3);
-      drawn.forEach((c, i) => {
-        imgs[i].src = `${basePath}${c.file}.jpg`;
-        labels[i].innerText = c.label;
-        imgs[i].classList.remove('card-spinning');
-      });
+    loader.style.display = 'block';
+    status.innerHTML = `<span class="status-emoji">🤖</span><span class="status-text">Processando consulta com IA...</span>`;
 
-      loader.style.display = 'block';
-      status.innerHTML = `<span class="status-emoji">🤖</span><span class="status-text">Processando consulta com IA...</span>`;
+    callAuroraAPI(drawn.map(c => c.label));
 
-      callAuroraAPI(drawn.map(c => c.label));
-
-      hasReading = true;
-      button.className = 'action-button blue';
-      button.innerHTML = `<span class="status-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
-      camalaBox && (camalaBox.style.display = 'none');  
-      promptBox && (promptBox.style.display = 'flex');    
-    }, 6500);
-  }
-function showPrompt(drawn) {
-    const pBox = document.getElementById('promptBox');
-    if (pBox) {
-        pBox.style.display = 'block';
-        pBox.innerHTML = `<strong>📜 Cartas:</strong> ${drawn.join(' | ')}`;
-    }
+    hasReading = true;
+    button.className = 'action-button blue';
+    button.innerHTML = `<span class="status-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
+    camalaBox && (camalaBox.style.display = 'none'); // Esconde a cabala ao final do sorteio
+    promptBox && (promptBox.style.display = 'flex');
+  }, 6500);
 }
-  function resetReading() {
-    imgs.forEach(img => img.src = backCard);
-    labels.forEach(l => l.innerText = '');
 
-    aiBox.style.display = 'none';
-    loader.style.display = 'none';
+function showPrompt(drawn) {
+  const pBox = document.getElementById('promptBox');
+  if (pBox) {
+    pBox.style.display = 'block';
+    pBox.innerHTML = `<strong>📜 Cartas:</strong> ${drawn.join(' | ')}`;
+  }
+}
 
-    florBox && (florBox.style.display = 'flex');
-    camalaBox && (camalaBox.style.display = 'flex');    
+function resetReading() {
+  imgs.forEach(img => img.src = backCard);
+  labels.forEach(l => l.innerText = '');
 
-    button.innerHTML = `<span class="btn-emoji">🔮</span><span>Embaralhar Cartas</span>`;
-    button.className = 'action-button pink';
+  aiBox.style.display = 'none';
+  loader.style.display = 'none';
 
-    status.innerHTML = `<span class="status-emoji"></span><span class="status-text">Aguardando sua consulta...</span>`;
-    status.className = '';
-    hasReading = false;
+  florBox && (florBox.style.display = 'flex');
+  camalaBox && (camalaBox.style.display = 'flex'); // Garante que a cabala volte a aparecer no reset
+
+  button.innerHTML = `<span class="btn-emoji">🔮</span><span>Embaralhar Cartas</span>`;
+  button.className = 'action-button pink';
+
+  status.innerHTML = `<span class="status-emoji"></span><span class="status-text">Aguardando sua consulta...</span>`;
+  status.className = '';
+  hasReading = false;
+}
+
+function shareOnWhatsApp() {
+  const title = document.querySelector('#aiBox h2')?.innerText?.trim() || 'Anora Tarô';
+  const analysisText = document.querySelector('#aiBox p')?.innerText?.trim() || '';
+
+  if (!analysisText) {
+    console.warn('Nenhum texto de análise encontrado para compartilhar.');
+    return;
+  }
+  const WHATSAPP_FOOTER = "\n\n🔮 Anora Tarô — leitura assistida por IA\n⚡ Powered by Geraldo A. Seabra";
+  const message = `✨ ${title}\n\n${analysisText}${WHATSAPP_FOOTER}`;
+
+  try {
+    if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
+      window.AppInventor.setWebViewString(message);
+    } else {
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;
+      window.open(whatsappUrl, '_blank');
+    }
+  } catch (error) {
+    console.error("Erro ao tentar compartilhar no WhatsApp:", error);
+  }
+}
+
+async function callAuroraAPI(cardsDrawn) {
+  try {
+    const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{
+          role: "user",
+          content: `Interprete as cartas ${cardsDrawn.join(', ')}`
+        }]
+      })
+    });
+    const data = await res.json();
+    const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
+
+    aiBox.innerHTML = `
+      <h2 class="ai-title">
+        <img src="cards_images/marca_anora.png" class="ai-logo">
+        Anora Assistente de IA
+      </h2>
+      <p>${text}</p>
+      <button id="shareButton" class="action-button">Compartilhar no WhatsApp</button>
+      <div id="ad-container" style="display: none;">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-3940256099942544"
+             data-ad-slot="6300978111"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+    `;
+
+    status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
+    status.className = 'status-success';
+
+  } catch (error) {
+    console.error('Erro na chamada da API:', error);
+    aiBox.innerHTML = `<p>Erro ao acessar a reflexão.</p>`;
+    status.textContent = 'Erro de acessar análise feita pelo sistema.';
+    status.className = 'status-error';
   }
 
-  function shareOnWhatsApp() {
-    const title = document.querySelector('#aiBox h2')?.innerText?.trim() || 'Anora Tarô';
-    const analysisText = document.querySelector('#aiBox p')?.innerText?.trim() || '';
+  loader.style.display = 'none';
+  
+  // >>> CORREÇÃO: Esconde a cabala quando a aiBox aparece <<<
+  camalaBox && (camalaBox.style.display = 'none');
+  aiBox.style.display = 'block';
 
-    if (!analysisText) {
-      console.warn('Nenhum texto de análise encontrado para compartilhar.');
-      return;
-    }
-    const WHATSAPP_FOOTER = "\n\n🔮 Anora Tarô — leitura assistida por IA\n⚡ Powered by Geraldo A. Seabra";
-    const message = `✨ ${title}\n\n${analysisText}${WHATSAPP_FOOTER}`;
-
+  const adContainer = document.getElementById('ad-container');
+  if (adContainer) {
+    adContainer.style.display = 'block';
     try {
-      if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
-        window.AppInventor.setWebViewString(message);
-      } else {
-        const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;
-        window.open(whatsappUrl, '_blank');
-      }
-    } catch (error) {
-      console.error("Erro ao tentar compartilhar no WhatsApp:", error);
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error("Erro ao tentar carregar o anúncio:", e);
     }
   }
+}
 
-  // >>> FUNÇÃO PRINCIPALMENTE CORRIGIDA <<<
-  async function callAuroraAPI(cardsDrawn) {
-    try {
-      const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [{
-            role: "user",
-            content: `Interprete as cartas ${cardsDrawn.join(', ')}`
-          }]
-        })
-      });
-const data = await res.json();
-      const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
+// ---------------- EVENTOS ----------------
+if (button) {
+  button.onclick = () => hasReading ? resetReading() : newReading();
+}
 
-      // O conteúdo é inserido no 'aiBox'. O botão e o anúncio são criados aqui.
-      aiBox.innerHTML = `
-        <h2 class="ai-title">
-          <img src="cards_images/marca_anora.png" class="ai-logo">
-          Anora Assistente de IA
-        </h2>
-        <p>${text}</p>
-        <button id="shareButton" class="action-button">Compartilhar no WhatsApp</button>
-        <div id="ad-container" style="display: none;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-3940256099942544"
-                 data-ad-slot="6300978111"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-        </div>
-      `;
-
-      status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
-      status.className = 'status-success';
-
-    } catch (error) {
-      console.error('Erro na chamada da API:', error);
-      aiBox.innerHTML = `<p>Erro ao acessar a reflexão.</p>`;
-      status.textContent = 'Erro ao acessar análise feita pelo sistema.';
-      status.className = 'status-error';
-    }
-
-    loader.style.display = 'none';
-
-    // >>> PONTO CHAVE: MOSTRANDO O BOTÃO E O ANÚNCIO <<<
-    // Ao mostrar o 'aiBox', tudo que está dentro dele (texto, botão e anúncio) se torna visível.
-    aiBox.style.display = 'block';
-
-    // Re-seleciona o container do anúncio DEPOIS de criá-lo com innerHTML
-    const adContainer = document.getElementById('ad-container');
-    if (adContainer) {
-      adContainer.style.display = 'block';
-      try {
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      } catch (e) {
-        console.error("Erro ao tentar carregar o anúncio:", e);
-      }
-    }
+document.addEventListener('click', (event) => {
+  if (event.target && event.target.id === 'shareButton') {
+    shareOnWhatsApp();
   }
+});
 
-  // ---------------- EVENTOS ----------------
-  if (button) {
-    button.onclick = () => hasReading ? resetReading() : newReading();
-  }
+window.addEventListener('load', () => {
+  setTimeout(() => pageLoader?.classList.add('hidden'), 1500);
+});
 
-  // Usar "Event Delegation" para o clique do botão de compartilhar
-  document.addEventListener('click', (event) => {
-    if (event.target && event.target.id === 'shareButton') {
-      shareOnWhatsApp();
-    }
-  });
-
-  window.addEventListener('load', () => {
-    setTimeout(() => pageLoader?.classList.add('hidden'), 1500);
-  });
-
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-      .catch(err => console.warn('SW erro:', err));
-  }
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .catch(err => console.warn('SW erro:', err));
+}
 });
       
    
