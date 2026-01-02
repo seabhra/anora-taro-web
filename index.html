@@ -514,8 +514,7 @@ function showPrompt(drawn) {
           }]
         })
       });
-
-      const data = await res.json();
+const data = await res.json();
       const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
       // O conteúdo é inserido no 'aiBox'. O botão e o anúncio são criados aqui.
@@ -536,24 +535,23 @@ function showPrompt(drawn) {
         </div>
       `;
 
-      status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
-      status.className = 'status-success'; 
-      pBox.style.display = 'block';
-      
-          
+      status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada</span>`;
+      status.className = 'status-success';
 
     } catch (error) {
       console.error('Erro na chamada da API:', error);
-      aiBox.innerHTML = `<p>Erro ao acessar análise feita pelo sistema.</p>`;
-      status.textContent = 'Erro de carregamento';
+      aiBox.innerHTML = `<p>Erro ao acessar a reflexão.</p>`;
+      status.textContent = 'Erro ao acessar análise feita pelo sistema.';
       status.className = 'status-error';
     }
 
     loader.style.display = 'none';
-    aiBox.style.display = 'block';
-     
 
-    // CORREÇÃO 1: Re-seleciona o container do anúncio DEPOIS de criá-lo com innerHTML
+    // >>> PONTO CHAVE: MOSTRANDO O BOTÃO E O ANÚNCIO <<<
+    // Ao mostrar o 'aiBox', tudo que está dentro dele (texto, botão e anúncio) se torna visível.
+    aiBox.style.display = 'block';
+
+    // Re-seleciona o container do anúncio DEPOIS de criá-lo com innerHTML
     const adContainer = document.getElementById('ad-container');
     if (adContainer) {
       adContainer.style.display = 'block';
@@ -566,30 +564,28 @@ function showPrompt(drawn) {
   }
 
   // ---------------- EVENTOS ----------------
-  // Lógica principal do botão de ação
   if (button) {
     button.onclick = () => hasReading ? resetReading() : newReading();
   }
 
-  //  clique do botão de compartilhar
-   document.addEventListener('click', (event) => {
- if (event.target && event.target.id === 'shareButton') {
+  // Usar "Event Delegation" para o clique do botão de compartilhar
+  document.addEventListener('click', (event) => {
+    if (event.target && event.target.id === 'shareButton') {
       shareOnWhatsApp();
     }
-        
   });
 
-  // Loader inicial
   window.addEventListener('load', () => {
     setTimeout(() => pageLoader?.classList.add('hidden'), 1500);
   });
 
-  // Service Worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js')
       .catch(err => console.warn('SW erro:', err));
   }
 });
+      
+   
 </script>
 </body>
 </html>
