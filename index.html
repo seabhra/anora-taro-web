@@ -75,6 +75,7 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 #cabalaBox img {
   width: 80px;          /* 👈 tamanho real */
   height: auto;
+  animation: spin 2.4s linear infinite; /* 🐢 mais lento */
   opacity: 0.9;
   display: block;       /* 👈 ESSENCIAL */
 }
@@ -298,15 +299,31 @@ font-size: 15px;
   margin-right: 8px;
 }
  /* CONTROLE DE ESPAÇO EMOJI DENTRO DO JS */
+
+
+.status-emoji.giro {
+  margin-right: 8px;
+  display: inline-block;
+   animation: spin 0.6s linear infinite; /* 🚀 rápido */
+}
   
 .status-emoji {
   margin-right: 8px;
   display: inline-block;
+
 }
 .status-text {
  vertical-align: middle;
 }
-  
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
  
 /* Container do AdMob Google */
 #ad-container {
@@ -480,7 +497,7 @@ function newReading() {
   shuffleAudio.play().catch(() => {});
 
   button.className = 'action-button roxo';
-  button.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
+  button.innerHTML = `<span class="status-emoji.giro">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
 
   status.textContent = 'Sua previsão em andamento...';
   status.className = 'status-process';
