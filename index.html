@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
     button.className = 'action-button roxo';
     button.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
 
-    status.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Sorteando suas cartas</span>`;
+    status.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Sorteando suas cartas...</span>`;
     status.className = 'status-loading';
 
     imgs.forEach(img => img.classList.add('card-spinning'));
@@ -451,7 +451,13 @@ document.addEventListener('DOMContentLoaded', () => {
       button.innerHTML = `<span class="status-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
     }, 6500);
   }
-
+function showPrompt(drawn) {
+    const pBox = document.getElementById('promptBox');
+    if (pBox) {
+        pBox.style.display = 'block';
+        pBox.innerHTML = `<strong>📜 Cartas:</strong> ${drawn.join(' | ')}`;
+    }
+}
   function resetReading() {
     imgs.forEach(img => img.src = backCard);
     labels.forEach(l => l.innerText = '');
