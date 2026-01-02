@@ -433,7 +433,7 @@ const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
 function newReading() {
   florBox && (florBox.style.display = 'none');
-  cabalaBox && (cabalaBox.style.display = 'block');
+
   aiBox.style.display = 'none';
   promptBox.style.display = 'none';
   loader.style.display = 'none';
@@ -443,7 +443,8 @@ function newReading() {
 
   button.className = 'action-button roxo';
   button.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
-
+  
+  cabalaBox.style.display = 'block';
   status.textContent = 'Sua previsão em andamento...';
   status.className = 'status-process';
 
