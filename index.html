@@ -479,7 +479,8 @@ function newReading() {
     button.className = 'action-button blue';
     button.innerHTML = `<span class="status-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
     cabalaBox && (cabalaBox.style.display = 'none'); // Esconde a cabala ao final do sorteio
-    promptBox && (promptBox.style.display = 'block');
+   
+    promptBox.style.display = 'block';
   }, 6500);
 }
 
