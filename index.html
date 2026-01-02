@@ -3,17 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+      <!-- 1. SCRIPT PRINCIPAL DO ADMOB -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3940256099942544"
+            crossorigin="anonymous"></script>
+  
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#6b46c1">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
-
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3940256099942544"
-  crossorigin="anonymous"></script>
 
   
 <title>Anora Tarô</title>
 
 <style>
+ 
 body {
 margin: 0;
 padding: 20px;
@@ -271,20 +274,20 @@ background-color: #128C7E;
 }
   
  /* CSS DO ADMOB GOOGLE */
-  
-  #ad-container {
-  margin-top: 20px; /* Espaço acima do anúncio */
-  text-align: center; /* Centraliza o banner na tela */
-  width: 100%; /* Ocupa a largura disponível */
-}
 
+   /* Estilo para o container do anúncio */
+        #ad-container {
+            margin-top: 20px; /* Espaço acima do anúncio */
+            text-align: center; /* Centraliza o banner na tela */
+            width: 100%; /* Ocupa a largura disponível */
+            border: 1px solid red; /* Borda vermelha apenas para você ver onde ele está */
+        }
   
+ 
 </style>
 </head>
 
 <body>
-
-
 
 <!-- Loader da página -->
            
@@ -344,23 +347,28 @@ background-color: #128C7E;
 
 <button id="shareButton">Compartilhar no WhatsApp</button>
 
-    <!-- Codigo Admob Google -->
+    <!-- LOCAL CÓDIGO ADMOB GOOGLE -->
 
-  <div id="shareButton" style="display: none;">
-    <ba-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </scriptutton>Compartilhar Leitura</button>
-  </div>
+  <h1>Minha Página de Leitura</h1>
+    <p>Aqui viria o resultado da sua leitura...</p>
 
-  <div id="ad-container">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3940256099942544"
-         data-ad-slot="6300978111"
-         data-ad-format="auto"
-         dat>
-  </div>
+    <!-- Seu botão de compartilhar -->
+    <div id="shareButton" style="display: block;"> <!-- Mudei para block para aparecer no teste -->
+        <button>Compartilhar Leitura</button>
+    </div>
+
+    <!-- 2. BLOCO DE ANÚNCIO DO ADMOB -->
+    <div id="ad-container">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-3940256099942544"
+             data-ad-slot="6300978111"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
 
   
  <!--  CORPO DO JS DO APLICATIVO  -->
