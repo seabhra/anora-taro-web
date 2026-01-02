@@ -87,7 +87,7 @@ color: #fff;
 cursor: pointer;
 }
 
-  /* Status da cor do botão */
+/* Status da cor do botão */
   
 .pink { background:#fd98be; }
 .roxo { background:#de86e5 }
@@ -111,8 +111,6 @@ cursor: pointer;
   border-radius: 50%;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
-
-  
 /* Estilo padrão do status */
 #status {
 margin-top: 16px;
@@ -120,7 +118,6 @@ font-weight: bold;
 color: #718096;
 transition: color 0.3s ease;
 }
-
 /* status da mudança de cores da label abaixo do botão*/
 
 #status.status-process {
@@ -475,7 +472,7 @@ function showPrompt(drawn) {
     button.innerHTML = `<span class="btn-emoji">🔮</span><span>Embaralhar Cartas</span>`;
     button.className = 'action-button pink';
 
-    status.innerHTML = `<span class="status-emoji">...</span><span class="status-text">Aguardando sua consulta...</span>`;
+    status.innerHTML = `<span class="status-emoji"></span><span class="status-text">Aguardando sua consulta...</span>`;
     status.className = '';
     hasReading = false;
   }
@@ -542,7 +539,7 @@ function showPrompt(drawn) {
       status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
       status.className = 'status-success'; 
       pBox.style.display = 'block';
-      shareButton.style.display = 'block';
+      
           
 
     } catch (error) {
@@ -554,6 +551,7 @@ function showPrompt(drawn) {
 
     loader.style.display = 'none';
     aiBox.style.display = 'block';
+        shareButton.style.display = 'flex';
 
     // CORREÇÃO 1: Re-seleciona o container do anúncio DEPOIS de criá-lo com innerHTML
     const adContainer = document.getElementById('ad-container');
@@ -573,13 +571,12 @@ function showPrompt(drawn) {
     button.onclick = () => hasReading ? resetReading() : newReading();
   }
 
-  // CORREÇÃO 2: Usar "Event Delegation" para o clique do botão de compartilhar
-  // Isso funciona mesmo que o botão seja criado dinamicamente.
-  document.addEventListener('click', (event) => {
-    // Verifica se o elemento clicado é o botão de compartilhar
-    if (event.target && event.target.id === 'shareButton') {
+  //  clique do botão de compartilhar
+   document.addEventListener('click', (event) => {
+ if (event.target && event.target.id === 'shareButton') {
       shareOnWhatsApp();
     }
+        
   });
 
   // Loader inicial
