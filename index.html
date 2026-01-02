@@ -361,13 +361,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const button = document.getElementById('actionButton');
   const status = document.getElementById('status');
   const loader = document.getElementById('loader');
-  // CORREÇÃO: O script agora aponta para 'aiBox', o único container de resultado.
-  const aiBox = document.getElementById('aiBox'); 
+  const aiBox = document.getElementById('aiBox');
   const promptBox = document.getElementById('promptBox');
-  const shareButton = document.getElementById('shareButton');
   const florBox = document.getElementById('florBox');
   const pageLoader = document.getElementById('pageLoader');
-  const adContainer = document.getElementById('ad-container');
 
   const imgs = [
     document.getElementById('card1'),
@@ -411,15 +408,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function newReading() {
     florBox && (florBox.style.display = 'none');
     aiBox.style.display = 'none';
-    shareButton.style.display = 'none';
     promptBox.style.display = 'none';
     loader.style.display = 'none';
-    adContainer && (adContainer.style.display = 'none');
 
     shuffleAudio.currentTime = 0;
     shuffleAudio.play().catch(() => {});
 
-    button.className = 'action-button roxo'; // Corrigido para 'roxo' durante o sorteio
+    button.className = 'action-button roxo';
     button.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
 
     status.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Sorteando suas cartas</span>`;
@@ -452,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
       callAuroraAPI(drawn.map(c => c.label));
 
       hasReading = true;
-      button.className = 'action-button blue'; // Corrigido para 'blue' no final
+      button.className = 'action-button blue';
       button.innerHTML = `<span class="status-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
     }, 6500);
   }
@@ -462,9 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
     labels.forEach(l => l.innerText = '');
 
     aiBox.style.display = 'none';
-    shareButton.style.display = 'none';
     loader.style.display = 'none';
-    adContainer && (adContainer.style.display = 'none');
 
     florBox && (florBox.style.display = 'flex');
 
@@ -476,7 +469,6 @@ document.addEventListener('DOMContentLoaded', () => {
     hasReading = false;
   }
 
-  // CORREÇÃO: Função de compartilhamento que estava faltando
   function shareOnWhatsApp() {
     const title = document.querySelector('#aiBox h2')?.innerText?.trim() || 'Anora Tarô';
     const analysisText = document.querySelector('#aiBox p')?.innerText?.trim() || '';
@@ -501,6 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // >>> FUNÇÃO PRINCIPALMENTE CORRIGIDA <<<
   async function callAuroraAPI(cardsDrawn) {
     try {
       const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
@@ -517,14 +510,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
-      // CORREÇÃO: O conteúdo agora é inserido no 'aiBox', junto com o botão e o anúncio.
+      // O conteúdo é inserido no 'aiBox'. O botão e o anúncio são criados aqui.
       aiBox.innerHTML = `
         <h2 class="ai-title">
           <img src="cards_images/marca_anora.png" class="ai-logo">
           Anora Assistente de IA
         </h2>
         <p>${text}</p>
-        <div id="shareButton">Compartilhar no WhatsApp</div>
+        <button id="shareButton" class="action-button">Compartilhar no WhatsApp</button>
         <div id="ad-container" style="display: none;">
             <ins class="adsbygoogle"
                  style="display:block"
@@ -538,7 +531,8 @@ document.addEventListener('DOMContentLoaded', () => {
       status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada</span>`;
       status.className = 'status-success';
 
-    } catch {
+    } catch (error) {
+      console.error('Erro na chamada da API:', error);
       aiBox.innerHTML = `<p>Erro ao acessar a reflexão.</p>`;
       status.textContent = 'Erro de carregamento';
       status.className = 'status-error';
@@ -546,24 +540,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loader.style.display = 'none';
     aiBox.style.display = 'block';
-    
-    // CORREÇÃO: Mostra o anúncio e tenta carregá-lo após o container estar visível.
-    if(adContainer) {
-        adContainer.style.display = 'block';
-        try {
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (e) {
-            console.error("Erro ao tentar carregar o anúncio:", e);
-        }
+
+    // CORREÇÃO 1: Re-seleciona o container do anúncio DEPOIS de criá-lo com innerHTML
+    const adContainer = document.getElementById('ad-container');
+    if (adContainer) {
+      adContainer.style.display = 'block';
+      try {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (e) {
+        console.error("Erro ao tentar carregar o anúncio:", e);
+      }
     }
   }
 
   // ---------------- EVENTOS ----------------
-  button && (button.onclick = () => hasReading ? resetReading() : newReading());
-  
-  // CORREÇÃO: O evento de clique para o botão de compartilhar precisa ser re-atribuído
-  // toda vez que o botão é criado dinamicamente.
+  // Lógica principal do botão de ação
+  if (button) {
+    button.onclick = () => hasReading ? resetReading() : newReading();
+  }
+
+  // CORREÇÃO 2: Usar "Event Delegation" para o clique do botão de compartilhar
+  // Isso funciona mesmo que o botão seja criado dinamicamente.
   document.addEventListener('click', (event) => {
+    // Verifica se o elemento clicado é o botão de compartilhar
     if (event.target && event.target.id === 'shareButton') {
       shareOnWhatsApp();
     }
