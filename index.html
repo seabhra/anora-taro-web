@@ -367,14 +367,13 @@ background-color: #128C7E;
   
 <div id="promptBox"></div>
 
-<!-- CORREÇÃO: Caixa de resposta da IA e anúncio unificadas em um só lugar -->
-<!-- A div antiga 'aiResponse' foi removida. Tudo agora fica dentro de 'aiBox'. -->
+<!-- LOCAL Compartilhar no WhatsApp e Anúncio -->
+
 <div id="aiBox" style="display: none;">
   <!-- O conteúdo será inserido aqui pelo JavaScript -->
 </div>
 
-   <!-- LOCAL Compartilhar no WhatsApp e Anúncio -->
-   <!-- O botão e o anúncio foram movidos para dentro do aiBox via JavaScript -->
+   
 
   
  <!--  CORPO DO JS DO APLICATIVO  -->
@@ -493,7 +492,21 @@ function newReading() {
     cabalaBox && (cabalaBox.style.display = 'none'); // Esconde a cabala ao final do sorteio
    
    showPrompt(drawn.map(c => c.label));
-        cabalaBox && (cabalaBox.style.display = 'none');
+   cabalaBox && (cabalaBox.style.display = 'none');
+
+aiBox.style.display = 'block';
+
+aiBox.innerHTML = `
+  <h2 class="ai-title">
+    <img src="cards_images/marca_anora.png" class="ai-logo">
+    Anora Assistente de IA
+  </h2>
+
+  <p>${text}</p>
+
+  <button id="shareButton">Compartilhar no WhatsApp</button>
+`;
+        
   }, 6500);
 }
 
