@@ -447,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       loader.style.display = 'block';
-      status.innerHTML = `<span class="status-emoji">🤖</span><span class="status-text">Consultando a IA...</span>`;
+      status.innerHTML = `<span class="status-emoji">🤖</span><span class="status-text">Processando consulta com IA...</span>`;
 
       callAuroraAPI(drawn.map(c => c.label));
 
@@ -539,8 +539,11 @@ function showPrompt(drawn) {
         </div>
       `;
 
-      status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada</span>`;
-      status.className = 'status-success';
+      status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
+      status.className = 'status-success'; 
+      pBox.style.display = 'block';
+      shareButton.style.display = 'block';
+          
 
     } catch (error) {
       console.error('Erro na chamada da API:', error);
