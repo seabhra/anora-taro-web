@@ -298,30 +298,26 @@ font-size: 15px;
 }
  /* CONTROLE DE ESPAÇO EMOJI DENTRO DO JS */
 
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.status-emoji {
+  display: inline-block;
+margin-right: 8px;
+}
 
 .status-emoji.giro {
   margin-right: 8px;
-
    animation: spin 0.6s linear infinite; /* 🚀 rápido */
 }
   
-.status-emoji {
-  margin-right: 8px;
-  display: inline-block;
 
-}
 .status-text {
  vertical-align: middle;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
  
 /* Container do AdMob Google */
 #ad-container {
