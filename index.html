@@ -85,8 +85,6 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   to   { opacity: 1; transform: scale(1); }
 }
 
-
-
       
 .label {
 margin-top: 6px;
@@ -250,24 +248,36 @@ font-size: 15px;
  /* ESTILO PARA BOTÃO WHATSAPP */
 
 #shareButton {
-display: none;
-width: 100%;
-max-width: 320px;
-height: 45px;
-margin: 12px auto 0;
-border: none;
-border-radius: 8px;
-font-size: 16px;
-font-weight: bold;
-color: #fff;
-background-color: #25D366;
-cursor: pointer;
-transition: background-color 0.2s ease;
+  width: 100%;
+  max-width: 320px;
+  height: 45px;
+  margin: 12px auto 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #25D366;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-#shareButton:hover {
-background-color: #128C7E;
+/* Estado oculto */
+#shareButton.hidden {
+  display: none;
 }
+
+/* Hover elegante */
+#shareButton:hover {
+  background-color: #128C7E;
+  transform: scale(1.02);
+}
+
+/* Feedback de clique */
+#shareButton:active {
+  transform: scale(0.98);
+}
+
 
 /* Efeito de vibração/giro das cartas */
 .card-spinning {
@@ -282,6 +292,8 @@ background-color: #128C7E;
 }
  /* CONTROLE DE ESPAÇO EMOJI FORA JS */
 
+
+      
  .btn-emoji {
   margin-right: 8px;
 }
@@ -494,18 +506,7 @@ function newReading() {
    showPrompt(drawn.map(c => c.label));
    cabalaBox && (cabalaBox.style.display = 'none');
 
-aiBox.style.display = 'block';
 
-aiBox.innerHTML = `
-  <h2 class="ai-title">
-    <img src="cards_images/marca_anora.png" class="ai-logo">
-    Anora Assistente de IA
-  </h2>
-
-  <p>${text}</p>
-
-  <button id="shareButton">Compartilhar no WhatsApp</button>
-`;
         
   }, 6500);
 }
@@ -626,7 +627,21 @@ async function callAuroraAPI(cardsDrawn) {
   
   // >>> CORREÇÃO: Esconde a cabala quando a aiBox aparece <<<
   cabalaBox && (cabalaBox.style.display = 'none');
+      
   aiBox.style.display = 'block';
+
+      aiBox.innerHTML = `
+  <h2 class="ai-title">
+    <img src="cards_images/marca_anora.png" class="ai-logo">
+    Anora Assistente de IA
+  </h2>
+
+  <p>${text}</p>
+
+  <button id="shareButton" style="display:block;">
+    Compartilhar no WhatsApp
+  </button>
+`;
 
   const adContainer = document.getElementById('ad-container');
   if (adContainer) {
