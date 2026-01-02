@@ -361,10 +361,6 @@ background-color: #128C7E;
          (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
   </div>
-
-  <div id="shareButton" style="display: none;">
-    <button>Compartilhar Leitura</button>
-  </div>
 </div>
 
   
@@ -372,6 +368,7 @@ background-color: #128C7E;
   
 <script>
 
+const adContainer = document.getElementById('ad-container');
 const shuffleAudio = new Audio('Audio_app/slots_machine.mp3');
 shuffleAudio.preload = 'auto';
   
@@ -466,7 +463,7 @@ function shuffle(arr) {
     status.textContent = 'Sua previsão em andamento...';
     status.className = 'status-process';
     
-    // 3. Iniciar Animação Visual
+    // 3. INCIA ANIMAÇÃO VISUAL DAS CARTAS
     imgs.forEach(img => img.classList.add('card-spinning'));
     labels.forEach(l => l.innerText = "Sorteando...");
 
@@ -476,7 +473,7 @@ function shuffle(arr) {
             const randomCard = cards[Math.floor(Math.random() * cards.length)];
             img.src = `${basePath}${randomCard.file}.jpg`;
         });
-    }, 100); 
+    }, 80); 
 
     // 5. Finalizar após 7 segundos
     setTimeout(() => {
@@ -493,6 +490,17 @@ function shuffle(arr) {
             labels[i].innerText = card.label;
             imgs[i].classList.remove('card-spinning');
         });
+
+        //  MOSTRAR BOTÃO WHATSAPP E ANUNCIO ADMOB
+      shareButton.style.display = 'flex';
+      adContainer.style.display = 'block'; // Mostra o anúncio
+
+    // Tenta carregar o anúncio agora que o container está visível
+    try {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error("Erro ao tentar carregar o anúncio:", e);
+    }          
 
         // 6. Chamar as funções de interface e API
         showPrompt(drawnNames);
