@@ -75,13 +75,30 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .cabala img {
-  width: 50%;
+  width: 100%;
   height: auto;
   display: none;
   box-shadow: none;
   border-radius: 0;
   background: transparent;
 }  
+    
+}
+#cabalaBox img {
+    width: 64px;       /* 👈 tamanho reduzido */
+  height: auto;
+  opacity: 0.9;
+      
+}
+#cabalaBox {
+  animation: fadeIn 0.6s ease;
+      
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
       
 .label {
 margin-top: 6px;
@@ -515,6 +532,11 @@ function resetReading() {
 
   aiBox.style.display = 'none';
   loader.style.display = 'none';
+
+if (cabalaBox) {
+  cabalaBox.style.display = 'none';
+}
+
 
   florBox && (florBox.style.display = 'flex');
   cabalaBox && (cabalaBox.style.display = 'flex');
