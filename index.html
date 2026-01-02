@@ -433,7 +433,7 @@ const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
 function newReading() {
   florBox && (florBox.style.display = 'none');
-  camalaBox && (camalaBox.style.display = 'block'); // Linha agora funciona, pois a variável foi declarada
+  cabalaBox && (cabalaBox.style.display = 'block'); // Linha agora funciona, pois a variável foi declarada
   aiBox.style.display = 'none';
   promptBox.style.display = 'none';
   loader.style.display = 'none';
@@ -477,7 +477,7 @@ function newReading() {
     hasReading = true;
     button.className = 'action-button blue';
     button.innerHTML = `<span class="status-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
-    camalaBox && (camalaBox.style.display = 'none'); // Esconde a cabala ao final do sorteio
+    cabalaBox && (cabalaBox.style.display = 'none'); // Esconde a cabala ao final do sorteio
     promptBox && (promptBox.style.display = 'flex');
   }, 6500);
 }
@@ -498,7 +498,7 @@ function resetReading() {
   loader.style.display = 'none';
 
   florBox && (florBox.style.display = 'flex');
-  camalaBox && (camalaBox.style.display = 'flex'); // Garante que a cabala volte a aparecer no reset
+  cabalaBox && (cabalaBox.style.display = 'flex'); 
 
   button.innerHTML = `<span class="btn-emoji">🔮</span><span>Embaralhar Cartas</span>`;
   button.className = 'action-button pink';
@@ -577,7 +577,7 @@ async function callAuroraAPI(cardsDrawn) {
   loader.style.display = 'none';
   
   // >>> CORREÇÃO: Esconde a cabala quando a aiBox aparece <<<
-  camalaBox && (camalaBox.style.display = 'none');
+  cabalaBox && (cabalaBox.style.display = 'none');
   aiBox.style.display = 'block';
 
   const adContainer = document.getElementById('ad-container');
