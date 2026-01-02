@@ -350,11 +350,10 @@ background-color: #128C7E;
   </div>
 </div>
 
-<div class="cabalas" id="cabalaBox">
-  <div class="cabala">
-    <img src="cards_images/cabala.png" alt="Cabala">
-  </div>
+<div id="cabalaBox" style="display:none;">
+  <img src="cards_images/cabala.png" alt="Cabala">
 </div>
+
 
       
 <div id="loader"></div>
@@ -436,6 +435,13 @@ const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 function newReading() {
   florBox && (florBox.style.display = 'none');
 
+// 👉 MOSTRA A IMAGEM AO CLICAR
+  if (cabalaBox) {
+    cabalaBox.style.display = 'flex';
+    cabalaBox.style.justifyContent = 'center';
+    cabalaBox.style.alignItems = 'center';
+  }
+
   aiBox.style.display = 'none';
   promptBox.style.display = 'none';
   loader.style.display = 'none';
@@ -445,8 +451,7 @@ function newReading() {
 
   button.className = 'action-button roxo';
   button.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
-  
-  cabalaBox.style.display = 'block';
+
   status.textContent = 'Sua previsão em andamento...';
   status.className = 'status-process';
 
@@ -483,6 +488,7 @@ function newReading() {
     cabalaBox && (cabalaBox.style.display = 'none'); // Esconde a cabala ao final do sorteio
    
    showPrompt(drawn.map(c => c.label));
+        cabalaBox && (cabalaBox.style.display = 'none');
   }, 6500);
 }
 
