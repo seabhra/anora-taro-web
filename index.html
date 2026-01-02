@@ -367,33 +367,28 @@ background-color: #128C7E;
  <!--  CORPO DO JS DO APLICATIVO  -->
   
 <script>
-
 // ===================================================================
-// SCRIPT PRINCIPAL - ORÁCULO ANORA TARÔ
+// SCRIPT PRINCIPAL - ORÁCULO ANORA TARÔ (VERSÃO CORRIGIDA)
 // ===================================================================
 
-// Garante que o código só execute depois que todo o HTML for carregado
 document.addEventListener('DOMContentLoaded', () => {
 
-  // --- INICIALIZAÇÃO DAS VARIÁVEIS GLOBAIS ---
-
-  // Elementos do DOM
-  const adContainer = document.getElementById('ad-container');
+  // ---------------- ELEMENTOS DO DOM ----------------
   const button = document.getElementById('actionButton');
   const status = document.getElementById('status');
   const loader = document.getElementById('loader');
-  const aiBox = document.getElementById('aiResponse'); // ID correspondente no HTML
+  const aiBox = document.getElementById('aiResponse');
   const promptBox = document.getElementById('promptBox');
   const shareButton = document.getElementById('shareButton');
   const florBox = document.getElementById('florBox');
   const pageLoader = document.getElementById('pageLoader');
+  const adContainer = document.getElementById('ad-container'); // pode ser null
 
-  // Elementos das cartas (mais limpo e seguro)
   const imgs = [
     document.getElementById('card1'),
     document.getElementById('card2'),
     document.getElementById('card3')
-  ].filter(Boolean); // Remove qualquer valor null se o elemento não for encontrado
+  ].filter(Boolean);
 
   const labels = [
     document.getElementById('name1'),
@@ -401,180 +396,100 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('name3')
   ].filter(Boolean);
 
-  // Variáveis de estado e configuração
+  // ---------------- ESTADO ----------------
   let hasReading = false;
   const basePath = 'cards_images/';
   const backCard = basePath + 'back.jpg';
 
-  // Áudio
-  const shuffleAudio = new Audio('./Audio_app/slots_machine.mp3');
+  // ---------------- ÁUDIO ----------------
+  const shuffleAudio = new Audio('Audio_app/slots_machine.mp3');
   shuffleAudio.preload = 'auto';
 
-  // Dados das cartas
+  // ---------------- CARTAS ----------------
   const cards = [
-    { label: 'Louco', file: '01_Louco' }, { label: 'Mago', file: '02_Mago' },
-    { label: 'Sacerdotisa', file: '03_Sacerdotisa' }, { label: 'Imperatriz', file: '04_Imperatriz' },
-    { label: 'Imperador', file: '05_Imperador' }, { label: 'Sacerdote', file: '06_Sacerdote' },
-    { label: 'Amantes', file: '07_Amantes' }, { label: 'Carro', file: '08_Carro' },
-    { label: 'Força', file: '09_Forca' }, { label: 'Eremita', file: '10_Eremita' },
-    { label: 'Roda da Fortuna', file: '11_Roda' }, { label: 'Justiça', file: '12_Justica' },
-    { label: 'Enforcado', file: '13_Enforcado' }, { label: 'Morte', file: '14_Morte' },
-    { label: 'Temperança', file: '15_Temperanca' }, { label: 'Diabo', file: '16_Diabo' },
-    { label: 'Torre', file: '17_Torre' }, { label: 'Estrela', file: '18_Estrela' },
-    { label: 'Lua', file: '19_Lua' }, { label: 'Sol', file: '20_Sol' },
-    { label: 'Julgamento', file: '21_Julgamento' }, { label: 'Mundo', file: '22_Mundo' }
+    { label:'Louco', file:'01_Louco' }, { label:'Mago', file:'02_Mago' },
+    { label:'Sacerdotisa', file:'03_Sacerdotisa' }, { label:'Imperatriz', file:'04_Imperatriz' },
+    { label:'Imperador', file:'05_Imperador' }, { label:'Sacerdote', file:'06_Sacerdote' },
+    { label:'Amantes', file:'07_Amantes' }, { label:'Carro', file:'08_Carro' },
+    { label:'Força', file:'09_Forca' }, { label:'Eremita', file:'10_Eremita' },
+    { label:'Roda da Fortuna', file:'11_Roda' }, { label:'Justiça', file:'12_Justica' },
+    { label:'Enforcado', file:'13_Enforcado' }, { label:'Morte', file:'14_Morte' },
+    { label:'Temperança', file:'15_Temperanca' }, { label:'Diabo', file:'16_Diabo' },
+    { label:'Torre', file:'17_Torre' }, { label:'Estrela', file:'18_Estrela' },
+    { label:'Lua', file:'19_Lua' }, { label:'Sol', file:'20_Sol' },
+    { label:'Julgamento', file:'21_Julgamento' }, { label:'Mundo', file:'22_Mundo' }
   ];
 
-  // --- FUNÇÕES PRINCIPAIS ---
+  // ---------------- FUNÇÕES ----------------
+  const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
-  // Função para embaralhar o array de cartas
-  function shuffle(arr) {
-    return arr.sort(() => Math.random() - 0.5);
-  }
-
-  // Função principal para iniciar uma nova leitura
   function newReading() {
-    // 1. Preparação inicial e reset da interface
-    if (florBox) florBox.style.display = 'none';
+    florBox && (florBox.style.display = 'none');
     aiBox.style.display = 'none';
     shareButton.style.display = 'none';
     promptBox.style.display = 'none';
     loader.style.display = 'none';
-    adContainer.style.display = 'none'; // Garante que o anúncio comece escondido
+    adContainer && (adContainer.style.display = 'none');
 
-    // 2. Iniciar áudio de embaralhamento
-    if (shuffleAudio) {
-      shuffleAudio.currentTime = 0;
-      shuffleAudio.play().catch(e => console.log("Erro ao tocar áudio:", e));
-    }
+    shuffleAudio.currentTime = 0;
+    shuffleAudio.play().catch(() => {});
 
-    // 3. Atualizar status e botão para "Embaralhando"
-    button.className = 'action-button roxo';
-    button.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
-    status.textContent = 'Sua previsão em andamento...';
-    status.className = 'status-process';
+    button.className = 'action-button blue';
+    button.innerHTML = `🌀&nbsp;&nbsp;Embaralhando Cartas`;
 
-    // 4. Iniciar animação visual das cartas
+    status.innerHTML = `🌀&nbsp;&nbsp;Sorteando suas cartas`;
+    status.className = 'status-loading';
+
     imgs.forEach(img => img.classList.add('card-spinning'));
-    labels.forEach(l => l.innerText = "Sorteando...");
+    labels.forEach(l => l.innerText = '...');
 
-    // 5. Efeito de roleta (troca de imagens rápidas)
-    const spinInterval = setInterval(() => {
+    const spin = setInterval(() => {
       imgs.forEach(img => {
-        const randomCard = cards[Math.floor(Math.random() * cards.length)];
-        img.src = `${basePath}${randomCard.file}.jpg`;
+        const r = cards[Math.floor(Math.random() * cards.length)];
+        img.src = `${basePath}${r.file}.jpg`;
       });
     }, 80);
 
-    // 6. Finalizar o efeito após 7 segundos
     setTimeout(() => {
-      clearInterval(spinInterval);
-      if (shuffleAudio) shuffleAudio.pause();
+      clearInterval(spin);
+      shuffleAudio.pause();
 
-      // Selecionar as 3 cartas finais
-      const finalSelection = shuffle([...cards]).slice(0, 3);
-      const drawnNames = finalSelection.map(c => c.label);
-
-      // Atualizar as imagens e textos com as cartas sorteadas
-      finalSelection.forEach((card, i) => {
-        imgs[i].src = `${basePath}${card.file}.jpg`;
-        labels[i].innerText = card.label;
+      const drawn = shuffle([...cards]).slice(0, 3);
+      drawn.forEach((c, i) => {
+        imgs[i].src = `${basePath}${c.file}.jpg`;
+        labels[i].innerText = c.label;
         imgs[i].classList.remove('card-spinning');
       });
 
-      // 7. Preparar interface para a chamada da IA
       loader.style.display = 'block';
-      status.innerHTML = `<span class="status-emoji">🤖</span><span class="status-text">Processando consulta com IA...</span>`;
-      status.className = 'status-loading';
+      status.innerHTML = `🤖&nbsp;&nbsp;Consultando a IA...`;
 
-      // Chamar a API com os nomes das cartas
-      callAuroraAPI(drawnNames);
+      callAuroraAPI(drawn.map(c => c.label));
 
-      // 8. Atualizar estado do botão para "Nova Consulta"
       hasReading = true;
-      button.className = 'action-button blue';
-      button.innerHTML = `<span class="status-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
-    }, 7000);
+      button.innerHTML = `🔄&nbsp;&nbsp;Nova Consulta`;
+    }, 6500);
   }
 
-  // Função para resetar a leitura para o estado inicial
   function resetReading() {
     imgs.forEach(img => img.src = backCard);
     labels.forEach(l => l.innerText = '');
-    promptBox.style.display = 'none';
+
     aiBox.style.display = 'none';
     shareButton.style.display = 'none';
     loader.style.display = 'none';
-    adContainer.style.display = 'none';
+    adContainer && (adContainer.style.display = 'none');
 
-    // Mostra a flor centralizada novamente
-    if (florBox) {
-      florBox.style.display = 'flex';
-      florBox.style.justifyContent = 'center';
-      florBox.style.alignItems = 'center';
-    }
+    florBox && (florBox.style.display = 'flex');
 
-    button.innerText = '🔮\u00A0\u00A0\u00A0Embaralhar Cartas';
+    button.innerHTML = `🔮&nbsp;&nbsp;Embaralhar Cartas`;
     button.className = 'action-button pink';
+
     status.textContent = 'Aguardando sua consulta';
     status.className = '';
     hasReading = false;
   }
 
-  // Função para exibir os resultados finais (análise, botão e anúncio)
-  function showFinalResults() {
-    loader.style.display = 'none';
-    aiBox.style.display = 'block';
-    shareButton.style.display = 'flex';
-    adContainer.style.display = 'block';
-
-    // Tenta carregar o anúncio agora que o container está visível
-    try {
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.error("Erro ao tentar carregar o anúncio:", e);
-    }
-  }
-
-  // Função para mostrar o prompt com as cartas sorteadas
-  function showPrompt(drawn) {
-    if (promptBox) {
-      promptBox.style.display = 'block';
-      promptBox.innerHTML = `<strong>📜 Cartas:</strong> ${drawn.join(' | ')}`;
-    }
-  }
-
-  // --- FUNÇÕES DE API E COMPARTILHAMENTO ---
-
-  // Configuração do compartilhamento no WhatsApp
-  const WHATSAPP_FOOTER = "\n\n🔮 Anora Tarô — leitura assistida por IA\n⚡ Powered by Geraldo A. Seabra";
-  const DEFAULT_SHARE_TITLE = 'Anora Tarô';
-
-  function shareOnWhatsApp() {
-    const title = document.querySelector('#aiResponse h2')?.innerText?.trim() || DEFAULT_SHARE_TITLE;
-    const analysisText = document.querySelector('#aiResponse p')?.innerText?.trim() || '';
-
-    if (!analysisText) {
-      console.warn('Nenhum texto de análise encontrado para compartilhar.');
-      return;
-    }
-
-    const message = `✨ ${title}\n\n${analysisText}${WHATSAPP_FOOTER}`;
-
-    try {
-      if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
-        window.AppInventor.setWebViewString(message);
-      } else {
-        const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;
-        window.open(whatsappUrl, '_blank');
-      }
-    } catch (error) {
-      console.error("Erro ao tentar compartilhar no WhatsApp:", error);
-    }
-  }
-
-  // Função assíncrona para chamar a API de IA
   async function callAuroraAPI(cardsDrawn) {
     try {
       const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
@@ -583,83 +498,56 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({
           messages: [{
             role: "user",
-            content: `Faça uma pequena introdução interpretativa da sequência de cartas antes de iniciar a análise de cada ítem. Depois realize uma análise profunda da situação do consulente, em parágrafos separados, os significados do passado, do presente e do futuro de forma integrada e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente.Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
-
-**Situação do Consulente no Passado:**
-Escreva aqui sua análise sobre a carta ${cardsDrawn[0]} e sua influência no passado do consulente.
-
-**Situação do Consulente no Presente:**
-Escreva aqui sua análise sobre a carta ${cardsDrawn[1]} e sua influência no presente do consulente.
-
-**Situação do Consulente no Futuro:**
-Escreva aqui sua análise sobre a carta ${cardsDrawn[2]} e sua influência no futuro do consulente.
-
-**Análise Contextualizada do Consulente:**
-Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma orientação clara e integrada para o consulente.`
+            content: `Interprete as cartas ${cardsDrawn.join(', ')}`
           }]
         })
       });
-const data = await res.json();
-      const analysisText = data.choices[0].message.content || 'A IA não retornou nenhuma análise.';
 
-      // Atualiza o conteúdo da caixa de IA
+      const data = await res.json();
+      const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
+
       aiBox.innerHTML = `
         <h2 class="ai-title">
-          <img src="cards_images/marca_anora.png" alt="Anora Tarô" class="ai-logo">
+          <img src="cards_images/marca_anora.png" class="ai-logo">
           Anora Assistente de IA
         </h2>
-        <p>${analysisText}</p>
+        <p>${text}</p>
       `;
 
-      status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
+      status.innerHTML = `✅&nbsp;&nbsp;Consulta realizada`;
       status.className = 'status-success';
 
-    } catch (error) {
-      console.error('Erro na chamada da API:', error);
-      aiBox.innerHTML = `<h2>🔮\u00A0\u00A0\u00A0Anora Assistente de IA</h2><p>Erro ao acessar a reflexão.</p>`;
+    } catch {
+      aiBox.innerHTML = `<p>Erro ao acessar a reflexão.</p>`;
       status.textContent = 'Erro de carregamento';
       status.className = 'status-error';
     }
 
-    // Chama a função para mostrar os resultados finais (botão e anúncio)
-    showFinalResults();
+    loader.style.display = 'none';
+    aiBox.style.display = 'block';
+    shareButton.style.display = 'block';
+    adContainer && (adContainer.style.display = 'block');
   }
 
-  // --- LISTENERS DE EVENTOS (SEÇÃO CORRIGIDA) ---
+  // ---------------- EVENTOS ----------------
+  button && (button.onclick = () => hasReading ? resetReading() : newReading());
+  shareButton && (shareButton.onclick = shareOnWhatsApp);
 
-  // >>> CORREÇÃO APLICADA AQUI <<<
-  // Lógica principal do botão de ação, agora com verificação de existência
-  if (button) {
-    button.onclick = () => hasReading ? resetReading() : newReading();
-  } else {
-    console.error("Erro: Botão principal com id='actionButton' não foi encontrado no HTML.");
-  }
-
-  // Lógica para o botão de compartilhar (já estava seguro, mas mantido para consistência)
-  if (shareButton) {
-    shareButton.onclick = shareOnWhatsApp;
-  }
-
-  // Lógica para esconder o loader da página no carregamento inicial
+  // Loader inicial
   window.addEventListener('load', () => {
-    setTimeout(() => {
-      if (pageLoader) {
-        pageLoader.classList.add('hidden');
-      }
-    }, 2000);
+    setTimeout(() => pageLoader?.classList.add('hidden'), 1500);
   });
-}); // Fim do DOMContentLoaded
 
-      
-<script>
-if ('serviceWorker' in navigator) {
-window.addEventListener('load', () => {
-navigator.serviceWorker.register('/service-worker.js')
-.then(() => console.log('SW registrado'))
-.catch(err => console.error('SW erro:', err));
+  // Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .catch(err => console.warn('SW erro:', err));
+  }
+
 });
-}
 </script>
+
+
 
 </body>
 </html>
