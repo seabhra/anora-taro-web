@@ -62,43 +62,31 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   background: transparent;
 }
 
-.cabalas {
-  display: flex;
+/* Container */
+#cabalaBox {
+  display: none; /* começa oculto */
   justify-content: center;
   align-items: center;
   margin: 16px 0;
+  animation: fadeIn 0.6s ease;
 }
 
-.cabala {
-  width: 30px;
-  height: auto;
-}
-
-.cabala img {
-  width: 100%;
-  height: auto;
-  display: none;
-  box-shadow: none;
-  border-radius: 0;
-  background: transparent;
-}  
-    
-}
+/* Imagem */
 #cabalaBox img {
-    width: 64px;       /* 👈 tamanho reduzido */
+  width: 64px;          /* 👈 tamanho real */
   height: auto;
   opacity: 0.9;
-      
-}
-#cabalaBox {
-  animation: fadeIn 0.6s ease;
-      
+  display: block;       /* 👈 ESSENCIAL */
 }
 
+/* Animação */
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
 }
+
+
+
       
 .label {
 margin-top: 6px;
