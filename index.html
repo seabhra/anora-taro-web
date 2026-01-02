@@ -345,30 +345,27 @@ background-color: #128C7E;
 
    <!-- LOCAL Compartilhar no WhatsApp -->
 
-<button id="shareButton">Compartilhar no WhatsApp</button>
+<div id="aiBox" style="display: none;">
+  <h2>Sua Análise</h2>
+  <p id="promptText">Aqui virá o texto da IA...</p>
 
-    <!-- LOCAL CÓDIGO ADMOB GOOGLE -->
+  <!-- >>> ANÚNCIO AGORA ESTÁ DENTRO DA PÁGINA DE ANÁLISE <<< -->
+  <div id="ad-container" style="display: none;"> <!-- Começa escondido -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3940256099942544"  <!-- ID de teste -->
+         data-ad-slot="6300978111"               <!-- ID de teste -->
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
 
-  <h1>Minha Página de Leitura</h1>
-    <p>Aqui viria o resultado da sua leitura...</p>
-
-    <!-- Seu botão de compartilhar -->
-    <div id="shareButton" style="display: block;"> <!-- Mudei para block para aparecer no teste -->
-        <button>Compartilhar Leitura</button>
-    </div>
-
-    <!-- 2. BLOCO DE ANÚNCIO DO ADMOB -->
-    <div id="ad-container">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-3940256099942544"
-             data-ad-slot="6300978111"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-    </div>
+  <div id="shareButton" style="display: none;">
+    <button>Compartilhar Leitura</button>
+  </div>
+</div>
 
   
  <!--  CORPO DO JS DO APLICATIVO  -->
