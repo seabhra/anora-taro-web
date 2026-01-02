@@ -496,11 +496,8 @@ function resetReading() {
   imgs.forEach(img => img.src = backCard);
   labels.forEach(l => l.innerText = '');
 
- // 🔴 ESCONDE O PROMPT DAS CARTAS
-  if (promptBox) {
-    promptBox.style.display = 'none';
-    promptBox.innerHTML = ''; // limpa o conteúdo anterior
-  }
+ 
+  clearPrompt(); // 🔥 LIMPA O showPrompt DE VERDADE
 
   aiBox.style.display = 'none';
   loader.style.display = 'none';
