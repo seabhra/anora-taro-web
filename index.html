@@ -184,7 +184,7 @@ animation: spin 1s linear infinite;
 }
 
 /* ESTILO DA CAIXA DE RESPOSTA DA IA */
-#aiResponse {
+#aiBox { /* CORREÇÃO: ID unificado para aiBox */
 display: none;
 margin-top: 16px;
 padding: 14px;
@@ -195,7 +195,7 @@ text-align: left;
 }
 
 /* ESTILO DO NOVO CABEÇALHO COMPARTILHADO H2 */
-#aiResponse h2 {
+#aiBox h2 {
 text-align: center;
 color: #6b46c1;
 margin-top: 0;
@@ -205,19 +205,19 @@ font-weight: bold;
 }
 
 /* Estilo do parágrafo com espaçamento <<< */
-#aiResponse p {
+#aiBox p {
 line-height: 1.6;
 margin: 0; /* Reseta a margem */
 }
 
 /* Adiciona espaço apenas ENTRE os parágrafos (a partir do segundo) */
   
-#aiResponse p:not(:first-child) {
+#aiBox p:not(:first-child) {
 margin-top: 1em;
 }
 
 /* ESTILO PARA OS TÍTULOS DENTRO DA ANÁLISE */
-#aiResponse p strong {
+#aiBox p strong {
 color: #6b46c1;
 display: block;
 margin-top: 18px;
@@ -338,37 +338,21 @@ background-color: #128C7E;
   
 <div id="promptBox"></div>
 
-<!-- CAIXA DE RESPOSTA DA IA -->
-<div id="aiResponse">
-<!-- O conteúdo será inserido aqui pelo JavaScript -->
-</div>
-
-   <!-- LOCAL Compartilhar no WhatsApp -->
-
+<!-- CORREÇÃO: Caixa de resposta da IA e anúncio unificadas em um só lugar -->
+<!-- A div antiga 'aiResponse' foi removida. Tudo agora fica dentro de 'aiBox'. -->
 <div id="aiBox" style="display: none;">
-  <h2>Sua Análise</h2>
-  <p id="promptText">Aqui virá o texto da IA...</p>
-
-  <!-- >>> ANÚNCIO AGORA ESTÁ DENTRO DA PÁGINA DE ANÁLISE <<< -->
-  <div id="ad-container" style="display: none;"> <!-- Começa escondido -->
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3940256099942544"  <!-- ID de teste -->
-         data-ad-slot="6300978111"               <!-- ID de teste -->
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-  </div>
+  <!-- O conteúdo será inserido aqui pelo JavaScript -->
 </div>
+
+   <!-- LOCAL Compartilhar no WhatsApp e Anúncio -->
+   <!-- O botão e o anúncio foram movidos para dentro do aiBox via JavaScript -->
 
   
  <!--  CORPO DO JS DO APLICATIVO  -->
   
 <script>
 // ===================================================================
-// SCRIPT PRINCIPAL - ORÁCULO ANORA TARÔ (VERSÃO CORRIGIDA)
+// SCRIPT PRINCIPAL - ORÁCULO ANORA TARÔ (VERSÃO FINAL CORRIGIDA)
 // ===================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -377,12 +361,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const button = document.getElementById('actionButton');
   const status = document.getElementById('status');
   const loader = document.getElementById('loader');
-  const aiBox = document.getElementById('aiResponse');
+  // CORREÇÃO: O script agora aponta para 'aiBox', o único container de resultado.
+  const aiBox = document.getElementById('aiBox'); 
   const promptBox = document.getElementById('promptBox');
   const shareButton = document.getElementById('shareButton');
   const florBox = document.getElementById('florBox');
   const pageLoader = document.getElementById('pageLoader');
-  const adContainer = document.getElementById('ad-container'); // pode ser null
+  const adContainer = document.getElementById('ad-container');
 
   const imgs = [
     document.getElementById('card1'),
@@ -434,10 +419,10 @@ document.addEventListener('DOMContentLoaded', () => {
     shuffleAudio.currentTime = 0;
     shuffleAudio.play().catch(() => {});
 
-    button.className = 'action-button blue';
-    button.innerHTML = `🌀&nbsp;&nbsp;Embaralhando Cartas`;
+    button.className = 'action-button roxo'; // Corrigido para 'roxo' durante o sorteio
+    button.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
 
-    status.innerHTML = `🌀&nbsp;&nbsp;Sorteando suas cartas`;
+    status.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Sorteando suas cartas</span>`;
     status.className = 'status-loading';
 
     imgs.forEach(img => img.classList.add('card-spinning'));
@@ -462,12 +447,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       loader.style.display = 'block';
-      status.innerHTML = `🤖&nbsp;&nbsp;Consultando a IA...`;
+      status.innerHTML = `<span class="status-emoji">🤖</span><span class="status-text">Consultando a IA...</span>`;
 
       callAuroraAPI(drawn.map(c => c.label));
 
       hasReading = true;
-      button.innerHTML = `🔄&nbsp;&nbsp;Nova Consulta`;
+      button.className = 'action-button blue'; // Corrigido para 'blue' no final
+      button.innerHTML = `<span class="status-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
     }, 6500);
   }
 
@@ -482,12 +468,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     florBox && (florBox.style.display = 'flex');
 
-    button.innerHTML = `🔮&nbsp;&nbsp;Embaralhar Cartas`;
+    button.innerHTML = `<span class="btn-emoji">🔮</span><span>Embaralhar Cartas</span>`;
     button.className = 'action-button pink';
 
-    status.textContent = 'Aguardando sua consulta';
+    status.innerHTML = `<span class="status-emoji">...</span><span class="status-text">Aguardando sua consulta...</span>`;
     status.className = '';
     hasReading = false;
+  }
+
+  // CORREÇÃO: Função de compartilhamento que estava faltando
+  function shareOnWhatsApp() {
+    const title = document.querySelector('#aiBox h2')?.innerText?.trim() || 'Anora Tarô';
+    const analysisText = document.querySelector('#aiBox p')?.innerText?.trim() || '';
+
+    if (!analysisText) {
+      console.warn('Nenhum texto de análise encontrado para compartilhar.');
+      return;
+    }
+    const WHATSAPP_FOOTER = "\n\n🔮 Anora Tarô — leitura assistida por IA\n⚡ Powered by Geraldo A. Seabra";
+    const message = `✨ ${title}\n\n${analysisText}${WHATSAPP_FOOTER}`;
+
+    try {
+      if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
+        window.AppInventor.setWebViewString(message);
+      } else {
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;
+        window.open(whatsappUrl, '_blank');
+      }
+    } catch (error) {
+      console.error("Erro ao tentar compartilhar no WhatsApp:", error);
+    }
   }
 
   async function callAuroraAPI(cardsDrawn) {
@@ -506,15 +517,25 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
+      // CORREÇÃO: O conteúdo agora é inserido no 'aiBox', junto com o botão e o anúncio.
       aiBox.innerHTML = `
         <h2 class="ai-title">
           <img src="cards_images/marca_anora.png" class="ai-logo">
           Anora Assistente de IA
         </h2>
         <p>${text}</p>
+        <div id="shareButton">Compartilhar no WhatsApp</div>
+        <div id="ad-container" style="display: none;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-3940256099942544"
+                 data-ad-slot="6300978111"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
       `;
 
-      status.innerHTML = `✅&nbsp;&nbsp;Consulta realizada`;
+      status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada</span>`;
       status.className = 'status-success';
 
     } catch {
@@ -525,13 +546,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loader.style.display = 'none';
     aiBox.style.display = 'block';
-    shareButton.style.display = 'block';
-    adContainer && (adContainer.style.display = 'block');
+    
+    // CORREÇÃO: Mostra o anúncio e tenta carregá-lo após o container estar visível.
+    if(adContainer) {
+        adContainer.style.display = 'block';
+        try {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+            console.error("Erro ao tentar carregar o anúncio:", e);
+        }
+    }
   }
 
   // ---------------- EVENTOS ----------------
   button && (button.onclick = () => hasReading ? resetReading() : newReading());
-  shareButton && (shareButton.onclick = shareOnWhatsApp);
+  
+  // CORREÇÃO: O evento de clique para o botão de compartilhar precisa ser re-atribuído
+  // toda vez que o botão é criado dinamicamente.
+  document.addEventListener('click', (event) => {
+    if (event.target && event.target.id === 'shareButton') {
+      shareOnWhatsApp();
+    }
+  });
 
   // Loader inicial
   window.addEventListener('load', () => {
@@ -543,11 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navigator.serviceWorker.register('/service-worker.js')
       .catch(err => console.warn('SW erro:', err));
   }
-
 });
 </script>
-
-
-
 </body>
 </html>
