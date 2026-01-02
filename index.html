@@ -544,14 +544,14 @@ function showPrompt(drawn) {
 
     } catch (error) {
       console.error('Erro na chamada da API:', error);
-      aiBox.innerHTML = `<p>Erro ao acessar a reflexão.</p>`;
+      aiBox.innerHTML = `<p>Erro ao acessar análise feita pelo sistema.</p>`;
       status.textContent = 'Erro de carregamento';
       status.className = 'status-error';
     }
 
     loader.style.display = 'none';
     aiBox.style.display = 'block';
-        shareButton.style.display = 'flex';
+     
 
     // CORREÇÃO 1: Re-seleciona o container do anúncio DEPOIS de criá-lo com innerHTML
     const adContainer = document.getElementById('ad-container');
