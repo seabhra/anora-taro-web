@@ -418,11 +418,15 @@ document.addEventListener('DOMContentLoaded', () => {
     button.className = 'action-button roxo';
     button.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
 
-    status.innerHTML = `<span class="status-emoji">🌀</span><span class="status-text">Sorteando suas cartas...</span>`;
-    status.className = 'status-loading';
+    status.textContent = 'Sua previsão em andamento...';
+    status.className = 'status-process';
+
+        
+        // 3. INCIA ANIMAÇÃO VISUAL DAS CARTAS
+    
 
     imgs.forEach(img => img.classList.add('card-spinning'));
-    labels.forEach(l => l.innerText = '...');
+    labels.forEach(l => l.innerText = 'Sorteando');
 
     const spin = setInterval(() => {
       imgs.forEach(img => {
