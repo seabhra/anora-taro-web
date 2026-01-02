@@ -496,23 +496,24 @@ function resetReading() {
   imgs.forEach(img => img.src = backCard);
   labels.forEach(l => l.innerText = '');
 
- 
-  clearPrompt(); // 🔥 LIMPA O showPrompt DE VERDADE
+  clearPrompt();
 
   aiBox.style.display = 'none';
   loader.style.display = 'none';
-showPrompt.style.display = 'none';
 
   florBox && (florBox.style.display = 'flex');
-  cabalaBox && (cabalaBox.style.display = 'flex'); 
+  cabalaBox && (cabalaBox.style.display = 'flex');
 
   button.innerHTML = `<span class="btn-emoji">🔮</span><span>Embaralhar Cartas</span>`;
   button.className = 'action-button pink';
+  button.disabled = false;
 
-  status.innerHTML = `<span class="status-emoji"></span><span class="status-text">Aguardando sua consulta...</span>`;
+  status.innerHTML = `<span class="status-text">Aguardando sua consulta...</span>`;
   status.className = '';
+
   hasReading = false;
 }
+
 
 function shareOnWhatsApp() {
   const title = document.querySelector('#aiBox h2')?.innerText?.trim() || 'Anora Tarô';
