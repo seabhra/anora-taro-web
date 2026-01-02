@@ -678,9 +678,7 @@ status.className = 'status-success';
 console.error('Erro na chamada da API:', error);
 const errorText = 'Erro ao acessar a reflexão.';
 
-  
 aiBox.innerHTML = `<h2>🔮\u00A0\u00A0\u00A0Anora Assistente de IA</h2><p>${errorText}</p>`;
-
 
 status.textContent = 'Erro de carregamento';
 status.className = 'status-error';
@@ -689,6 +687,9 @@ status.className = 'status-error';
 loader.style.display = 'none';
 aiBox.style.display = 'block';
 shareButton.style.display = 'block';
+
+  // Depois que o conteúdo foi inserido na página, mostre o resto.
+  showFinalResults();      
 }
 
 // Lógica para esconder o loader da página
