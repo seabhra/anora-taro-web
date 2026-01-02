@@ -276,7 +276,7 @@ background-color: #128C7E;
         #ad-container {
             margin-top: 20px; /* Espaço acima do anúncio */
             text-align: center; /* Centraliza o banner na tela */
-            heigth: 20px; /* Ocupa a largura disponível */
+            height: 25px; /* Ocupa a largura disponível */
             width: 100%; /* Ocupa a largura disponível */
             border: 1px solid red; /* Borda vermelha apenas para você ver onde ele está */
         }
@@ -451,6 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
       hasReading = true;
       button.className = 'action-button blue';
       button.innerHTML = `<span class="status-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
+         
     }, 6500);
   }
 function showPrompt(drawn) {
@@ -535,7 +536,7 @@ const data = await res.json();
         </div>
       `;
 
-      status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada</span>`;
+      status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
       status.className = 'status-success';
 
     } catch (error) {
