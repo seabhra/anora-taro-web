@@ -599,8 +599,7 @@ Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma ori
           }]
         })
       });
-
-      const data = await res.json();
+const data = await res.json();
       const analysisText = data.choices[0].message.content || 'A IA não retornou nenhuma análise.';
 
       // Atualiza o conteúdo da caixa de IA
@@ -626,12 +625,17 @@ Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma ori
     showFinalResults();
   }
 
-  // --- LISTENERS DE EVENTOS ---
+  // --- LISTENERS DE EVENTOS (SEÇÃO CORRIGIDA) ---
 
-  // Lógica principal do botão de ação
-  button.onclick = () => hasReading ? resetReading() : newReading();
+  // >>> CORREÇÃO APLICADA AQUI <<<
+  // Lógica principal do botão de ação, agora com verificação de existência
+  if (button) {
+    button.onclick = () => hasReading ? resetReading() : newReading();
+  } else {
+    console.error("Erro: Botão principal com id='actionButton' não foi encontrado no HTML.");
+  }
 
-  // Lógica para o botão de compartilhar
+  // Lógica para o botão de compartilhar (já estava seguro, mas mantido para consistência)
   if (shareButton) {
     shareButton.onclick = shareOnWhatsApp;
   }
@@ -647,12 +651,6 @@ Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma ori
 }); // Fim do DOMContentLoaded
 
       
-// BOTÃO DE COMPARTILHAR WHATSAPP
-shareButton.onclick = shareOnWhatsApp;
-
-button.onclick = () => hasReading ? resetReading() : newReading();
-</script>
-
 <script>
 if ('serviceWorker' in navigator) {
 window.addEventListener('load', () => {
