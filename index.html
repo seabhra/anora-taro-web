@@ -612,7 +612,8 @@ async function callAuroraAPI(cardsDrawn) {
     const data = await res.json();
         if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
-     const adContainer = document.getElementById('ad-container');
+        
+   const adContainer = document.getElementById('ad-container');
 
 if (adContainer) {
   adContainer.style.display = 'block';
@@ -655,16 +656,6 @@ if (adContainer) {
   </button>
 `;
 
-aiBox.innerHTML = `
-  <h2 class="ai-title">
-    <img src="cards_images/marca_anora.png" class="ai-logo">
-    Anora Assistente de IA
-  </h2>
-  <p>${text}</p>
-  <button id="shareButton" class="action-button">
-    Compartilhar no WhatsApp
-  </button>
-`;
 
 aiBox.style.display = 'block';
 
