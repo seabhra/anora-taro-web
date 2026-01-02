@@ -637,27 +637,11 @@ if (adContainer) {
   }
 
   loader.style.display = 'none';
+  aiBox.style.display = 'block';
   
   // >>> CORREÇÃO: Esconde a cabala quando a aiBox aparece <<<
   cabalaBox && (cabalaBox.style.display = 'none');
       
-  aiBox.style.display = 'block';
-
-      aiBox.innerHTML = `
-  <h2 class="ai-title">
-    <img src="cards_images/marca_anora.png" class="ai-logo">
-    Anora Assistente de IA
-  </h2>
-
-  <p>${text}</p>
-
-  <button id="shareButton" style="display:block;">
-    Compartilhar no WhatsApp
-  </button>
-`;
-
-
-aiBox.style.display = 'block';
 
 const adContainer = document.getElementById('ad-container');
 if (adContainer) {
