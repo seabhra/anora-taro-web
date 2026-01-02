@@ -380,6 +380,8 @@ background-color: #128C7E;
 // SCRIPT PRINCIPAL - ORÁCULO ANORA TARÔ (VERSÃO FINAL CORRIGIDA)
 // ===================================================================
 
+let isResetting = false;
+      
 document.addEventListener('DOMContentLoaded', () => {
 
   // ---------------- ELEMENTOS DO DOM ----------------
@@ -491,8 +493,15 @@ function showPrompt(drawn) {
     pBox.innerHTML = `<strong>📜 Cartas:</strong> ${drawn.join(' | ')}`;
   }
 }
-
+function clearPrompt() {
+  if (!promptBox) return;
+  promptBox.innerHTML = '';
+  promptBox.style.display = 'none';
+}
+      
 function resetReading() {
+  isResetting = true;
+
   imgs.forEach(img => img.src = backCard);
   labels.forEach(l => l.innerText = '');
 
@@ -511,7 +520,8 @@ function resetReading() {
   status.innerHTML = `<span class="status-text">Aguardando sua consulta...</span>`;
   status.className = '';
 
-  hasReading = false;
+   hasReading = false;
+  isResetting = false
 }
 
 
@@ -540,6 +550,7 @@ function shareOnWhatsApp() {
 }
 
 async function callAuroraAPI(cardsDrawn) {
+      
   try {
     const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
       method: 'POST',
@@ -552,6 +563,7 @@ async function callAuroraAPI(cardsDrawn) {
       })
     });
     const data = await res.json();
+        if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
     aiBox.innerHTML = `
