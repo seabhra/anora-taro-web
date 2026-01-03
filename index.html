@@ -649,6 +649,9 @@ function shareOnWhatsApp() {
         <p>${text}</p>
       `;
     }
+ aiContent.style.display = 'block';
+aiContent.style.opacity = '1';
+
 
     status.innerHTML = `
       <span class="status-emoji">✅</span>
@@ -682,21 +685,30 @@ function shareOnWhatsApp() {
     if (!isResetting) {
 
       if (shareBtn) {
-        shareBtn.classList.remove('hidden');
-        shareBtn.onclick = shareOnWhatsApp;
-      }
+  shareBtn.style.display = 'block';
+  shareBtn.classList.remove('hidden');
+  shareBtn.onclick = shareOnWhatsApp;
+}
+if (adBox) {
+  // 🔍 fallback visual (diagnóstico)
+  adBox.innerHTML = '<p style="color:red; text-align:center;">[ Espaço do anúncio ]</p>';
 
-      if (adBox) {
-        adBox.classList.remove('hidden');
-        try {
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (e) {
-          console.warn('AdMob ainda não inicializado');
-        }
-      }
+  // 👁️ garante visibilidade
+  adBox.style.display = 'block';
+  adBox.classList.remove('hidden');
+
+  // ⚠️ tentativa de inicialização SOMENTE se existir adsbygoogle
+  if (window.adsbygoogle) {
+    try {
+      window.adsbygoogle.push({});
+    } catch (e) {
+      console.warn('Adsbygoogle presente, mas falhou ao inicializar');
     }
+  } else {
+    console.warn('Adsbygoogle não disponível (WebView / App Inventor)');
   }
 }
+
   
 
 
