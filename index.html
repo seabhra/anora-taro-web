@@ -638,6 +638,7 @@ async function callAuroraAPI(cardsDrawn) {
         if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
+        const shareBtn = document.getElementById('aiContent');
 const shareBtn = document.getElementById('shareButton');
 
 if (shareBtn) {
