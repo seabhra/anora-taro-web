@@ -516,11 +516,7 @@ button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="stat
   imgs.forEach(img => img.classList.add('card-spinning'));
   labels.forEach(l => l.innerText = 'Sorteando');
 
- if (memoriesAudio) {
-      memoriesAudio.currentTime = 0;
-      memoriesAudio.muted = true; // 🎧 COMEÇA MUDO
-      memoriesAudio.play().catch(e => console.error("Erro ao iniciar áudio mudo:", e));
-    }
+
 
   const spin = setInterval(() => {
     imgs.forEach(img => {
@@ -550,7 +546,8 @@ button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="stat
     button.className = 'action-button blue';
     button.innerHTML = `<span class="btn-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
     cabalaBox && (cabalaBox.style.display = 'none'); // Esconde a cabala ao final do sorteio
-   
+
+        
    showPrompt(drawn.map(c => c.label));
    cabalaBox && (cabalaBox.style.display = 'none');
 
@@ -600,7 +597,10 @@ if (adContainer) {
   adContainer.style.display = 'none';
 }
     
-
+if (memoriesAudio) {
+  memoriesAudio.pause();
+  memoriesAudio.currentTime = 0;
+}
    hasReading = false;
   isResetting = false
 }
@@ -634,6 +634,7 @@ function shareOnWhatsApp() {
 async function callAuroraAPI(cardsDrawn) {
       
   try {
+        
     const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -647,6 +648,14 @@ async function callAuroraAPI(cardsDrawn) {
     const data = await res.json();
         if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
+
+  memoriesAudio.currentTime = 0;
+  memoriesAudio.play();
+} catch (e) {
+  console.warn('Áudio bloqueado pelo navegador:', e);
+}
+
+      status.className = 'status-success';
 
       aiBox.innerHTML = `
       <h2 class="ai-title">
@@ -692,7 +701,7 @@ async function callAuroraAPI(cardsDrawn) {
   }
 }
 
-       // >>> CORREÇÃO AQUI: Ativa o som do áudio de memória <<<
+     // >>> CORREÇÃO AQUI: Ativa o som do áudio de memória <<<
 
     if (memoriesAudio) {
       memoriesAudio.muted = false; // 🔊 ATIVA O SOM! O áudio já está tocando desde o clique.
