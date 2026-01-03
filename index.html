@@ -617,7 +617,7 @@ function shareOnWhatsApp() {
 
 // ---------------- declaração DOM da API ----------------
 
- async function callAuroraAPI(cardsDrawn) {
+      async function callAuroraAPI(cardsDrawn) {
 
   const aiContent = document.getElementById('aiContent');
   const shareBtn  = document.getElementById('shareButton');
@@ -635,12 +635,16 @@ function shareOnWhatsApp() {
       })
     });
 
+    if (!res.ok) {
+      throw new Error('Resposta HTTP inválida');
+    }
+
     const data = await res.json();
     if (isResetting) return;
 
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
-  if (!isResetting && aiContent) {
+    if (aiContent) {
       aiContent.innerHTML = `
         <h2 class="ai-title">
           <img src="cards_images/marca_anora.png" class="ai-logo">
@@ -648,10 +652,9 @@ function shareOnWhatsApp() {
         </h2>
         <p>${text}</p>
       `;
+      aiContent.style.display = 'block';
+      aiContent.style.opacity = '1';
     }
- aiContent.style.display = 'block';
-aiContent.style.opacity = '1';
-
 
     status.innerHTML = `
       <span class="status-emoji">✅</span>
@@ -670,13 +673,14 @@ aiContent.style.opacity = '1';
         </h2>
         <p>❌ Erro ao acessar análise feita pelo sistema.</p>
       `;
+      aiContent.style.display = 'block';
     }
 
     status.textContent = 'Erro na análise pela Inteligência Artificial.';
     status.className = 'status-error';
 
   } finally {
-    /* 🔴 LIMPEZA GARANTIDA — SEMPRE EXECUTA */
+    /* 🔴 LIMPEZA GARANTIDA — SEM LOOP */
 
     loader.style.display = 'none';
     aiBox.style.display = 'block';
@@ -685,27 +689,28 @@ aiContent.style.opacity = '1';
     if (!isResetting) {
 
       if (shareBtn) {
-  shareBtn.style.display = 'block';
-  shareBtn.classList.remove('hidden');
-  shareBtn.onclick = shareOnWhatsApp;
-}
-if (adBox) {
-  // 🔍 fallback visual (diagnóstico)
-  adBox.innerHTML = '<p style="color:red; text-align:center;">[ Espaço do anúncio ]</p>';
+        shareBtn.style.display = 'block';
+        shareBtn.classList.remove('hidden');
+        shareBtn.onclick = shareOnWhatsApp;
+      }
 
-  // 👁️ garante visibilidade
-  adBox.style.display = 'block';
-  adBox.classList.remove('hidden');
+      if (adBox) {
+        adBox.innerHTML =
+          '<p style="color:red; text-align:center;">[ Espaço do anúncio ]</p>';
+        adBox.style.display = 'block';
+        adBox.classList.remove('hidden');
 
-  // ⚠️ tentativa de inicialização SOMENTE se existir adsbygoogle
-  if (window.adsbygoogle) {
-    try {
-      window.adsbygoogle.push({});
-    } catch (e) {
-      console.warn('Adsbygoogle presente, mas falhou ao inicializar');
+        if (window.adsbygoogle) {
+          try {
+            window.adsbygoogle.push({});
+          } catch (e) {
+            console.warn('Adsbygoogle presente, mas falhou');
+          }
+        } else {
+          console.warn('Adsbygoogle não disponível (WebView)');
+        }
+      }
     }
-  } else {
-    console.warn('Adsbygoogle não disponível (WebView / App Inventor)');
   }
 }
 
