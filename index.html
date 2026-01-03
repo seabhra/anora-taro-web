@@ -630,11 +630,16 @@ aiContent.innerHTML = `
     status.className = 'status-success';
 
   } catch (error) {
-    console.error('Erro na chamada da API:', error);
-    aiBox.innerHTML = `<p>Erro ao acessar a reflexão.</p>`;
-    status.textContent = 'Erro ao acessar análise feita pelo sistema.';
-    status.className = 'status-error';
+  console.error('Erro na chamada da API:', error);
+
+  const aiContent = document.getElementById('aiContent');
+  if (aiContent) {
+    aiContent.innerHTML = `<p>❌ Erro na análise pela Inteligência Artificial.</p>`;
   }
+
+  status.textContent = 'Erro ao acessar análise feita pelo sistema.';
+  status.className = 'status-error';
+}
 
   // ✅ ESSENCIAL
   loader.style.display = 'none';      
