@@ -649,6 +649,8 @@ async function callAuroraAPI(cardsDrawn) {
         if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
+         // ---------------- TOCA ÁUDIO ----------------
+
   memoriesAudio.currentTime = 0;
   memoriesAudio.play();
 } catch (e) {
@@ -701,11 +703,7 @@ async function callAuroraAPI(cardsDrawn) {
   }
 }
 
-     // >>> CORREÇÃO AQUI: Ativa o som do áudio de memória <<<
-
-    if (memoriesAudio) {
-      memoriesAudio.muted = false; // 🔊 ATIVA O SOM! O áudio já está tocando desde o clique.
-    }
+ 
   
       
       // ---------------- EVENTOS ----------------
