@@ -686,8 +686,9 @@ async function callAuroraAPI(cardsDrawn) {
   }
 }
 
-  //Inicia a música de fundo quando a análise é finalizada
+       // >>> CORREÇÃO AQUI: Ativa o som do áudio de memória <<<
     if (memoriesAudio) {
+      memoriesAudio.muted = false; // Ativa o som! O áudio já está tocando (mudo) desde o clique.
       memoriesAudio.play().catch(e => console.log("Erro ao tocar áudio de memória:", e));
     }
   
