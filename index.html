@@ -144,10 +144,10 @@ transition: color 0.3s ease;
 /* status da mudança de cores da label abaixo do botão*/
 
 #status.status-process {
-color: #4d0567; /* Roxo Forte */
+color: #4d0567; /* Roxo */
 }
 #status.status-loading {
-color: #6b46c1; /* Roxo */
+color: #fd6bcd; /* Rosa */
 }
 #status.status-success {
 color: #38a169; /* Verde */
@@ -667,6 +667,7 @@ aiContent.innerHTML = `
   loader.style.display = 'none';      
   cabalaBox && (cabalaBox.style.display = 'none');
   aiBox.style.display = 'block';
+  aiContent.style.display = 'block';
 
 setTimeout(() => {
   const ad = document.getElementById('ad-container');
