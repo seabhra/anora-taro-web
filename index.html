@@ -165,7 +165,7 @@ height: 50px;
 border: 5px solid rgba(131, 242, 212, 0.2);
 border-top: 5px solid #83f2d4;
 border-radius: 50%;
-animation: spin 5s linear infinite;
+animation: spin 10s linear infinite;
 }
 
 @keyframes spin {
@@ -391,9 +391,10 @@ border: 2px dashed red;
 
   <p id="aiText"></p>
 
-  <button id="shareButton" class="action-button">
-    Compartilhar no WhatsApp
-  </button>
+      
+  <button id="shareButton" class="action-button hidden">
+  Compartilhar no WhatsApp
+</button>
 </div>
       
 <!-- LOCAL Compartilhar Anúncio -->
@@ -629,16 +630,20 @@ async function callAuroraAPI(cardsDrawn) {
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
 const aiContent = document.getElementById('aiContent');
-
 aiContent.innerHTML = `
   <h2 class="ai-title">
     <img src="cards_images/marca_anora.png" class="ai-logo">
     Anora Assistente de IA
   </h2>
   <p>${text}</p>
-  <button id="shareButton" class="action-button">Compartilhar no WhatsApp</button>
-   
 `;
+
+
+ const shareBtn = document.getElementById('shareButton');
+if (shareBtn) {
+  shareBtn.classList.remove('hidden');
+  shareBtn.addEventListener('click', shareOnWhatsApp);
+}
 
     status.innerHTML = `<span class="status-emoji">✅</span>
     <span class="status-text">Consulta realizada com sucesso</span>`;
