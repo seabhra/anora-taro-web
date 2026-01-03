@@ -697,23 +697,7 @@ function shareOnWhatsApp() {
     }
   }
 }
-  // ✅ SEMPRE EXECUTA
-
-  cabalaBox && (cabalaBox.style.display = 'none');
-  aiContent && (aiContent.style.display = 'block');
-
-  setTimeout(() => {
-    const ad = document.getElementById('ad-container');
-    if (ad) {
-      ad.style.display = 'block';
-      try {
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      } catch (e) {
-        console.warn('AdSense não inicializou', e);
-      }
-    }
-  }, 300);
-}
+  
 
 
       
