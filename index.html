@@ -516,6 +516,12 @@ button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="stat
   imgs.forEach(img => img.classList.add('card-spinning'));
   labels.forEach(l => l.innerText = 'Sorteando');
 
+ if (memoriesAudio) {
+      memoriesAudio.currentTime = 0;
+      memoriesAudio.muted = true; // 🎧 COMEÇA MUDO
+      memoriesAudio.play().catch(e => console.error("Erro ao iniciar áudio mudo:", e));
+    }
+
   const spin = setInterval(() => {
     imgs.forEach(img => {
       const r = cards[Math.floor(Math.random() * cards.length)];
@@ -549,7 +555,7 @@ button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="stat
    cabalaBox && (cabalaBox.style.display = 'none');
 
         
-  }, 6500);
+  }, 7500);
 }
 
 function showPrompt(drawn) {
@@ -689,7 +695,7 @@ async function callAuroraAPI(cardsDrawn) {
        // >>> CORREÇÃO AQUI: Ativa o som do áudio de memória <<<
     if (memoriesAudio) {
       memoriesAudio.muted = false; // Ativa o som! O áudio já está tocando (mudo) desde o clique.
- 
+
     }
   
       
