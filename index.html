@@ -617,8 +617,9 @@ function shareOnWhatsApp() {
 
 // ---------------- declaração DOM da API ----------------
 
-      async function callAuroraAPI(cardsDrawn) {
+ async function callAuroraAPI(cardsDrawn) {
 
+  const aiBox     = document.getElementById('aiBox');
   const aiContent = document.getElementById('aiContent');
   const shareBtn  = document.getElementById('shareButton');
   const adBox     = document.getElementById('ad-container');
@@ -635,98 +636,43 @@ function shareOnWhatsApp() {
       })
     });
 
-    if (!res.ok) {
-      throw new Error('Resposta HTTP inválida');
-    }
-
     const data = await res.json();
-    if (isResetting) return;
-
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
-
-
-        if (aiContent) {
-  aiContent.innerHTML = `
-    <h2 class="ai-title">
-      <img src="cards_images/marca_anora.png" class="ai-logo">
-      Anora Assistente de IA
-    </h2>
-
-    <p>${text}</p>
-
-    <button id="shareButton" class="action-button">
-      Compartilhar no WhatsApp
-    </button>
-
-    <div id="ad-container" style="
-      margin-top:16px;
-      padding:12px;
-      border:2px dashed red;
-      text-align:center;
-    ">
-      [ Espaço do anúncio ]
-    </div>
-  `;
-}
-
-/* 🔴 AGORA SIM: elementos EXISTEM */
-const shareBtn = document.getElementById('shareButton');
-const adBox    = document.getElementById('ad-container');
-
-/* WhatsApp */
-if (shareBtn) {
-  shareBtn.style.display = 'block';
-  shareBtn.classList.remove('hidden');
-  shareBtn.onclick = shareOnWhatsApp;
-}
-
-/* AdMob / Placeholder */
-if (adBox) {
-  adBox.style.display = 'block';
-  adBox.classList.remove('hidden');
-
-  if (window.adsbygoogle) {
-    try {
-      window.adsbygoogle.push({});
-    } catch (e) {
-      console.warn('Adsbygoogle falhou ao inicializar');
-    }
-  } else {
-    console.warn('Adsbygoogle não disponível (WebView / App Inventor)');
-  }
-}
-
-/* Status */
-status.innerHTML = `
-  <span class="status-emoji">✅</span>
-  <span class="status-text">Consulta realizada com sucesso</span>
-`;
-status.className = 'status-success';
-
-catch (error) {
-  console.error('Erro na chamada da API:', error);
-
-  if (aiContent) {
     aiContent.innerHTML = `
       <h2 class="ai-title">
         <img src="cards_images/marca_anora.png" class="ai-logo">
         Anora Assistente de IA
       </h2>
-      <p>❌ Erro ao acessar análise feita pelo sistema.</p>
+      <p>${text}</p>
     `;
+
+    status.innerHTML = '✅ Consulta realizada com sucesso';
+    status.className = 'status-success';
+
+    /* WhatsApp */
+    shareBtn.classList.remove('hidden');
+    shareBtn.onclick = shareOnWhatsApp;
+
+    /* Anúncio */
+    adBox.classList.remove('hidden');
+
+    if (window.adsbygoogle) {
+      try { window.adsbygoogle.push({}); }
+      catch (e) { console.warn('Adsbygoogle falhou'); }
+    }
+
+  } catch (err) {
+    aiContent.innerHTML = '❌ Erro ao acessar análise.';
+    status.textContent = 'Erro na análise';
+    status.className = 'status-error';
+
+  } finally {
+    loader.style.display = 'none';
+    aiBox.style.display = 'block';
   }
-
-  status.textContent = 'Erro na análise pela Inteligência Artificial.';
-  status.className = 'status-error';
 }
 
-        
-finally {
-  loader.style.display = 'none';
-  aiBox.style.display = 'block';
-  cabalaBox && (cabalaBox.style.display = 'none');
-}
       
       // ---------------- EVENTOS DOS BOTÕES ----------------
 if (button) {
