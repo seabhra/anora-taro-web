@@ -40,7 +40,6 @@ border-radius: 10px;
 box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-
 .flors {
   display: flex;
   justify-content: center;
@@ -85,6 +84,7 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
 }
+
       
 .label {
 margin-top: 6px;
@@ -120,8 +120,6 @@ cursor: pointer;
   
   .ai-title {
   display: flex;
-  font-size: 18px;
-  font-weight: bold;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -146,7 +144,7 @@ transition: color 0.3s ease;
 /* status da mudança de cores da label abaixo do botão*/
 
 #status.status-process {
-color: #4d0567; /* Roxo */
+color: #4d0567; /* Roxinho */
 }
 #status.status-loading {
 color: #1383c9; /* Azul */
@@ -167,7 +165,7 @@ height: 50px;
 border: 5px solid rgba(131, 242, 212, 0.2);
 border-top: 5px solid #83f2d4;
 border-radius: 50%;
-animation: spin 10s linear infinite;
+animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
@@ -249,15 +247,11 @@ font-size: 15px;
 
  /* ESTILO PARA BOTÃO WHATSAPP */
 
-.hidden {
-  display: none;
-}
-
 #shareButton {
   width: 100%;
   max-width: 320px;
   height: 45px;
-  margin: 16px auto 0;
+  margin: 12px auto 0;
   border: none;
   border-radius: 8px;
   font-size: 16px;
@@ -265,6 +259,12 @@ font-size: 15px;
   color: #fff;
   background-color: #25D366;
   cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Estado oculto */
+#shareButton.hidden {
+  display: none;
 }
 
 /* Hover elegante */
@@ -277,7 +277,6 @@ font-size: 15px;
 #shareButton:active {
   transform: scale(0.98);
 }
-
 
 /* Efeito de vibração/giro das cartas */
 .card-spinning {
@@ -302,26 +301,29 @@ font-size: 15px;
   to   { transform: rotate(360deg); }
 }
 
+
 .status-emoji.giro {
   margin-right: 8px;
    animation: spin 0.6s linear infinite; /* 🚀 rápido */
 }
   
+
 .status-text {
  vertical-align: middle;
 }
+
  
 /* Container do AdMob Google */
-
 #ad-container {
-  margin-top: 20px;
+  margin-top: 24px;
+  width: 100%;
+  min-height: 50px;   /* 👈 altura mínima realista */
   text-align: center;
- width: 100%;
-  min-height: 60px;   /* 👈 força o espaço aparecer */
-  border: 1px dashed red; /* debug visual */
-display: none;     /* começa escondido */
+  display: none;     /* começa escondido */
 }
-       
+
+  
+ 
 </style>
 </head>
 
@@ -374,7 +376,6 @@ display: none;     /* começa escondido */
   <img src="cards_images/cabala.png" alt="Cabala">
 </div>
 
-
       
 <div id="loader"></div>
 
@@ -382,36 +383,26 @@ display: none;     /* começa escondido */
   
 <div id="promptBox"></div>
 
-      <!-- LOCAL Compartilhar WhatsApp -->
-      
-<div id="aiContent" style="display: none;" >
-  <h2 class="ai-title">
-    <img src="cards_images/marca_anora.png" class="ai-logo">
-    Anora Assistente de IA
-  </h2>
+<!-- LOCAL Compartilhar no WhatsApp e Anúncio -->
 
-  <p id="aiText"></p>
+<div id="aiBox" style="display: none;">
+  <!-- conteúdo da IA entra aqui -->
 
-<div id="aiBox" style="display:none">
-
-  <div id="aiContent"></div>
-
-  <!-- BOTÃO FIXO -->
-  <button id="shareButton" class="action-button hidden">
-    Compartilhar no WhatsApp
-  </button>
-
-  <!-- ADMOB FIXO -->
-  <div id="ad-container" class="hidden">
+  <!-- 👇 FICA FIXO, NÃO É RECRIADO -->
+  <div id="ad-container">
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-3940256099942544"
          data-ad-slot="6300978111"
          data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
+         data-full-width-responsive="true">
+    </ins>
   </div>
+</div
 
-</div>
+
+   
+
   
  <!--  CORPO DO JS DO APLICATIVO  -->
   
@@ -522,7 +513,6 @@ button.innerHTML = `
 
     loader.style.display = 'block';
     status.innerHTML = `<span class="status-emoji">🤖</span><span class="status-text">Processando consulta com IA...</span>`;
-    status.className = 'status-loading';
 
     callAuroraAPI(drawn.map(c => c.label));
 
@@ -534,9 +524,8 @@ button.innerHTML = `
    showPrompt(drawn.map(c => c.label));
    cabalaBox && (cabalaBox.style.display = 'none');
 
-
         
-  }, 7500);
+  }, 6500);
 }
 
 function showPrompt(drawn) {
@@ -575,11 +564,7 @@ florBox && (florBox.style.display = 'flex');
   status.className = '';
 
 aiBox.style.display = 'none';
-      
-const shareBtn = document.getElementById('shareButton');
-if (shareBtn) {
-  shareBtn.classList.add('hidden');
-}      
+
 const adContainer = document.getElementById('ad-container');
 if (adContainer) {
   adContainer.style.display = 'none';
@@ -589,7 +574,6 @@ if (adContainer) {
    hasReading = false;
   isResetting = false
 }
-
 
 function shareOnWhatsApp() {
   const title = document.querySelector('#aiBox h2')?.innerText?.trim() || 'Anora Tarô';
@@ -615,9 +599,6 @@ function shareOnWhatsApp() {
   }
 }
 
-// ---------------- declaração DOM da API ----------------
-
-
 async function callAuroraAPI(cardsDrawn) {
       
   try {
@@ -634,7 +615,6 @@ async function callAuroraAPI(cardsDrawn) {
     const data = await res.json();
         if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
-
 
         aiBox.innerHTML = `
       <h2 class="ai-title">
@@ -664,28 +644,6 @@ async function callAuroraAPI(cardsDrawn) {
 }
 
       // ---------------- EVENTOS ----------------
-if (button) {
-  button.onclick = () => hasReading ? resetReading() : newReading();
-}
-
-document.addEventListener('click', (event) => {
-  if (event.target && event.target.id === 'shareButton') {
-    shareOnWhatsApp();
-  }
-});
-
-window.addEventListener('load', () => {
-  setTimeout(() => pageLoader?.classList.add('hidden'), 1500);
-});
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js')
-    .catch(err => console.warn('SW erro:', err));
-}
-});
-  
-      
-      // ---------------- EVENTOS DOS BOTÕES ----------------
 if (button) {
   button.onclick = () => hasReading ? resetReading() : newReading();
 }
