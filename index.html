@@ -85,7 +85,6 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
 }
-
       
 .label {
 margin-top: 6px;
@@ -145,7 +144,7 @@ transition: color 0.3s ease;
 /* status da mudança de cores da label abaixo do botão*/
 
 #status.status-process {
-color: #46b7c1; /* verde-azul */
+color: #a046c1; /* Roxinho */
 }
 #status.status-loading {
 color: #6b46c1; /* Roxo */
@@ -382,7 +381,22 @@ border: 2px dashed red;
   
 <div id="promptBox"></div>
 
-<!-- LOCAL Compartilhar no WhatsApp e Anúncio -->
+      <!-- LOCAL Compartilhar WhatsApp -->
+      
+<div id="aiContent">
+  <h2 class="ai-title">
+    <img src="cards_images/marca_anora.png" class="ai-logo">
+    Anora Assistente de IA
+  </h2>
+
+  <p id="aiText"></p>
+
+  <button id="shareButton" class="action-button">
+    Compartilhar no WhatsApp
+  </button>
+</div>
+      
+<!-- LOCAL Compartilhar Anúncio -->
 
 <div id="aiBox" style="display: none;">
   <!-- conteúdo da IA entra aqui -->
@@ -629,17 +643,25 @@ aiContent.innerHTML = `
     <span class="status-text">Consulta realizada com sucesso</span>`;
     status.className = 'status-success';
 
-  } catch (error) {
+} catch (error) {
   console.error('Erro na chamada da API:', error);
 
   const aiContent = document.getElementById('aiContent');
   if (aiContent) {
-    aiContent.innerHTML = `<p>❌ Erro na análise pela Inteligência Artificial.</p>`;
+    aiContent.innerHTML = `
+      <h2 class="ai-title">
+        <img src="cards_images/marca_anora.png" class="ai-logo">
+        Anora Assistente de IA
+      </h2>
+      <p>❌ Erro ao acessar análise feita pelo sistema.</p>
+      <button id="shareButton" class="action-button">Compartilhar no WhatsApp</button>
+    `;
   }
 
-  status.textContent = 'Erro ao acessar análise feita pelo sistema.';
+  status.textContent = 'Erro na análise pela Inteligência Artificial.';
   status.className = 'status-error';
 }
+
 
   // ✅ ESSENCIAL
   loader.style.display = 'none';      
