@@ -134,6 +134,7 @@ cursor: pointer;
   border-radius: 50%;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
+      
 /* Estilo padrão do status */
 #status {
 margin-top: 16px;
@@ -308,6 +309,15 @@ font-size: 15px;
   }
 }
 
+.status-emoji {
+  margin-right: 8px; /* Define o espaçamento à direita */
+  display: inline-block; /* ESSENCIAL para a margem funcionar */
+  vertical-align: middle; /* Alinha o emoji verticalmente com o texto */
+}
+
+.status-text {
+ vertical-align: middle;
+}
 
 .status-emoji.giro {
   margin-right: 8px;
@@ -315,11 +325,6 @@ font-size: 15px;
   animation: spin 0.6s linear infinite;
 }
   
-
-.status-text {
- vertical-align: middle;
-}
-
  
 /* Container do AdMob Google */
 #ad-container {
@@ -645,6 +650,8 @@ async function callAuroraAPI(cardsDrawn) {
       </div>
     `;
     status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
+ 
+        
     status.className = 'status-success';
   } catch (error) {
     console.error('Erro na chamada da API:', error);
