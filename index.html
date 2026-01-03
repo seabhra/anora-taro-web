@@ -596,7 +596,9 @@ const adContainer = document.getElementById('ad-container');
 if (adContainer) {
   adContainer.style.display = 'none';
 }
-    
+
+// ---------------- DELETA AUDIO ----------------
+      
 if (memoriesAudio) {
   memoriesAudio.pause();
   memoriesAudio.currentTime = 0;
@@ -633,8 +635,13 @@ function shareOnWhatsApp() {
       
 async function callAuroraAPI(cardsDrawn) {
       
+// ---------------- TOCA ÁUDIO ----------------
   try {
-        
+memoriesAudio.currentTime = 0;
+  memoriesAudio.play();
+} catch (e) {
+  console.warn('Áudio bloqueado pelo navegador:', e);
+}
     const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -649,15 +656,6 @@ async function callAuroraAPI(cardsDrawn) {
         if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
-         // ---------------- TOCA ÁUDIO ----------------
-
-  memoriesAudio.currentTime = 0;
-  memoriesAudio.play();
-} catch (e) {
-  console.warn('Áudio bloqueado pelo navegador:', e);
-}
-
-      status.className = 'status-success';
 
       aiBox.innerHTML = `
       <h2 class="ai-title">
