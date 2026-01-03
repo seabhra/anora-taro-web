@@ -613,16 +613,17 @@ async function callAuroraAPI(cardsDrawn) {
         if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
+const aiContent = document.getElementById('aiContent');
 
-        aiBox.innerHTML = `
-      <h2 class="ai-title">
-        <img src="cards_images/marca_anora.png" class="ai-logo">
-        Anora Assistente de IA
-      </h2>
-      <p>${text}</p>
-      <button id="shareButton" class="action-button">Compartilhar no WhatsApp</button>
-      <div id="ad-container"></div>
-    `;
+aiContent.innerHTML = `
+  <h2 class="ai-title">
+    <img src="cards_images/marca_anora.png" class="ai-logo">
+    Anora Assistente de IA
+  </h2>
+  <p>${text}</p>
+  <button id="shareButton" class="action-button">Compartilhar no WhatsApp</button>
+     <div id="ad-container"></div>
+`;
 
     status.innerHTML = `<span class="status-emoji">✅</span>
     <span class="status-text">Consulta realizada com sucesso</span>`;
@@ -641,10 +642,14 @@ async function callAuroraAPI(cardsDrawn) {
   aiBox.style.display = 'block';
 
 setTimeout(() => {
-  try {
-    (adsbygoogle = window.adsbygoogle || []).push({});
-  } catch (e) {
-    console.warn('AdSense ainda não pronto', e);
+  const ad = document.getElementById('ad-container');
+  if (ad) {
+    ad.style.display = 'block';
+    try {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.warn('AdSense não inicializou', e);
+    }
   }
 }, 300);
 }
