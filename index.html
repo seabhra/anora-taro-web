@@ -617,13 +617,9 @@ function shareOnWhatsApp() {
 
 // ---------------- declaração DOM da API ----------------
 
- async function callAuroraAPI(cardsDrawn) {
 
-  const aiBox     = document.getElementById('aiBox');
-  const aiContent = document.getElementById('aiContent');
-  const shareBtn  = document.getElementById('shareButton');
-  const adBox     = document.getElementById('ad-container');
-
+async function callAuroraAPI(cardsDrawn) {
+      
   try {
     const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
       method: 'POST',
@@ -635,44 +631,59 @@ function shareOnWhatsApp() {
         }]
       })
     });
-
     const data = await res.json();
+        if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
-    aiContent.innerHTML = `
+
+        aiBox.innerHTML = `
       <h2 class="ai-title">
         <img src="cards_images/marca_anora.png" class="ai-logo">
         Anora Assistente de IA
       </h2>
       <p>${text}</p>
+      <button id="shareButton" class="action-button">Compartilhar no WhatsApp</button>
+      <div id="ad-container"></div>
     `;
 
-    status.innerHTML = '✅ Consulta realizada com sucesso';
+    status.innerHTML = `<span class="status-emoji">✅</span>
+    <span class="status-text">Consulta realizada com sucesso</span>`;
     status.className = 'status-success';
 
-    /* WhatsApp */
-    shareBtn.classList.remove('hidden');
-    shareBtn.onclick = shareOnWhatsApp;
-
-    /* Anúncio */
-    adBox.classList.remove('hidden');
-
-    if (window.adsbygoogle) {
-      try { window.adsbygoogle.push({}); }
-      catch (e) { console.warn('Adsbygoogle falhou'); }
-    }
-
-  } catch (err) {
-    aiContent.innerHTML = '❌ Erro ao acessar análise.';
-    status.textContent = 'Erro na análise';
+  } catch (error) {
+    console.error('Erro na chamada da API:', error);
+    aiBox.innerHTML = `<p>Erro ao acessar a reflexão.</p>`;
+    status.textContent = 'Erro ao acessar análise feita pelo sistema.';
     status.className = 'status-error';
-
-  } finally {
-    loader.style.display = 'none';
-    aiBox.style.display = 'block';
   }
+
+  // ✅ ESSENCIAL
+  loader.style.display = 'none';
+  aiBox.style.display = 'block';
+  cabalaBox && (cabalaBox.style.display = 'none');
 }
 
+      // ---------------- EVENTOS ----------------
+if (button) {
+  button.onclick = () => hasReading ? resetReading() : newReading();
+}
+
+document.addEventListener('click', (event) => {
+  if (event.target && event.target.id === 'shareButton') {
+    shareOnWhatsApp();
+  }
+});
+
+window.addEventListener('load', () => {
+  setTimeout(() => pageLoader?.classList.add('hidden'), 1500);
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .catch(err => console.warn('SW erro:', err));
+}
+});
+  
       
       // ---------------- EVENTOS DOS BOTÕES ----------------
 if (button) {
