@@ -483,14 +483,14 @@ document.addEventListener('DOMContentLoaded', () => {
 const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
 function newReading() {
-  florBox && (florBox.style.display = 'none');
-      
+        
 // Para e reseta a música de fundo se uma nova leitura começar
     if (memoriesAudio) {
       memoriesAudio.pause();
       memoriesAudio.currentTime = 0;
     }
-
+florBox && (florBox.style.display = 'none');
+      
 // 👉 MOSTRA A IMAGEM AO CLICAR
   if (cabalaBox) {
     cabalaBox.style.display = 'flex';
@@ -501,7 +501,7 @@ function newReading() {
   aiBox.style.display = 'none';
   promptBox.style.display = 'none';
   loader.style.display = 'none';
-
+      
   shuffleAudio.currentTime = 0;
   shuffleAudio.play().catch(() => {});
 
@@ -689,7 +689,7 @@ async function callAuroraAPI(cardsDrawn) {
        // >>> CORREÇÃO AQUI: Ativa o som do áudio de memória <<<
     if (memoriesAudio) {
       memoriesAudio.muted = false; // Ativa o som! O áudio já está tocando (mudo) desde o clique.
-      memoriesAudio.play().catch(e => console.log("Erro ao tocar áudio de memória:", e));
+ 
     }
   
       
