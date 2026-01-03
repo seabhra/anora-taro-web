@@ -645,16 +645,27 @@ function shareOnWhatsApp() {
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
     if (aiContent) {
-      aiContent.innerHTML = `
-        <h2 class="ai-title">
-          <img src="cards_images/marca_anora.png" class="ai-logo">
-          Anora Assistente de IA
-        </h2>
-        <p>${text}</p>
-      `;
-      aiContent.style.display = 'block';
-      aiContent.style.opacity = '1';
-    }
+     aiContent.innerHTML = `
+  <h2 class="ai-title">
+    <img src="cards_images/marca_anora.png" class="ai-logo">
+    Anora Assistente de IA
+  </h2>
+
+  <p>${text}</p>
+
+  <button id="shareButton" class="action-button">
+    Compartilhar no WhatsApp
+  </button>
+
+  <div id="ad-container" style="
+    margin-top:16px;
+    padding:12px;
+    border:2px dashed red;
+    text-align:center;
+  ">
+    [ Espaço do anúncio ]
+  </div>
+`;
 
     status.innerHTML = `
       <span class="status-emoji">✅</span>
