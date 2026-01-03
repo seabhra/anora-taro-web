@@ -522,6 +522,7 @@ button.innerHTML = `
 
     loader.style.display = 'block';
     status.innerHTML = `<span class="status-emoji">🤖</span><span class="status-text">Processando consulta com IA...</span>`;
+    status.className = 'status-loading';
 
     callAuroraAPI(drawn.map(c => c.label));
 
