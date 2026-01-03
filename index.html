@@ -581,7 +581,11 @@ florBox && (florBox.style.display = 'flex');
   status.className = '';
 
 aiBox.style.display = 'none';
-
+      
+const shareBtn = document.getElementById('shareButton');
+if (shareBtn) {
+  shareBtn.classList.add('hidden');
+}      
 const adContainer = document.getElementById('ad-container');
 if (adContainer) {
   adContainer.style.display = 'none';
@@ -634,14 +638,15 @@ async function callAuroraAPI(cardsDrawn) {
         if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
-const aiContent = document.getElementById('aiContent');
-aiContent.innerHTML = `
-  <h2 class="ai-title">
-    <img src="cards_images/marca_anora.png" class="ai-logo">
-    Anora Assistente de IA
-  </h2>
-  <p>${text}</p>
-`;
+const shareBtn = document.getElementById('shareButton');
+
+if (shareBtn) {
+  shareBtn.classList.remove('hidden');
+  shareBtn.style.display = 'block';
+  shareBtn.onclick = shareOnWhatsApp;
+}
+
+
 
 
  const shareBtn = document.getElementById('shareButton');
