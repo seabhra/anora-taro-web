@@ -304,7 +304,8 @@ font-size: 15px;
 
 .status-emoji.giro {
   margin-right: 8px;
-   animation: spin 0.6s linear infinite; /* 🚀 rápido */
+  display: inline-block; /* Necessário para a animação funcionar bem em spans */
+  animation: spin 0.6s linear infinite;
 }
   
 
@@ -483,8 +484,8 @@ function newReading() {
   shuffleAudio.play().catch(() => {});
 
   button.className = 'action-button roxo';
-button.innerHTML = `
-  <span class="btn-emoji.giro">🌀</span>  <span class="status-text">Embaralhando Cartas</span>`;
+
+button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
 
   status.textContent = 'Sua previsão em andamento...';
   status.className = 'status-process';
