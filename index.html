@@ -484,6 +484,12 @@ const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
 function newReading() {
   florBox && (florBox.style.display = 'none');
+      
+// Para e reseta a música de fundo se uma nova leitura começar
+    if (memoriesAudio) {
+      memoriesAudio.pause();
+      memoriesAudio.currentTime = 0;
+    }
 
 // 👉 MOSTRA A IMAGEM AO CLICAR
   if (cabalaBox) {
