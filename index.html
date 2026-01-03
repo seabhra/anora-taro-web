@@ -621,8 +621,9 @@ function shareOnWhatsApp() {
   }
 }
 
-async function callAuroraAPI(cardsDrawn) {
+// ---------------- declaração da API ----------------
       
+async function callAuroraAPI(cardsDrawn) {
   try {
     const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
       method: 'POST',
@@ -634,70 +635,71 @@ async function callAuroraAPI(cardsDrawn) {
         }]
       })
     });
+
     const data = await res.json();
-        if (isResetting) return;
+    if (isResetting) return;
+
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
-        const shareBtn = document.getElementById('aiContent');
-const shareBtn = document.getElementById('shareButton');
+    const aiContent = document.getElementById('aiContent');
+    if (aiContent) {
+      aiContent.innerHTML = `
+        <h2 class="ai-title">
+          <img src="cards_images/marca_anora.png" class="ai-logo">
+          Anora Assistente de IA
+        </h2>
+        <p>${text}</p>
+      `;
+    }
 
-if (shareBtn) {
-  shareBtn.classList.remove('hidden');
-  shareBtn.style.display = 'block';
-  shareBtn.onclick = shareOnWhatsApp;
-}
+    const shareBtn = document.getElementById('shareButton');
+    if (shareBtn) {
+      shareBtn.classList.remove('hidden');
+      shareBtn.style.display = 'block';
+      shareBtn.onclick = shareOnWhatsApp;
+    }
 
-
-
-
- const shareBtn = document.getElementById('shareButton');
-if (shareBtn) {
-  shareBtn.classList.remove('hidden');
-  shareBtn.addEventListener('click', shareOnWhatsApp);
-}
-
-    status.innerHTML = `<span class="status-emoji">✅</span>
-    <span class="status-text">Consulta realizada com sucesso</span>`;
+    status.innerHTML = `
+      <span class="status-emoji">✅</span>
+      <span class="status-text">Consulta realizada com sucesso</span>
+    `;
     status.className = 'status-success';
 
-} catch (error) {
-  console.error('Erro na chamada da API:', error);
+  } catch (error) {
+    console.error('Erro na chamada da API:', error);
 
-  const aiContent = document.getElementById('aiContent');
-  if (aiContent) {
-    aiContent.innerHTML = `
-      <h2 class="ai-title">
-        <img src="cards_images/marca_anora.png" class="ai-logo">
-        Anora Assistente de IA
-      </h2>
-      <p>❌ Erro ao acessar análise feita pelo sistema.</p>
-      <button id="shareButton" class="action-button">Compartilhar no WhatsApp</button>
-    `;
+    const aiContent = document.getElementById('aiContent');
+    if (aiContent) {
+      aiContent.innerHTML = `
+        <h2 class="ai-title">
+          <img src="cards_images/marca_anora.png" class="ai-logo">
+          Anora Assistente de IA
+        </h2>
+        <p>❌ Erro ao acessar análise feita pelo sistema.</p>
+      `;
+    }
+
+    status.textContent = 'Erro na análise pela Inteligência Artificial.';
+    status.className = 'status-error';
   }
 
-  status.textContent = 'Erro na análise pela Inteligência Artificial.';
-  status.className = 'status-error';
-}
-
-
-  // ✅ ESSENCIAL
-  loader.style.display = 'none';      
+  // ✅ SEMPRE EXECUTA
+  loader.style.display = 'none';
   cabalaBox && (cabalaBox.style.display = 'none');
   aiBox.style.display = 'block';
-  aiContent.style.display = 'block';
- 
+  aiContent && (aiContent.style.display = 'block');
 
-setTimeout(() => {
-  const ad = document.getElementById('ad-container');
-  if (ad) {
-    ad.style.display = 'block';
-    try {
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.warn('AdSense não inicializou', e);
+  setTimeout(() => {
+    const ad = document.getElementById('ad-container');
+    if (ad) {
+      ad.style.display = 'block';
+      try {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (e) {
+        console.warn('AdSense não inicializou', e);
+      }
     }
-  }
-}, 300);
+  }, 300);
 }
 
 
