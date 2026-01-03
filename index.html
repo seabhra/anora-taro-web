@@ -120,6 +120,8 @@ cursor: pointer;
   
   .ai-title {
   display: flex;
+  font-size: 14px;
+  font-weight: bold;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -247,11 +249,15 @@ font-size: 15px;
 
  /* ESTILO PARA BOTÃO WHATSAPP */
 
+.hidden {
+  display: none;
+}
+
 #shareButton {
   width: 100%;
   max-width: 320px;
   height: 45px;
-  margin: 12px auto 0;
+  margin: 16px auto 0;
   border: none;
   border-radius: 8px;
   font-size: 16px;
@@ -259,12 +265,6 @@ font-size: 15px;
   color: #fff;
   background-color: #25D366;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-/* Estado oculto */
-#shareButton.hidden {
-  display: none;
 }
 
 /* Hover elegante */
@@ -312,15 +312,16 @@ font-size: 15px;
 }
  
 /* Container do AdMob Google */
+
 #ad-container {
-  margin-top: 24px;
-  width: 100%;
-  min-height: 50px;   /* 👈 altura mínima realista */
+  margin-top: 20px;
   text-align: center;
-border: 2px dashed red;
-  display: none;     /* começa escondido */
+ width: 100%;
+  min-height: 60px;   /* 👈 força o espaço aparecer */
+  border: 1px dashed red; /* debug visual */
+display: none;     /* começa escondido */
 }
- 
+       
 </style>
 </head>
 
@@ -391,33 +392,26 @@ border: 2px dashed red;
 
   <p id="aiText"></p>
 
-      <div id="aiBox" style="display:none">
+<div id="aiBox" style="display:none">
+
   <div id="aiContent"></div>
 
+  <!-- BOTÃO FIXO -->
   <button id="shareButton" class="action-button hidden">
     Compartilhar no WhatsApp
   </button>
 
-  <div id="ad-container" style="display:none"></div>
-</div>
-
-      
-<!-- LOCAL Compartilhar Anúncio -->
-
-<div id="aiBox" style="display: none;">
-  <!-- conteúdo da IA entra aqui -->
-  <div id="ad-container">
+  <!-- ADMOB FIXO -->
+  <div id="ad-container" class="hidden">
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-3940256099942544"
          data-ad-slot="6300978111"
          data-ad-format="auto"
-         data-full-width-responsive="true">
-    </ins>
+         data-full-width-responsive="true"></ins>
   </div>
-</div>
-   
 
+</div>
   
  <!--  CORPO DO JS DO APLICATIVO  -->
   
@@ -621,7 +615,7 @@ function shareOnWhatsApp() {
   }
 }
 
-// ---------------- declaração da API ----------------
+// ---------------- declaração DOM da API ----------------
       
 async function callAuroraAPI(cardsDrawn) {
   try {
@@ -641,23 +635,29 @@ async function callAuroraAPI(cardsDrawn) {
 
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
-    const aiContent = document.getElementById('aiContent');
-    if (aiContent) {
-      aiContent.innerHTML = `
-        <h2 class="ai-title">
-          <img src="cards_images/marca_anora.png" class="ai-logo">
-          Anora Assistente de IA
-        </h2>
-        <p>${text}</p>
-      `;
-    }
+  
+const aiContent = document.getElementById('aiContent');
+const shareBtn  = document.getElementById('shareButton');
+const adBox     = document.getElementById('ad-container');
 
-    const shareBtn = document.getElementById('shareButton');
-    if (shareBtn) {
-      shareBtn.classList.remove('hidden');
-      shareBtn.style.display = 'block';
-      shareBtn.onclick = shareOnWhatsApp;
-    }
+aiContent.innerHTML = `
+  <h2 class="ai-title">
+    <img src="cards_images/marca_anora.png" class="ai-logo">
+    Anora Assistente de IA
+  </h2>
+  <p>${text}</p>
+`;
+
+shareBtn.classList.remove('hidden');
+shareBtn.onclick = shareOnWhatsApp;
+
+adBox.classList.remove('hidden');
+try {
+  (adsbygoogle = window.adsbygoogle || []).push({});
+} catch (e) {
+  console.warn('AdMob ainda não inicializado');
+}
+
 
     status.innerHTML = `
       <span class="status-emoji">✅</span>
@@ -703,7 +703,7 @@ async function callAuroraAPI(cardsDrawn) {
 }
 
 
-      // ---------------- EVENTOS ----------------
+      // ---------------- EVENTOS DOS BOTÕES ----------------
 if (button) {
   button.onclick = () => hasReading ? resetReading() : newReading();
 }
