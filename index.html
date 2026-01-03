@@ -684,9 +684,8 @@ try {
   }
 
   // ✅ SEMPRE EXECUTA
-  loader.style.display = 'none';
+
   cabalaBox && (cabalaBox.style.display = 'none');
-  aiBox.style.display = 'block';
   aiContent && (aiContent.style.display = 'block');
 
   setTimeout(() => {
@@ -702,7 +701,9 @@ try {
   }, 300);
 }
 
-
+  loader.style.display = 'none';
+ aiBox.style.display = 'block';
+      
       // ---------------- EVENTOS DOS BOTÕES ----------------
 if (button) {
   button.onclick = () => hasReading ? resetReading() : newReading();
