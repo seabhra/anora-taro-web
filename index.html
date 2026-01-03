@@ -330,13 +330,12 @@ font-size: 15px;
 #ad-container {
   margin-top: 24px;
   width: 100%;
-  min-height: 50px;   /* 👈 altura mínima realista */
+  min-height: 0;   /* 👈 altura mínima realista */
   text-align: center;
   display: none;     /* começa escondido */
  border: 1px dashed red; /* debug visual */
 }
-
-  
+ 
  
 </style>
 </head>
@@ -460,6 +459,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---------------- ÁUDIO ----------------
   const shuffleAudio = new Audio('Audio_app/slots_machine.mp3');
   shuffleAudio.preload = 'auto';
+
+  const memoriesAudio = new Audio('./Audio_app/memories.mp3');
+  memoriesAudio.loop = true; // Define que o áudio deve tocar em loop
+  memoriesAudio.preload = 'auto';    
 
   // ---------------- CARTAS ----------------
   const cards = [
@@ -677,6 +680,12 @@ async function callAuroraAPI(cardsDrawn) {
   }
 }
 
+  //Inicia a música de fundo quando a análise é finalizada
+    if (memoriesAudio) {
+      memoriesAudio.play().catch(e => console.log("Erro ao tocar áudio de memória:", e));
+    }
+  }
+      
       // ---------------- EVENTOS ----------------
 if (button) {
   button.onclick = () => hasReading ? resetReading() : newReading();
