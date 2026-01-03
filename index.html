@@ -460,9 +460,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const shuffleAudio = new Audio('Audio_app/slots_machine.mp3');
   shuffleAudio.preload = 'auto';
 
-  const memoriesAudio = new Audio('./Audio_app/memories.mp3');
-  memoriesAudio.loop = true; // Define que o áudio deve tocar em loop
-  memoriesAudio.preload = 'auto';    
+ const memoriesAudio = new Audio('./Audio_app/memories.mp3');
+memoriesAudio.loop = true;
+memoriesAudio.preload = 'auto';
+// Opcional: define um volume inicial mais baixo para não assustar o usuário
+memoriesAudio.volume = 0.5;
 
   // ---------------- CARTAS ----------------
   const cards = [
@@ -598,11 +600,10 @@ if (adContainer) {
 }
 
 // ---------------- DELETA AUDIO ----------------
-      
-if (memoriesAudio) {
-  memoriesAudio.pause();
-  memoriesAudio.currentTime = 0;
-}
+// Para a música de fundo ao resetar
+    memoriesAudio.pause();
+    memoriesAudio.currentTime = 0;      
+
    hasReading = false;
   isResetting = false
 }
@@ -637,11 +638,7 @@ async function callAuroraAPI(cardsDrawn) {
       
 // ---------------- TOCA ÁUDIO ----------------
   try {
-memoriesAudio.currentTime = 0;
-  memoriesAudio.play();
-} catch (e) {
-  console.warn('Áudio bloqueado pelo navegador:', e);
-}
+
     const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -673,7 +670,13 @@ memoriesAudio.currentTime = 0;
              data-full-width-responsive="true"></ins>
       </div>
     `;
-    status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
+
+// TOCA O ÁUDIO DE MEMÓRIAS (AUTOPLAY)
+        memoriesAudio.currentTime = 0; // Reinicia a música do começo
+        memoriesAudio.play().catch(e => console.log("Autoplay bloqueado pelo navegador:", e));
+     
+        
+        status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
  
         
     status.className = 'status-success';
