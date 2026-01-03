@@ -303,18 +303,14 @@ font-size: 15px;
   to   { transform: rotate(360deg); }
 }
 
-
-
 .status-emoji.giro {
   margin-right: 8px;
    animation: spin 0.6s linear infinite; /* 🚀 rápido */
 }
   
-
 .status-text {
  vertical-align: middle;
 }
-
  
 /* Container do AdMob Google */
 #ad-container {
@@ -322,10 +318,9 @@ font-size: 15px;
   width: 100%;
   min-height: 50px;   /* 👈 altura mínima realista */
   text-align: center;
+border: 2px dashed red;
   display: none;     /* começa escondido */
 }
-
-  
  
 </style>
 </head>
@@ -391,8 +386,6 @@ font-size: 15px;
 
 <div id="aiBox" style="display: none;">
   <!-- conteúdo da IA entra aqui -->
-
-  <!-- 👇 FICA FIXO, NÃO É RECRIADO -->
   <div id="ad-container">
     <ins class="adsbygoogle"
          style="display:block"
@@ -402,10 +395,7 @@ font-size: 15px;
          data-full-width-responsive="true">
     </ins>
   </div>
-</div
-
-
-
+</div>
    
 
   
@@ -531,7 +521,7 @@ button.innerHTML = `
 
 
         
-  }, 6500);
+  }, 7500);
 }
 
 function showPrompt(drawn) {
@@ -646,9 +636,17 @@ async function callAuroraAPI(cardsDrawn) {
   }
 
   // ✅ ESSENCIAL
-  loader.style.display = 'none';
-  aiBox.style.display = 'block';
+  loader.style.display = 'none';      
   cabalaBox && (cabalaBox.style.display = 'none');
+  aiBox.style.display = 'block';
+
+setTimeout(() => {
+  try {
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  } catch (e) {
+    console.warn('AdSense ainda não pronto', e);
+  }
+}, 300);
 }
 
       // ---------------- EVENTOS ----------------
