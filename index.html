@@ -147,7 +147,7 @@ transition: color 0.3s ease;
 color: #4d0567; /* Roxo */
 }
 #status.status-loading {
-color: #08dfee; /* Azul */
+color: #1383c9; /* Azul */
 }
 #status.status-success {
 color: #38a169; /* Verde */
@@ -391,11 +391,16 @@ border: 2px dashed red;
 
   <p id="aiText"></p>
 
-      
+      <div id="aiBox" style="display:none">
+  <div id="aiContent"></div>
+
   <button id="shareButton" class="action-button hidden">
-  Compartilhar no WhatsApp
-</button>
+    Compartilhar no WhatsApp
+  </button>
+
+  <div id="ad-container" style="display:none"></div>
 </div>
+
       
 <!-- LOCAL Compartilhar Anúncio -->
 
@@ -674,7 +679,7 @@ if (shareBtn) {
   cabalaBox && (cabalaBox.style.display = 'none');
   aiBox.style.display = 'block';
   aiContent.style.display = 'block';
-  shareButton.style.display = 'block';
+ 
 
 setTimeout(() => {
   const ad = document.getElementById('ad-container');
