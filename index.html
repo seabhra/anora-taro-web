@@ -457,14 +457,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const backCard = basePath + 'back.jpg';
 
   // ---------------- ÁUDIO ----------------
-  const shuffleAudio = new Audio('Audio_app/slots_machine.mp3');
-  shuffleAudio.preload = 'auto';
 
-// 1. Definição do Áudio com o link Direto (RAW) do GitHub
-const memoriesAudio = new Audio('https://raw.githubusercontent.com/seabhra/anora-taro-web/refs/heads/main/Audio_app/memories.mp3');     
+// 1. Definição com links absolutos (Exemplo com seu GitHub Pages)
+const URL_BASE = 'https://seabhra.github.io/anora-taro-web/';
+
+const shuffleAudio = new Audio(URL_BASE + 'Audio_app/slots_machine.mp3');
+shuffleAudio.preload = 'auto';     
+const memoriesAudio = new Audio(URL_BASE + 'Audio_app/memories.mp3');
 memoriesAudio.loop = true;
-memoriesAudio.preload = 'auto';
-memoriesAudio.crossOrigin = "anonymous"; // Tente adicionar isso para evitar erros de CORS
+
+// FUNÇÃO PARA TOCAR ÁUDIO COM SEGURANÇA
+function playAudio(audioObj, volume = 1) {
+    audioObj.volume = volume;
+    const promise = audioObj.play();
+    if (promise !== undefined) {
+        promise.catch(error => console.log("Erro ao tocar:", error));
+    }
+}
       
 
   // ---------------- CARTAS ----------------
@@ -487,11 +496,7 @@ const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
 function newReading() {
         
-// Para e reseta a música de fundo se uma nova leitura começar
-         memoriesAudio.play().then(() => {
-        memoriesAudio.pause();
-        memoriesAudio.currentTime = 0;
-    }).catch(e => console.log("Áudio preparado"));
+
 
       const florBox = document.getElementById('florBox');
     if (florBox) florBox.style.display = 'none';
@@ -507,8 +512,13 @@ function newReading() {
   aiBox.style.display = 'none';
   promptBox.style.display = 'none';
   loader.style.display = 'none';
-      
-  shuffleAudio.currentTime = 0;
+
+  // Para a música de fundo se ela estiver tocando de uma consulta anterior
+    memoriesAudio.pause();
+    memoriesAudio.currentTime = 0;
+
+    // Toca o som das cartas (slots)
+   shuffleAudio.currentTime = 0;
   shuffleAudio.play().catch(() => {});
 
   button.className = 'action-button roxo';
@@ -676,12 +686,14 @@ async function callAuroraAPI(cardsDrawn) {
     `;
 
 // TOCA O ÁUDIO DE MEMÓRIAS (Agora liberado pelo clique inicial)
-        memoriesAudio.volume = 0.5; // Opcional: define um volume inicial mais baixo para não assustar o usuário
-      
-        memoriesAudio.play().catch(err => {
-    console.error("ERRO DETALHADO:", err.name, err.message);
-    // Se der erro de 'NotAllowedError', é o Android bloqueando o autoplay
-});
+ // Antes de tocar a música de fundo, garantimos que o som das cartas parou
+     
+        // Agora toca a música mística de fundo
+        playAudio(memoriesAudio, 0.5);
+
+    } catch (e) {
+        console.error(e);
+    }
      
         
         status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
