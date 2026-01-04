@@ -461,11 +461,10 @@ document.addEventListener('DOMContentLoaded', () => {
   shuffleAudio.preload = 'auto';
 
 // 1. Definição do Áudio com o link Direto (RAW) do GitHub
-const memoriesAudio = new Audio('https://raw.githubusercontent.com/seabhra/anora-taro-web/refs/heads/main/Audio_app/memories.mp3');
-
-        
+const memoriesAudio = new Audio('https://raw.githubusercontent.com/seabhra/anora-taro-web/refs/heads/main/Audio_app/memories.mp3');     
 memoriesAudio.loop = true;
 memoriesAudio.preload = 'auto';
+memoriesAudio.crossOrigin = "anonymous"; // Tente adicionar isso para evitar erros de CORS
       
 
   // ---------------- CARTAS ----------------
