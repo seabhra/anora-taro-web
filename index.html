@@ -444,19 +444,7 @@ let isResetting = false;
 memoriesAudio = new Audio('https://image2url.com/r2/default/audio/1767545788311-beeb40af-197a-4a99-9469-c723887f8b07.mp3');
 memoriesAudio.loop = true;
 
-// A função de parar também deve ser global
 
-function stopAllAudio() {
-    if (memoriesAudio) {
-        memoriesAudio.pause();
-        memoriesAudio.currentTime = 0;
-    }
-    if (shuffleAudio) {
-        shuffleAudio.pause();
-        shuffleAudio.currentTime = 0;
-    }
-    console.log("Áudios parados via comando nativo");
-}      
       
   // ---------------- ELEMENTOS DO DOM ----------------
       
