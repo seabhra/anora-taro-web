@@ -445,7 +445,7 @@ memoriesAudio = new Audio('https://image2url.com/r2/default/audio/1767545788311-
 memoriesAudio.loop = true;
 
 // A função de parar também deve ser global
-window.stopAudioNativo = function() {
+stopAudioNativo = function() {
     if (memoriesAudio) {
         memoriesAudio.pause();
         memoriesAudio.currentTime = 0;
