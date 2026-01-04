@@ -686,10 +686,12 @@ async function callAuroraAPI(cardsDrawn) {
     `;
 
 // TOCA O ÁUDIO DE MEMÓRIAS (Agora liberado pelo clique inicial)
- // Antes de tocar a música de fundo, garantimos que o som das cartas parou
      
         // Agora toca a música mística de fundo
         playAudio(memoriesAudio, 0.5);
+        catch (e) {
+        console.error(e);
+    }
 
     
      
