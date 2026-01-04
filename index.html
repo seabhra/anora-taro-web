@@ -330,7 +330,7 @@ font-size: 15px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr; /* Cria 3 colunas de igual largura */
   text-align: center; /* Centraliza o texto em cada coluna */
-  gap: 10px; /* Espaçamento entre as colunas */
+  gap: 5px; /* Espaçamento entre as colunas */
   margin-top: 5px;
 }
 
@@ -587,7 +587,7 @@ function showPrompt(drawn) {
   const pBox = document.getElementById('promptBox');
   if (pBox) {
     // 1. Cria a linha com os nomes das cartas
-    const cardNamesHtml = drawn.map(name => `<span class="prompt-card-name">${name}</span>`).join('');
+    const cardNamesHtml = drawn.map(name => `<span class="prompt-card-name">${name}</span>`).join('|');
     
     // 2. Cria a linha com os termos "Passado", "Presente" e "Futuro"
     const termsHtml = `
