@@ -588,7 +588,7 @@ button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="stat
 function showPrompt(drawn) {
   const pBox = document.getElementById('promptBox');
   if (pBox) {
-    const cardNamesHtml = drawn.map(name => `<span class="prompt-card-name">${name}</span>`).join('|');
+    const cardNamesHtml = drawn.map(name => `<span class="prompt-card-name">${name}</span>`).join('');
     const termsHtml = `
       <span style="color: #6b46c1; font-weight: normal;">Passado</span>
       <span style="color: #6b46c1; font-weight: normal;">Presente</span>
@@ -596,7 +596,7 @@ function showPrompt(drawn) {
     `;
     
     pBox.innerHTML = `
-     <p style="margin-top: 14px; color: #FFA500; font-weight: bold;">📜 Cartas selecionadas pela IA:</p>
+     <p style="margin-top: 14px; color: #7fa3f3; font-weight: normal;">📜 Cartas selecionadas pela IA:</p>
       <div class="prompt-container">
         ${cardNamesHtml}
         ${termsHtml}
