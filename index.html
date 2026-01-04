@@ -442,21 +442,18 @@ let hasReading = false;
 let isResetting = false;
 
 // A função de parar também deve ser global
-const memoriesAudio = new Audio('https://image2url.com/r2/default/audio/1767545788311-beeb40af-197a-4a99-9469-c723887f8b07.mp3');     
-memoriesAudio.loop = true;
-memoriesAudio.preload = 'auto';
 
-function stopAllAudio() {
-    if (memoriesAudio) {
-        memoriesAudio.pause();
-        memoriesAudio.currentTime = 0;
+
+window.memoriesAudio = new Audio('https://image2url.com/r2/default/audio/1767545788311-beeb40af-197a-4a99-9469-c723887f8b07.mp3');
+window.memoriesAudio.loop = true;
+
+// A função de parar também deve ser global
+window.stopAudioNativo = function() {
+    if (window.memoriesAudio) {
+        window.memoriesAudio.pause();
+        window.memoriesAudio.currentTime = 0;
     }
-    if (shuffleAudio) {
-        shuffleAudio.pause();
-        shuffleAudio.currentTime = 0;
-    }
-    console.log("Áudios parados via comando nativo");
-}      
+};    
 
 
   // ---------------- ELEMENTOS DO DOM ----------------      
@@ -651,8 +648,8 @@ if (adContainer) {
 
 // ---------------- DELETA AUDIO ----------------
 // Para a música de fundo ao resetar
-    memoriesAudio.pause();
-    memoriesAudio.currentTime = 0;      
+    window.memoriesAudio.pause();
+    window.memoriesAudio.currentTime = 0;      
 
    hasReading = false;
   isResetting = false
@@ -722,7 +719,7 @@ async function callAuroraAPI(cardsDrawn) {
     `;
 
 // TOCA O ÁUDIO DE MEMÓRIAS (Agora liberado pelo clique inicial)
-        memoriesAudio.volume = 0.5; // Opcional: define um volume inicial mais baixo para não assustar o usuário
+        window.memoriesAudio.volume = 0.5; // Opcional: define um volume inicial mais baixo para não assustar o usuário
       
         memoriesAudio.play().catch(err => {
     console.error("ERRO DETALHADO:", err.name, err.message);
