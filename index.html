@@ -584,6 +584,7 @@ button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="stat
         
   }, 7500);
 }
+
 function showPrompt(drawn) {
   const pBox = document.getElementById('promptBox');
   if (pBox) {
@@ -592,9 +593,9 @@ function showPrompt(drawn) {
     
     // 2. Cria a linha com os termos "Passado", "Presente" e "Futuro"
     const termsHtml = `
-      <span style="color: #6b46c1; font-weight: normal;">Passado</span>
-      <span style="color: #6b46c1; font-weight: normal;">Presente</span>
-      <span style="color: #6b46c1; font-weight: normal;">Futuro</span>
+      <span style="color: #6b46c1; font-weight: bold;">Passado</span>
+      <span style="color: #6b46c1; font-weight: bold;">Presente</span>
+      <span style="color: #6b46c1; font-weight: bold;">Futuro</span>
     `;
     
     // 3. Combina tudo em um único container com a classe 'prompt-container'
