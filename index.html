@@ -677,7 +677,11 @@ async function callAuroraAPI(cardsDrawn) {
 
 // TOCA O ÁUDIO DE MEMÓRIAS (Agora liberado pelo clique inicial)
         memoriesAudio.volume = 0.5; // Opcional: define um volume inicial mais baixo para não assustar o usuário
-        memoriesAudio.play().catch(err => console.error("Erro no autoplay:", err));
+      
+        memoriesAudio.play().catch(err => {
+    console.error("ERRO DETALHADO:", err.name, err.message);
+    // Se der erro de 'NotAllowedError', é o Android bloqueando o autoplay
+});
      
         
         status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
