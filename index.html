@@ -509,19 +509,6 @@ function playAudio(audioObj, volume = 1) {
   // ---------------- FUNÇÕES ----------------
 const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
-// Função que o App Inventor vai "chamar" lá de fora
-function stopAllAudio() {
-    if (memoriesAudio) {
-        memoriesAudio.pause();
-        memoriesAudio.currentTime = 0;
-    }
-    if (shuffleAudio) {
-        shuffleAudio.pause();
-        shuffleAudio.currentTime = 0;
-    }
-    console.log("Áudios parados via comando nativo");
-}      
-
 function newReading() {
         
       const florBox = document.getElementById('florBox');
@@ -598,6 +585,19 @@ button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="stat
   }, 7500);
 }
 
+// Função que o App Inventor vai "chamar" lá de fora
+function stopAllAudio() {
+    if (memoriesAudio) {
+        memoriesAudio.pause();
+        memoriesAudio.currentTime = 0;
+    }
+    if (shuffleAudio) {
+        shuffleAudio.pause();
+        shuffleAudio.currentTime = 0;
+    }
+    console.log("Áudios parados via comando nativo");
+}            
+
 function showPrompt(drawn) {
   const pBox = document.getElementById('promptBox');
   if (pBox) {
@@ -609,7 +609,7 @@ function showPrompt(drawn) {
     `;
     
     pBox.innerHTML = `
-     <p style="margin-top: 14px; color: #7fa3f3; font-weight: bold;">📜 Cartas selecionadas pela IA:</p>
+     <p style="margin-top: 12px; color: #7fa3f3; font-weight: bold;">📜 Cartas selecionadas pela IA:</p>
       <div class="prompt-container">
         ${cardNamesHtml}
         ${termsHtml}
