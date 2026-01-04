@@ -325,7 +325,21 @@ font-size: 15px;
   animation: spin 0.6s linear infinite;
 }
   
- 
+ /* Adicione este CSS ao seu arquivo <style> */
+.prompt-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* Cria 3 colunas de igual largura */
+  text-align: center; /* Centraliza o texto em cada coluna */
+  gap: 0px; /* >>> CORREÇÃO: Remove o espaço entre colunas e linhas */
+  margin-top: 1px; /* >>> CORREÇÃO: Reduz o espaço acima do container */
+}
+
+/* Força todos os spans dentro do container a se comportarem como blocos */
+.prompt-container span {
+  display: block;
+  line-height: 1; /* >>> CORREÇÃO: Reduz a altura da linha para compactar verticalmente */
+}    
+
 /* Container do AdMob Google */
 #ad-container {
   margin-top: 24px;
@@ -426,10 +440,28 @@ font-size: 15px;
 
 let hasReading = false;
 let isResetting = false;
-      
+
+// A função de parar também deve ser global
+const memoriesAudio = new Audio('https://image2url.com/r2/default/audio/1767545788311-beeb40af-197a-4a99-9469-c723887f8b07.mp3');     
+memoriesAudio.loop = true;
+memoriesAudio.preload = 'auto';
+
+function stopAllAudio() {
+    if (memoriesAudio) {
+        memoriesAudio.pause();
+        memoriesAudio.currentTime = 0;
+    }
+    if (shuffleAudio) {
+        shuffleAudio.pause();
+        shuffleAudio.currentTime = 0;
+    }
+    console.log("Áudios parados via comando nativo");
+}      
+
+
+  // ---------------- ELEMENTOS DO DOM ----------------      
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ---------------- ELEMENTOS DO DOM ----------------
   const button = document.getElementById('actionButton');
   const status = document.getElementById('status');
   const loader = document.getElementById('loader');
@@ -460,11 +492,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const shuffleAudio = new Audio('Audio_app/slots_machine.mp3');
   shuffleAudio.preload = 'auto';
 
-// 1. Definição do Áudio com o link Direto (RAW) do GitHub
-const memoriesAudio = new Audio('https://raw.githubusercontent.com/seabhra/anora-taro-web/refs/heads/main/Audio_app/memories.mp3');     
-memoriesAudio.loop = true;
-memoriesAudio.preload = 'auto';
-memoriesAudio.crossOrigin = "anonymous"; // Tente adicionar isso para evitar erros de CORS
+
+
       
 
   // ---------------- CARTAS ----------------
@@ -561,13 +590,29 @@ button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="stat
   }, 7500);
 }
 
+
 function showPrompt(drawn) {
   const pBox = document.getElementById('promptBox');
   if (pBox) {
+    const cardNamesHtml = drawn.map(name => `<span class="prompt-card-name">${name}</span>`).join('');
+    const termsHtml = `
+      <span style="color: #6b46c1; font-weight: normal;">Passado</span>
+      <span style="color: #6b46c1; font-weight: normal;">Presente</span>
+      <span style="color: #6b46c1; font-weight: normal;">Futuro</span>
+    `;
+    
+    pBox.innerHTML = `
+     <p style="margin-top: 12px; color: #7fa3f3; font-weight: bold;">📜 Cartas selecionadas pela IA:</p>
+      <div class="prompt-container">
+        ${cardNamesHtml}
+        ${termsHtml}
+      </div>
+    `;
+    
     pBox.style.display = 'block';
-    pBox.innerHTML = `<strong>📜 Cartas:</strong> ${drawn.join(' | ')}`;
   }
 }
+
 
 function clearPrompt() {
   if (!promptBox) return;
