@@ -588,19 +588,15 @@ button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="stat
 function showPrompt(drawn) {
   const pBox = document.getElementById('promptBox');
   if (pBox) {
-    // 1. Cria a linha com os nomes das cartas
     const cardNamesHtml = drawn.map(name => `<span class="prompt-card-name">${name}</span>`).join('');
-    
-    // 2. Cria a linha com os termos "Passado", "Presente" e "Futuro"
     const termsHtml = `
-      <span style="color: #6b46c1; font-weight: bold;">Passado</span>
-      <span style="color: #6b46c1; font-weight: bold;">Presente</span>
-      <span style="color: #6b46c1; font-weight: bold;">Futuro</span>
+      <span style="color: #6b46c1; font-weight: normal;">Passado</span>
+      <span style="color: #6b46c1; font-weight: normal;">Presente</span>
+      <span style="color: #6b46c1; font-weight: normal;">Futuro</span>
     `;
     
-    // 3. Combina tudo em um único container com a classe 'prompt-container'
     pBox.innerHTML = `
-      <strong style="margin-top: 10px;">📜 Cartas selecionadas pela IA:</strong>
+      <p style="margin-top: 15px; style="color: #dbcccc; font-weight: normal;">📜 Cartas selecionadas pela IA:</p>
       <div class="prompt-container">
         ${cardNamesHtml}
         ${termsHtml}
