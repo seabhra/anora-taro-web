@@ -324,7 +324,20 @@ font-size: 15px;
   display: inline-block; /* Necessário para a animação funcionar bem em spans */
   animation: spin 0.6s linear infinite;
 }
-  
+
+/* Adicione este CSS ao seu arquivo <style> */
+.prompt-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* Cria 3 colunas de igual largura */
+  text-align: center; /* Centraliza o texto em cada coluna */
+  gap: 10px; /* Espaçamento entre as colunas */
+  margin-top: 5px;
+}
+
+/* Força todos os spans dentro do container a se comportarem como blocos */
+.prompt-container span {
+  display: block;
+}      
  
 /* Container do AdMob Google */
 #ad-container {
