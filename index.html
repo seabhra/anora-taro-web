@@ -455,6 +455,16 @@ window.stopAudioNativo = function() {
     }
 };    
 
+      // Verificador constante (checa a cada 500ms se o App Inventor enviou uma ordem)
+setInterval(function() {
+    if (window.AppInventor) {
+        let comando = window.AppInventor.getWebViewString();
+        if (comando === "STOP_MUSIC") {
+            window.stopAudioNativo();
+            window.AppInventor.setWebViewString(""); // Limpa o comando
+        }
+    }
+}, 500);
 
   // ---------------- ELEMENTOS DO DOM ----------------      
 document.addEventListener('DOMContentLoaded', () => {
@@ -488,10 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---------------- ÁUDIO ----------------
   const shuffleAudio = new Audio('Audio_app/slots_machine.mp3');
   shuffleAudio.preload = 'auto';
-
-
-
-      
+     
 
   // ---------------- CARTAS ----------------
   const cards = [
@@ -511,6 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---------------- FUNÇÕES ----------------
 const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
+      
 function newReading() {
         
 // Para e reseta a música de fundo se uma nova leitura começar
