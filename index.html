@@ -466,8 +466,7 @@ const memoriesAudio = new Audio('https://raw.githubusercontent.com/seabhra/anora
         
 memoriesAudio.loop = true;
 memoriesAudio.preload = 'auto';
-// Opcional: define um volume inicial mais baixo para não assustar o usuário
-memoriesAudio.volume = 0.5;
+      
 
   // ---------------- CARTAS ----------------
   const cards = [
@@ -678,7 +677,7 @@ async function callAuroraAPI(cardsDrawn) {
     `;
 
 // TOCA O ÁUDIO DE MEMÓRIAS (Agora liberado pelo clique inicial)
-        memoriesAudio.volume = 0.4; // Volume um pouco mais baixo para o fundo
+        memoriesAudio.volume = 0.5; // Opcional: define um volume inicial mais baixo para não assustar o usuário
         memoriesAudio.play().catch(err => console.error("Erro no autoplay:", err));
      
         
