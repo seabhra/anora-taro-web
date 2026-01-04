@@ -570,20 +570,31 @@ button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="stat
         
   }, 7500);
 }
-
 function showPrompt(drawn) {
   const pBox = document.getElementById('promptBox');
   if (pBox) {
-    // 1. Cria a linha com os termos "Passado", "Presente" e "Futuro" na cor roxa
-    const termsLine = `<span style="color: #6b46c1; font-weight: bold;">Passado</span> | <span style="color: #6b46c1; font-weight: bold;">Presente</span> | <span style="color: #6b46c1; font-weight: bold;">Futuro</span>`;
+    // 1. Cria a linha com os nomes das cartas
+    const cardNamesHtml = drawn.map(name => `<span class="prompt-card-name">${name}</span>`).join('');
     
-    // 2. Insere a linha dos cartas e, em seguida, a linha dos termos
-    //    A tag <br> cria uma quebra de linha entre elas.
-    pBox.innerHTML = `<strong>📜 Cartas:</strong> ${drawn.join(' | ')}<br>${termsLine}`;
+    // 2. Cria a linha com os termos "Passado", "Presente" e "Futuro"
+    const termsHtml = `
+      <span style="color: #6b46c1; font-weight: bold;">Passado</span>
+      <span style="color: #6b46c1; font-weight: bold;">Presente</span>
+      <span style="color: #6b46c1; font-weight: bold;">Futuro</span>
+    `;
+    
+    // 3. Combina tudo em um único container com a classe 'prompt-container'
+    pBox.innerHTML = `
+      <strong>📜 Cartas:</strong>
+      <div class="prompt-container">
+        ${cardNamesHtml}
+        ${termsHtml}
+      </div>
+    `;
     
     pBox.style.display = 'block';
   }
-}      
+}
 
 function clearPrompt() {
   if (!promptBox) return;
