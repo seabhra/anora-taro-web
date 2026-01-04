@@ -330,14 +330,15 @@ font-size: 15px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr; /* Cria 3 colunas de igual largura */
   text-align: center; /* Centraliza o texto em cada coluna */
-  gap: 3px; /* Espaçamento entre as colunas */
-  margin-top: 3px;
+  gap: 0px; /* >>> CORREÇÃO: Remove o espaço entre colunas e linhas */
+  margin-top: 2px; /* >>> CORREÇÃO: Reduz o espaço acima do container */
 }
 
 /* Força todos os spans dentro do container a se comportarem como blocos */
 .prompt-container span {
   display: block;
-}      
+  line-height: 1; /* >>> CORREÇÃO: Reduz a altura da linha para compactar verticalmente */
+}    
  
 /* Container do AdMob Google */
 #ad-container {
