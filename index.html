@@ -247,54 +247,41 @@ font-size: 15px;
 }
 
 /* Botão compartilhar whatsapp */
-      
-#shareButton {
-  display: none; /* Começa oculto */
+
+ #shareButton {
+  display: none; /* Ativado via JS no sucesso da API */
+  float: right;  /* Faz o texto envolver o botão */
+  
+  /* Espaçamento para o texto não grudar */
+  margin-left: 15px;
+  margin-bottom: 10px;
+  
+  /* Estética do botão */
   align-items: center;
   justify-content: center;
-  gap: 3px; /* Espaço entre o ícone e o texto */
-  
-  /* Posicionamento à Direita para segurança AdMob */
-  float: right; 
-  margin: 5px 10px 20px 0; /* superior, direita, inferior, esquerda */
-  padding: 0 20px;
-  
-  width: auto;
-  height: 45px;
+  gap: 8px;
+  padding: 0 15px;
+  height: 40px;
   border: none;
-  border-radius: 25px; /* Mais arredondado fica mais elegante */
-  font-size: 15px;
-  font-weight: bold;
-  color: #ffffff;
+  border-radius: 20px;
   background-color: #25D366;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
 }
 
-/* Estilo da imagem do Zap dentro do botão */
 #shareButton img {
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
-}
-
-#shareButton:hover {
-  background-color: #128C7E;
-  transform: translateY(-2px);
+  width: 18px;
+  height: 18px;
 }
 
 #shareButton:active {
   transform: scale(0.95);
-}
-
-/* Limpar o float para não quebrar o layout abaixo */
-.clearfix::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
+}     
+ 
       
 /* Efeito de vibração/giro das cartas */
 .card-spinning {
@@ -731,8 +718,7 @@ async function callAuroraAPI(cardsDrawn) {
         Anora Assistente de IA
       </h2>
       <p>${text}</p>
-    
-    <div class="clearfix"><button id="shareButton" onclick="shareOnWhatsApp()"><img src="cards_images/zap.png" alt="Zap">Compartilhar</button></div>   
+    <button id="shareButton" onclick="shareOnWhatsApp()" style="display: flex;"><img src="cards_images/zap.png" alt="Zap"> Compartilhar</button>
     
       <div id="ad-container">
         <ins class="adsbygoogle"
