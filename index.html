@@ -537,6 +537,11 @@ const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
 function newReading() {
         
+// Para a música de fundo se uma nova leitura começar
+        window.memoriesAudio.play().then(() => {
+        window.memoriesAudio.pause();
+        window.memoriesAudio.currentTime = 0;
+    }).catch(e => console.log("Áudio preparado"));
 
       const florBox = document.getElementById('florBox');
     if (florBox) florBox.style.display = 'none';
@@ -727,7 +732,9 @@ async function callAuroraAPI(cardsDrawn) {
         Anora Assistente de IA
       </h2>
       <p>${text}</p>
-    <div class="clearfix"><button id="shareButton" onclick="shareOnWhatsApp()"><img src="cards_images/zap.png" alt="Zap">Compartilhar</button></div>   
+    
+    <div class="action-button"><button id="shareButton" onclick="shareOnWhatsApp()"><img src="cards_images/zap.png" alt="Zap">Compartilhar</button></div>   
+    
       <div id="ad-container">
         <ins class="adsbygoogle"
              style="display:block"
