@@ -359,13 +359,34 @@ font-size: 15px;
 }    
 
 /* Container do AdMob Google */
+
 #ad-container {
-  margin-top: 24px;
-  width: 100%;
-  min-height: 0;   /* 👈 altura mínima realista */
-  text-align: center;
-  display: none;     /* começa escondido */
- border: 1px dashed red; /* debug visual */
+    margin-top: 25px;
+    margin-bottom: 10px;
+    width: 100%;
+    
+    /* Removemos a altura fixa para evitar espaços vazios enormes */
+    min-height: 50px; 
+    
+    /* Centralização total */
+    display: none; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    /* Estética: Uma linha fina para separar a análise do anúncio */
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 15px;
+    
+    /* Garante que o anúncio não transborde horizontalmente */
+    overflow: hidden; 
+}
+
+/* Ajuste para o componente interno do Google */
+.adsbygoogle {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%; /* Fundamental para responsividade */
 }
  
  
@@ -741,20 +762,35 @@ aiBox.innerHTML = `
     <p style="margin: 0; line-height: 1.6; color: #333;">${text}</p>
 </div>
 
-    <div id="ad-container" style="margin-top: 25px; text-align: center; border-top: 1px solid #eee; padding-top: 15px;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-3940256099942544"
-             data-ad-slot="6300978111"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-    </div>
+<div id="ad-container">
+    <span style="font-size: 10px; color: #999; margin-bottom: 5px;">Publicidade</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3940256099942544"
+         data-ad-slot="6300978111"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins></div>
 `;
 
-// Ativa o AdMob
-setTimeout(() => {
-    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
-}, 500);
+// Ativa o AdMob de forma responsiva App Inventor e Web
+
+const adContainer = document.getElementById('ad-container');
+if (adContainer) {
+    adContainer.style.display = 'flex'; // Mostra o container
+    
+    // Executa o push do AdMob com uma pequena espera para o DOM respirar
+    setTimeout(() => {
+        try {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+            console.log("AdMob ainda carregando ou bloqueado.");
+        }
+    }, 300);
+}
+
+
+
+        
 // TOCA O ÁUDIO DE MEMÓRIAS (Agora liberado pelo clique inicial)
         window.memoriesAudio.volume = 0.5; // Opcional: define um volume inicial mais baixo para não assustar o usuário
         window.memoriesAudio.play().catch(err => {
