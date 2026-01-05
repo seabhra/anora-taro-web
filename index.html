@@ -455,15 +455,6 @@ window.stopAudioNativo = function() {
     }
 };    
 
-// Monitor constante para comandos do App Inventor
-setInterval(function() {
-    if (window.AppInventor) {
-        // Lemos o que o App Inventor escreveu na "caixa de mensagens" (WebViewString)
-        let comando = window.AppInventor.getWebViewString();        
-        if (comando === "PARAR") {
-     window.stopAudioNativo(); // Chama sua função que pausa a música
-        }
-    }
 
   // ---------------- ELEMENTOS DO DOM ----------------      
 document.addEventListener('DOMContentLoaded', () => {
@@ -497,7 +488,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---------------- ÁUDIO ----------------
   const shuffleAudio = new Audio('Audio_app/slots_machine.mp3');
   shuffleAudio.preload = 'auto';
-     
+
+
+
+      
 
   // ---------------- CARTAS ----------------
   const cards = [
@@ -517,9 +511,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---------------- FUNÇÕES ----------------
 const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
-      
 function newReading() {
         
+// Para e reseta a música de fundo se uma nova leitura começar
+         memoriesAudio.play().then(() => {
+        memoriesAudio.pause();
+        memoriesAudio.currentTime = 0;
+    }).catch(e => console.log("Áudio preparado"));
 
       const florBox = document.getElementById('florBox');
     if (florBox) florBox.style.display = 'none';
@@ -626,15 +624,7 @@ function resetReading() {
   labels.forEach(l => l.innerText = '');
 
   clearPrompt();
-// Adicione isso para resetar a tela visualmente:
-    document.getElementById('aiBox').style.display = 'none';
-    document.getElementById('florBox').style.display = 'block';
-    window.AppInventor.setWebViewString("") // Limpa a caixa para o próximo comando
-                   
-        }
-    }
-}, 500); // Checa a cada 500ms
-              
+
   aiBox.style.display = 'none';
   loader.style.display = 'none';
 
@@ -657,13 +647,9 @@ if (adContainer) {
 }
 
 // ---------------- DELETA AUDIO ----------------
-
-      // Para e reseta a música de fundo se uma nova leitura começar
-         window.memoriesAudio.play().then(() => {
-        window.memoriesAudio.pause();
-        window.memoriesAudio.currentTime = 0;
-    }).catch(e => console.log("Áudio preparado"));
-      
+// Para a música de fundo ao resetar
+    window.memoriesAudio.pause();
+    window.memoriesAudio.currentTime = 0;      
 
    hasReading = false;
   isResetting = false
