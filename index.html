@@ -248,34 +248,37 @@ font-size: 15px;
 
 /* Botão compartilhar whatsapp */
 #shareButton {
-  display: none; /* Ativado pelo JS */
-  float: right;  /* O segredo para o texto envolver */
-  
-  /* Margens para o texto não encostar no botão */
-  margin-left: 15px;
-  margin-bottom: 5px;
-  margin-top: 5px;
+    display: none; /* Ativado pelo JS */
+    float: right;
+    shape-outside: circle(50%); /* Faz o texto contornar de forma circular */
+    width: 55px;  /* Largura e altura iguais para ser redondo */
+    height: 55px;
+    border-radius: 50%;
+    
+    background-color: #25D366;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    
+    /* Centraliza o ícone */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Posicionamento e Margem */
+    margin-left: 15px;
+    margin-top: 10px;
+    transition: transform 0.2s ease;
+}
 
-  /* Estética */
-  background-color: #25D366;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 8px 15px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+#shareButton:active {
+    transform: scale(0.9);
 }
 
 #shareButton img {
-  width: 18px;
-  height: 18px;
-  vertical-align: middle;
+    width: 30px;
+    height: 30px;
 }
-
 /* Garante que o container da resposta limpe a flutuação no final */
 #aiResponseContent::after {
   content: "";
@@ -719,16 +722,15 @@ aiBox.innerHTML = `
         Anora Assistente de IA 
     </h2>
     
-    <div id="aiResponseContent" style="text-align: justify; overflow: hidden; position: relative;">
-        <button id="shareButton" onclick="shareOnWhatsApp()" style="display: flex; float: right; margin-left: 10px; margin-bottom: 5px; background-color: #25D366; color: white; border: none; border-radius: 20px; padding: 8px 12px; font-weight: bold; align-items: center; cursor: pointer;">
-            <img src="cards_images/zap.png" alt="Zap" style="width:18px; height:18px; margin-right:5px;"> 
-            Compartilhar
+    <div id="aiResponseContent" style="text-align: justify; overflow: hidden;">
+        <button id="shareButton" onclick="shareOnWhatsApp()" style="display: flex;">
+            <img src="cards_images/zap.png" alt="Zap">
         </button>
         
         <p style="margin: 0; line-height: 1.6; color: #333; font-size: 15px;">${text}</p>
     </div>
 
-    <div id="ad-container" style="margin-top: 25px; min-height: 100px; text-align: center; border-top: 1px solid #eee; padding-top: 15px;">
+    <div id="ad-container" style="margin-top: 25px; text-align: center; border-top: 1px solid #eee; padding-top: 15px;">
         <ins class="adsbygoogle"
              style="display:block"
              data-ad-client="ca-pub-3940256099942544"
@@ -738,16 +740,10 @@ aiBox.innerHTML = `
     </div>
 `;
 
-// Tenta carregar o anúncio. O setTimeout evita erros de sincronia no WebViewer
+// Ativa o AdMob
 setTimeout(() => {
-    try {
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-        console.error("Erro ao carregar AdMob:", e);
-    }
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
 }, 500);
-        
-
 // TOCA O ÁUDIO DE MEMÓRIAS (Agora liberado pelo clique inicial)
         window.memoriesAudio.volume = 0.5; // Opcional: define um volume inicial mais baixo para não assustar o usuário
         window.memoriesAudio.play().catch(err => {
