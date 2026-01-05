@@ -712,9 +712,9 @@ async function callAuroraAPI(cardsDrawn) {
         if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
-
-      aiBox.innerHTML = `
-     ${logoHtml}
+// MONTAGEM DO HTML: Botão vem ANTES do texto <p>
+aiBox.innerHTML = `
+    ${logoHtml}
     <h2>Anora Assistente de IA</h2>
     <div id="aiResponseContent" style="text-align: justify;">
         <button id="shareButton" onclick="shareOnWhatsApp()" style="display: flex;">
