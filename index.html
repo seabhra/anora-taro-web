@@ -246,41 +246,53 @@ margin-bottom: 8px;
 font-size: 15px;
 }
 
- /* ESTILO PARA BOTÃO WHATSAPP */
-
+/* Botão compartilhar whatsapp */
 #shareButton {
-  width: 100%;
-  max-width: 320px;
-  height: 45px;
-  margin: 12px auto 0;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  display: none; /* Começa oculto */
   align-items: center;
   justify-content: center;
+  gap: 8px; /* Espaço entre o ícone e o texto */
+  
+  /* Posicionamento à Direita para segurança AdMob */
+  float: right; 
+  margin: 15px 10px 20px 0; 
+  padding: 0 20px;
+  
+  width: auto;
+  height: 45px;
+  border: none;
+  border-radius: 25px; /* Mais arredondado fica mais elegante */
+  font-size: 15px;
   font-weight: bold;
-  color: #fdfdfe;
+  color: #ffffff;
   background-color: #25D366;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-/* Estado oculto */
-#shareButton.hidden {
-  display: none;
+/* Estilo da imagem do Zap dentro do botão */
+#shareButton img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
-/* Hover elegante */
 #shareButton:hover {
   background-color: #128C7E;
-  transform: scale(1.02);
+  transform: translateY(-2px);
 }
 
-/* Feedback de clique */
 #shareButton:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
 }
 
+/* Limpar o float para não quebrar o layout abaixo */
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
 /* Efeito de vibração/giro das cartas */
 .card-spinning {
     animation: spinEffect 0.15s infinite linear;
@@ -411,6 +423,13 @@ font-size: 15px;
 <div id="promptBox"></div>
 
 <!-- LOCAL Compartilhar no WhatsApp e Anúncio -->
+
+<div class="clearfix">
+    <button id="shareButton" onclick="shareOnWhatsApp()">
+        <img src="cards_images/zap.png" alt="Zap">
+        Compartilhar
+    </button>
+</div>      
 
 <div id="aiBox" style="display: none;">
   <!-- conteúdo do prompt da IA entra aqui -->
