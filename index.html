@@ -453,8 +453,20 @@ window.stopAudioNativo = function() {
         window.memoriesAudio.pause();
         window.memoriesAudio.currentTime = 0;
     }
-};    
+};
 
+// Monitor constante para comandos do App Inventor
+setInterval(function() {
+    if (window.AppInventor) {
+        // Lemos o que o App Inventor escreveu na "caixa de mensagens" (WebViewString)
+        let comando = window.AppInventor.getWebViewString();
+        
+        if (comando === "PARAR") {
+            window.stopAudioNativo(); // Chama sua função que pausa a música
+            window.AppInventor.setWebViewString(""); // Limpa a caixa para o próximo comando
+        }
+    }
+}, 500); // Checa a cada 500ms
 
   // ---------------- ELEMENTOS DO DOM ----------------      
 document.addEventListener('DOMContentLoaded', () => {
