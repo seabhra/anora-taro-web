@@ -422,14 +422,7 @@ font-size: 15px;
   
 <div id="promptBox"></div>
 
-<!-- LOCAL Compartilhar no WhatsApp e Anúncio -->
-
-<div class="clearfix">
-    <button id="shareButton" onclick="shareOnWhatsApp()">
-        <img src="cards_images/zap.png" alt="Zap">
-        Compartilhar
-    </button>
-</div>      
+<!-- LOCAL para compartilhar no WhatsApp e Anúncio -->   
 
 <div id="aiBox" style="display: none;">
   <!-- conteúdo do prompt da IA entra aqui -->
@@ -544,11 +537,6 @@ const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
 function newReading() {
         
-// Para e reseta a música de fundo se uma nova leitura começar
-         memoriesAudio.play().then(() => {
-        memoriesAudio.pause();
-        memoriesAudio.currentTime = 0;
-    }).catch(e => console.log("Áudio preparado"));
 
       const florBox = document.getElementById('florBox');
     if (florBox) florBox.style.display = 'none';
@@ -682,10 +670,11 @@ if (adContainer) {
     window.memoriesAudio.pause();
     window.memoriesAudio.currentTime = 0;      
 
+
    hasReading = false;
   isResetting = false
 }
-
+      
 function shareOnWhatsApp() {
   const title = document.querySelector('#aiBox h2')?.innerText?.trim() || 'Anora Tarô';
   const analysisText = document.querySelector('#aiBox p')?.innerText?.trim() || '';
@@ -738,7 +727,7 @@ async function callAuroraAPI(cardsDrawn) {
         Anora Assistente de IA
       </h2>
       <p>${text}</p>
-      <button id="shareButton" class="action-button">Compartilhar no WhatsApp</button>
+    <div class="clearfix"><button id="shareButton" onclick="shareOnWhatsApp()"><img src="cards_images/zap.png" alt="Zap">Compartilhar</button></div>   
       <div id="ad-container">
         <ins class="adsbygoogle"
              style="display:block"
