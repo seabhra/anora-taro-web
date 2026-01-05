@@ -721,8 +721,9 @@ aiBox.innerHTML = `
             <img src="cards_images/zap.png" alt="Zap" style="width:20px; margin-right:5px;"> Compartilhar
         </button>
         
-        <p style="margin: 0; line-height: 1.5; color: #333;">${analysisText}</p>
+        <p style="margin: 0; line-height: 1.5; color: #333;">${text}</p>
     </div>
+
 
     <div id="ad-container" style="margin-top: 20px; text-align: center;">
         <ins class="adsbygoogle"
@@ -751,7 +752,7 @@ aiBox.innerHTML = `
     status.className = 'status-success';
   } catch (error) {
     console.error('Erro na chamada da API:', error);
-    aiBox.innerHTML = `<p>Consulta assistida por IA indisponível no momento.</p>`;
+    aiBox.innerHTML = `<p>Indisponível consulta assistida por IA.</p>`;
     status.textContent = 'Erro ao acessar análise feita pelo sistema.';
     status.className = 'status-error';
   }
