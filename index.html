@@ -712,20 +712,23 @@ async function callAuroraAPI(cardsDrawn) {
         if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
-// MONTAGEM DO HTML: O botão dentro da div garante que o texto o envolva (wrap)
+// MONTAGEM DO HTML
 aiBox.innerHTML = `
-<h2 class="ai-title"> <img src="cards_images/marca_anora.png" class="ai-logo">Anora Assistente de IA </h2>
+    <h2 class="ai-title" style="display: flex; align-items: center; gap: 10px;"> 
+        <img src="cards_images/marca_anora.png" class="ai-logo" style="width: 30px; height: auto;">
+        Anora Assistente de IA 
+    </h2>
     
-    <div id="aiResponseContent" style="text-align: justify; overflow: hidden;">
-        <button id="shareButton" onclick="shareOnWhatsApp()" style="display: flex; float: right; margin-left: 10px; margin-bottom: 5px;">
-            <img src="cards_images/zap.png" alt="Zap" style="width:20px; margin-right:5px;"> Compartilhar
+    <div id="aiResponseContent" style="text-align: justify; overflow: hidden; position: relative;">
+        <button id="shareButton" onclick="shareOnWhatsApp()" style="display: flex; float: right; margin-left: 10px; margin-bottom: 5px; background-color: #25D366; color: white; border: none; border-radius: 20px; padding: 8px 12px; font-weight: bold; align-items: center; cursor: pointer;">
+            <img src="cards_images/zap.png" alt="Zap" style="width:18px; height:18px; margin-right:5px;"> 
+            Compartilhar
         </button>
         
-        <p style="margin: 0; line-height: 1.5; color: #333;">${text}</p>
+        <p style="margin: 0; line-height: 1.6; color: #333; font-size: 15px;">${text}</p>
     </div>
 
-
-    <div id="ad-container" style="margin-top: 20px; text-align: center;">
+    <div id="ad-container" style="margin-top: 25px; min-height: 100px; text-align: center; border-top: 1px solid #eee; padding-top: 15px;">
         <ins class="adsbygoogle"
              style="display:block"
              data-ad-client="ca-pub-3940256099942544"
@@ -735,8 +738,14 @@ aiBox.innerHTML = `
     </div>
 `;
 
-// Necessário para inicializar o anúncio após inserir o HTML
-(adsbygoogle = window.adsbygoogle || []).push({});
+// Tenta carregar o anúncio. O setTimeout evita erros de sincronia no WebViewer
+setTimeout(() => {
+    try {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+        console.error("Erro ao carregar AdMob:", e);
+    }
+}, 500);
         
 
 // TOCA O ÁUDIO DE MEMÓRIAS (Agora liberado pelo clique inicial)
@@ -752,7 +761,7 @@ aiBox.innerHTML = `
     status.className = 'status-success';
   } catch (error) {
     console.error('Erro na chamada da API:', error);
-    aiBox.innerHTML = `<p>Indisponível consulta assistida por IA.</p>`;
+    aiBox.innerHTML = `<p>Ainda indisponível consulta solicitada.</p>`;
     status.textContent = 'Erro ao acessar análise feita pelo sistema.';
     status.className = 'status-error';
   }
