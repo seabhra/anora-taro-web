@@ -462,8 +462,8 @@ setInterval(function() {
         let comando = window.AppInventor.getWebViewString();        
         if (comando === "PARAR") {
      window.stopAudioNativo(); // Chama sua função que pausa a música
-              
-    
+        }
+    }
 
   // ---------------- ELEMENTOS DO DOM ----------------      
 document.addEventListener('DOMContentLoaded', () => {
@@ -520,11 +520,6 @@ const shuffle = arr => arr.sort(() => Math.random() - 0.5);
       
 function newReading() {
         
-// Para e reseta a música de fundo se uma nova leitura começar
-         memoriesAudio.play().then(() => {
-        memoriesAudio.pause();
-        memoriesAudio.currentTime = 0;
-    }).catch(e => console.log("Áudio preparado"));
 
       const florBox = document.getElementById('florBox');
     if (florBox) florBox.style.display = 'none';
@@ -662,9 +657,13 @@ if (adContainer) {
 }
 
 // ---------------- DELETA AUDIO ----------------
-// Para a música de fundo ao resetar
-    window.memoriesAudio.pause();
-    window.memoriesAudio.currentTime = 0;      
+
+      // Para e reseta a música de fundo se uma nova leitura começar
+         window.memoriesAudio.play().then(() => {
+        window.memoriesAudio.pause();
+        window.memoriesAudio.currentTime = 0;
+    }).catch(e => console.log("Áudio preparado"));
+      
 
    hasReading = false;
   isResetting = false
