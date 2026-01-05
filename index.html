@@ -714,8 +714,7 @@ async function callAuroraAPI(cardsDrawn) {
 
 // MONTAGEM DO HTML: O botão dentro da div garante que o texto o envolva (wrap)
 aiBox.innerHTML = `
-    ${logoHtml}
-    <h2>Anora Assistente de IA</h2>
+<h2 class="ai-title"> <img src="cards_images/marca_anora.png" class="ai-logo">Anora Assistente de IA </h2>
     
     <div id="aiResponseContent" style="text-align: justify; overflow: hidden;">
         <button id="shareButton" onclick="shareOnWhatsApp()" style="display: flex; float: right; margin-left: 10px; margin-bottom: 5px;">
@@ -752,8 +751,8 @@ aiBox.innerHTML = `
     status.className = 'status-success';
   } catch (error) {
     console.error('Erro na chamada da API:', error);
-    aiBox.innerHTML = `<p>Erro ao acessar a reflexão.</p>`;
-    status.textContent = 'Erro de acessar análise feita pelo sistema.';
+    aiBox.innerHTML = `<p>Consulta assistida por IA indisponível no momento.</p>`;
+    status.textContent = 'Erro ao acessar análise feita pelo sistema.';
     status.className = 'status-error';
   }
   loader.style.display = 'none';
