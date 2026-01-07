@@ -1,5 +1,6 @@
 export default async function handler(req, res) {
     // 1. Configuração de CORS - Ampla para aceitar múltiplos domínios
+    
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -67,3 +68,4 @@ export default async function handler(req, res) {
 
 
   }
+
