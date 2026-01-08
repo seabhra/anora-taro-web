@@ -1,4 +1,4 @@
-const CACHE_NAME = 'anora-taro-v2'; // Versão atualizada
+const CACHE_NAME = 'anora-taro-v3'; // Versão atualizada para forçar o navegador a recarregar
 
 const urlsToCache = [
   '/',
@@ -9,25 +9,25 @@ const urlsToCache = [
   '/cards_images/zap.png'
 ];
 
-// Instalação e Cache de arquivos estáticos
+// Instalação: Salva arquivos básicos no celular do usuário
 self.addEventListener('install', event => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('📦 Arquivos estáticos mapeados para cache');
+      console.log('📦 Cache Anora Tarô atualizado');
       return cache.addAll(urlsToCache);
     })
   );
 });
 
-// Ativação e Limpeza de caches antigos
+// Ativação: Remove caches de versões antigas
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cache => {
           if (cache !== CACHE_NAME) {
-            console.log('🧹 Limpando cache antigo:', cache);
+            console.log('🧹 Removendo cache antigo:', cache);
             return caches.delete(cache);
           }
         })
@@ -36,30 +36,22 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Estratégia de busca inteligente
+// Interceptação de pedidos (Fetch)
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // ---------------------------------------------------------------------------
-  // EXCEÇÃO ROTA EXTERNA: Se a requisição for para a API do projeto Aurora Runas,
-  // NÃO intercepte. Deixe o navegador buscar direto na rede para evitar erros de CORS.
-  // ---------------------------------------------------------------------------
-  if (event.request.url.includes('express-js-on-vercel-eta-lyart.vercel.app')) {
-    return; // Não executa o respondWith, sai da função
+  // 1. EXCEÇÃO PARA API INTERNA:
+  // Se a requisição for para a sua própria API (/api/chat), 
+  // o Service Worker NÃO deve intervir. Deixa ir direto pela internet.
+  if (url.pathname.startsWith('/api/')) {
+    return; // Sai da função e deixa o navegador tratar via rede
   }
 
-  // EXCEÇÃO ROTA INTERNA: Se for uma chamada para a API local ou Groq
-  if (url.pathname.includes('/api/') || url.hostname.includes('groq.com')) {
-    return; 
-  }
-
+  // 2. ESTRATÉGIA PARA OUTROS ARQUIVOS:
+  // Tenta buscar no cache (offline), se não achar, busca na internet.
   event.respondWith(
     caches.match(event.request).then(response => {
-      // Se estiver no cache, retorna. Se não, busca na rede.
-      return response || fetch(event.request).catch(error => {
-        // Log de erro silencioso para não poluir o console do app
-        console.log('🌐 Requisição de rede falhou e arquivo não está no cache.');
-      });
+      return response || fetch(event.request);
     })
   );
 });
