@@ -40,18 +40,25 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // EXCEÇÃO: Se for uma chamada para a API, NÃO use o cache e NÃO intercepte
-  // Isso evita erros de CORS e garante que a IA receba dados novos
+  // ---------------------------------------------------------------------------
+  // EXCEÇÃO ROTA EXTERNA: Se a requisição for para a API do projeto Aurora Runas,
+  // NÃO intercepte. Deixe o navegador buscar direto na rede para evitar erros de CORS.
+  // ---------------------------------------------------------------------------
+  if (event.request.url.includes('express-js-on-vercel-eta-lyart.vercel.app')) {
+    return; // Não executa o respondWith, sai da função
+  }
+
+  // EXCEÇÃO ROTA INTERNA: Se for uma chamada para a API local ou Groq
   if (url.pathname.includes('/api/') || url.hostname.includes('groq.com')) {
-    return; // Deixa o navegador lidar com a rede normalmente
+    return; 
   }
 
   event.respondWith(
     caches.match(event.request).then(response => {
       // Se estiver no cache, retorna. Se não, busca na rede.
-      return response || fetch(event.request).catch(() => {
-        // Se falhar a rede e for uma página, você poderia retornar uma página offline aqui
-        console.log('🌐 Falha de rede e arquivo não está no cache.');
+      return response || fetch(event.request).catch(error => {
+        // Log de erro silencioso para não poluir o console do app
+        console.log('🌐 Requisição de rede falhou e arquivo não está no cache.');
       });
     })
   );
