@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const backCard = basePath + 'back.jpg';
 
   // ---------------- ÁUDIO ----------------
+    
   const shuffleAudio = new Audio('Audio_app/slots_machine.mp3');
   shuffleAudio.preload = 'auto';      
 
@@ -224,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function callAuroraAPI(cardsDrawn) {
     try {
       // CORREÇÃO 1: Usar a URL completa da API.
-      const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
+      const res = await fetch('https://anora-taro-web.vercel.app/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         // CORREÇÃO 2: Usar o prompt detalhado e corrigir o erro de sintaxe.
