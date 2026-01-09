@@ -1,477 +1,3 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-      <!-- 1. SCRIPT PRINCIPAL DO ADMOB -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3940256099942544"
-            crossorigin="anonymous"></script>
-  
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#6b46c1">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
-
-  
-<title>Anora Tarô</title>
-
-<style>
- 
-body {
-margin: 0;
-padding: 20px;
-font-family: Arial, Helvetica, sans-serif;
-background: #f7f7f7;
-text-align: center;
-}
-
-.cards {
-display: flex;
-justify-content: center;
-gap: 12px;
-margin-bottom: 24px;
-}
-
-.card { width: 90px; }
-
-.card img {
-width: 100%;
-border-radius: 10px;
-box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.flors {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 16px 0;
-}
-
-.flor {
-  width: 70px;
-  height: auto;
-}
-
-.flor img {
-  width: 100%;
-  height: auto;
-  display: block;
-  box-shadow: none;
-  border-radius: 0;
-  background: transparent;
-}
-
-/* Container */
-#cabalaBox {
-  display: none; /* começa oculto */
-  justify-content: center;
-  align-items: center;
-  margin: 16px 0;
-  animation: fadeIn 0.6s ease;
-}
-
-/* Imagem */
-#cabalaBox img {
-  width: 80px;          /* 👈 tamanho real */
-  height: auto;
-  animation: spin 2.4s linear infinite; /* 🐢 mais lento */
-  opacity: 0.9;
-  display: block;       /* 👈 ESSENCIAL */
-}
-
-/* Animação */
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-      
-.label {
-margin-top: 6px;
-font-size: 13px;
-font-weight: bold;
-}
-
-.card-name {
-font-size: 11px;
-color: #6b46c1;
-min-height: 14px;
-}
-
-.action-button {
-width: 100%;
-max-width: 320px;
-height: 50px;
-border: none;
-border-radius: 4px;
-font-size: 18px;
-font-weight: bold;
-color: #fff;
-cursor: pointer;
-}
-
-/* Status da cor do botão */
-  
-.pink { background:#fd98be; }
-.roxo { background:#de86e5 }
-.blue { background:#98e6ce; }
-
-/* Estilo marca anora na mensagem compartilhada */
-  
-  .ai-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-/* Shape arredondado */
-.ai-logo {
-  width: 26px;
-  height: 26px;
-  padding: 6px;
-  background: #f3e8ff;           /* lilás suave */
-  border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-}
-      
-/* Estilo padrão do status */
-#status {
-margin-top: 16px;
-font-weight: bold;
-color: #718096;
-transition: color 0.3s ease;
-}
-/* status da mudança de cores da label abaixo do botão*/
-
-#status.status-process {
-color: #4d0567; /* Roxinho */
-}
-#status.status-loading {
-color: #1383c9; /* Azul */
-}
-#status.status-success {
-color: #38a169; /* Verde */
-}
-#status.status-error {
-color: #ce3149; /* Vermelho */
-}
-
-/* Loader da API */
-#loader {
-display: none;
-margin: 20px auto;
-width: 50px;
-height: 50px;
-border: 5px solid rgba(131, 242, 212, 0.2);
-border-top: 5px solid #83f2d4;
-border-radius: 50%;
-animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-0% { transform: rotate(0deg); }
-100% { transform: rotate(360deg); }
-}
-
-/* Loader da página */
-#pageLoader {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-color: #f7f7f7;
-display: flex;
-justify-content: center;
-align-items: center;
-z-index: 9999;
-opacity: 1;
-transition: opacity 0.5s ease-out;
-}
-
-#pageLoader.hidden {
-opacity: 0;
-pointer-events: none;
-}
-
-.page-spinner {
-width: 60px;
-height: 60px;
-border: 6px solid rgba(131, 242, 212, 0.3);
-border-top: 6px solid #83f2d4;
-border-radius: 50%;
-animation: spin 1s linear infinite;
-}
-
-/* ESTILO DA CAIXA DE RESPOSTA DA IA */
-#aiBox { /* CORREÇÃO: ID unificado para aiBox */
-display: none;
-margin-top: 16px;
-padding: 5px;
-background: #fff;
-border-radius: 12px;
-font-size: 16px;
-text-align: center;
-}
-
-/* ESTILO DO NOVO CABEÇALHO COMPARTILHADO H2 */
-#aiBox h2 {
-text-align: center;
-color: #6b46c1;
-margin-top: 0;
-margin-bottom: 16px;
-font-size: 18px;
-font-weight: bold;
-}
-
-/* Estilo do parágrafo com espaçamento <<< */
-#aiBox p {
-line-height: 1.6;
-margin: 0; /* Reseta a margem */
-}
-
-/* Adiciona espaço apenas ENTRE os parágrafos (a partir do segundo) */
-  
-#aiBox p:not(:first-child) {
-margin-top: 1em;
-}
-
-/* ESTILO PARA OS TÍTULOS DENTRO DA ANÁLISE */
-#aiBox p strong {
-color: #6b46c1;
-display: block;
-margin-top: 18px;
-margin-bottom: 8px;
-font-size: 15px;
-}
-
-/* Botão compartilhar whatsapp */
-
-      #shareButton {
-    display: none; /* Ativado pelo JS */
-    float: right;
-    
-    /* Tamanho do Botão */
-    width: 60px; 
-    height: 60px;
-    border-radius: 50%;
-    
-    /* Estética */
-    background-color: #25D366;
-    border: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    cursor: pointer;
-    
-    /* Centralização Total do Ícone */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    /* Espaçamento para o texto envolver */
-    margin-left: 15px;
-    margin-bottom: 10px;
-    padding: 0; /* Importante remover padding para não achatar a imagem */
-    
-    /* Garante que o clique funcione no mobile */
-    -webkit-tap-highlight-color: transparent;
-}
-
-#shareButton img {
-    /* Aumente aqui o tamanho da imagem */
-    width: 50px; 
-    height: 50px;
-    
-    /* A SOLUÇÃO PARA O ERRO: */
-    pointer-events: none; 
-    
-    object-fit: contain;
-}
-
-#shareButton:active {
-    transform: scale(0.9);
-}
-/* Garante que o container da resposta limpe a flutuação no final */
-#aiResponseContent::after {
-  content: "";
-  display: table;
-  clear: both;
-}     
- 
-      
-/* Efeito de vibração/giro das cartas */
-.card-spinning {
-    animation: spinEffect 0.15s infinite linear;
-    filter: blur(1px); /* Leve desfoque para dar sensação de velocidade */
-}
-
-@keyframes spinEffect {
-    0% { transform: translateY(-5px); }
-    50% { transform: translateY(5px); }
-    100% { transform: translateY(-5px); }
-}
- /* CONTROLE DE ESPAÇO EMOJI FORA JS */
-    
- .btn-emoji {
-  margin-right: 8px;
-}
- /* CONTROLE DE ESPAÇO EMOJI DENTRO DO JS */
-
-      /* 1. Define a animação de rotação (giro de 360 graus) */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.status-emoji {
-  margin-right: 8px; /* Define o espaçamento à direita */
-  display: inline-block; /* ESSENCIAL para a margem funcionar */
-  vertical-align: middle; /* Alinha o emoji verticalmente com o texto */
-}
-
-.status-text {
- vertical-align: middle;
-}
-
-.status-emoji.giro {
-  margin-right: 8px;
-  display: inline-block; /* Necessário para a animação funcionar bem em spans */
-  animation: spin 0.6s linear infinite;
-}
-  
- /* Adicione este CSS ao seu arquivo <style> */
-.prompt-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* Cria 3 colunas de igual largura */
-  text-align: center; /* Centraliza o texto em cada coluna */
-  gap: 0px; /* >>> CORREÇÃO: Remove o espaço entre colunas e linhas */
-  margin-top: 1px; /* >>> CORREÇÃO: Reduz o espaço acima do container */
-}
-
-/* Força todos os spans dentro do container a se comportarem como blocos */
-.prompt-container span {
-  display: block;
-  line-height: 1; /* >>> CORREÇÃO: Reduz a altura da linha para compactar verticalmente */
-}    
-
-/* Container do AdMob Google */
-
-#ad-container {
-    margin-top: 25px;
-    margin-bottom: 10px;
-    width: 100%;
-    
-    /* Removemos a altura fixa para evitar espaços vazios enormes */
-    min-height: 50px; 
-    
-    /* Centralização total */
-    display: none; 
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    /* Estética: Uma linha fina para separar a análise do anúncio */
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    padding-top: 15px;
-    
-    /* Garante que o anúncio não transborde horizontalmente */
-    overflow: hidden; 
-}
-
-/* Ajuste para o componente interno do Google */
-.adsbygoogle {
-    display: block;
-    margin: 0 auto;
-    max-width: 100%; /* Fundamental para responsividade */
-}
- 
- 
-</style>
-</head>
-
-<body>
-
-<!-- Loader da página -->
-           
-<div id="pageLoader">
-<div class="page-spinner"></div>
-</div>
-
-<div class="cards">
-<div class="card">
-<img id="card1" src="cards_images/back.jpg">
-<div class="label">Passado</div>
-<div class="card-name" id="name1"></div>
-</div>
-<div class="card">
-<img id="card2" src="cards_images/back.jpg">
-<div class="label">Presente</div>
-<div class="card-name" id="name2"></div>
-</div>
-<div class="card">
-<img id="card3" src="cards_images/back.jpg">
-<div class="label">Futuro</div>
-<div class="card-name" id="name3"></div>
-</div>
-</div>
-
-<button id="actionButton" class="action-button pink">
-  <span class="btn-emoji">🔮</span>
-  <span>Embaralhar Cartas</span>
-</button>
-
-  <!-- LABEL AGUARDANDO SUA CONSULTA -->
-  <div id="status">
-  <span class="status-emoji"></span>
-  <span class="status-text">Aguardando sua consulta...</span>
-  </div>
-  
- <!-- LOCAL DA FLOR DE LIZ -->
-  
-<div class="flors" id="florBox">
-  <div class="flor">
-    <img src="cards_images/liz.png" alt="Flor simbólica">
-  </div>
-</div>
-
-<div id="cabalaBox" style="display:none;">
-  <img src="cards_images/cabala.png" alt="Cabala">
-</div>
-
-      
-<div id="loader"></div>
-
-<!-- LOCAL DO PROMPT DA IA -->
-  
-<div id="promptBox"></div>
-
-<!-- LOCAL para compartilhar no WhatsApp e Anúncio -->   
-
-<div id="aiBox" style="display: none;">
-  <!-- conteúdo do prompt da IA entra aqui -->
-
-  <!-- 👇 FICA FIXO, NÃO É RECRIADO -->
-  <div id="ad-container">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3940256099942544"
-         data-ad-slot="6300978111"
-         data-ad-format="auto"
-         data-full-width-responsive="true">
-    </ins>
-  </div>
-</div
-
-
-   
-
-  
- <!--  CORPO DO JS DO APLICATIVO  -->
-  
 <script>
 // ===================================================================
 // SCRIPT PRINCIPAL - ORÁCULO ANORA TARÔ (VERSÃO FINAL CORRIGIDA)
@@ -480,13 +6,11 @@ font-size: 15px;
 let hasReading = false;
 let isResetting = false;
 
-// A função de parar também deve ser global
-
-
+// Áudio de fundo global para o App Inventor
 window.memoriesAudio = new Audio('https://image2url.com/r2/default/audio/1767545788311-beeb40af-197a-4a99-9469-c723887f8b07.mp3');
 window.memoriesAudio.loop = true;
 
-// A função de parar também deve ser global
+// Função global para parar o áudio
 window.stopAudioNativo = function() {
     if (window.memoriesAudio) {
         window.memoriesAudio.pause();
@@ -494,29 +18,27 @@ window.stopAudioNativo = function() {
     }
 };
 
-// Monitor constante para comandos do App Inventor
+// Monitor para comandos do App Inventor
 setInterval(function() {
     if (window.AppInventor) {
-        // Lemos o que o App Inventor escreveu na "caixa de mensagens" (WebViewString)
         let comando = window.AppInventor.getWebViewString();
-        
         if (comando === "PARAR") {
-            window.stopAudioNativo(); // Chama sua função que pausa a música
-            window.AppInventor.setWebViewString(""); // Limpa a caixa para o próximo comando
+            window.stopAudioNativo();
+            window.AppInventor.setWebViewString("");
         }
     }
-}, 500); // Checa a cada 500ms
+}, 500);
 
-  // ---------------- ELEMENTOS DO DOM ----------------      
 document.addEventListener('DOMContentLoaded', () => {
 
+  // ---------------- ELEMENTOS DO DOM ----------------      
   const button = document.getElementById('actionButton');
   const status = document.getElementById('status');
   const loader = document.getElementById('loader');
   const aiBox = document.getElementById('aiBox');
   const promptBox = document.getElementById('promptBox');
   const florBox = document.getElementById('florBox');
- const cabalaBox = document.getElementById('cabalaBox');
+  const cabalaBox = document.getElementById('cabalaBox');
   const pageLoader = document.getElementById('pageLoader');
 
   const imgs = [
@@ -532,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
   ].filter(Boolean);
 
   // ---------------- ESTADO ----------------
-  let hasReading = false;
   const basePath = 'cards_images/';
   const backCard = basePath + 'back.jpg';
 
@@ -556,302 +77,258 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   // ---------------- FUNÇÕES ----------------
-const shuffle = arr => arr.sort(() => Math.random() - 0.5);
+  const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
-function newReading() {
-        
-// áudio de fundo preparado se uma nova leitura começar
-        window.memoriesAudio.play().then(() => {
+  function newReading() {
+    // Prepara o áudio de fundo
+    window.memoriesAudio.play().then(() => {
         window.memoriesAudio.pause();
         window.memoriesAudio.currentTime = 0;
     }).catch(e => console.log("Áudio preparado"));
 
-      const florBox = document.getElementById('florBox');
     if (florBox) florBox.style.display = 'none';
-      
-      
-// 👉 MOSTRA A IMAGEM AO CLICAR
-  if (cabalaBox) {
-    cabalaBox.style.display = 'flex';
-    cabalaBox.style.justifyContent = 'center';
-    cabalaBox.style.alignItems = 'center';
-  }
-
-  aiBox.style.display = 'none';
-  promptBox.style.display = 'none';
-  loader.style.display = 'none';
-      
-  shuffleAudio.currentTime = 0;
-  shuffleAudio.play().catch(() => {});
-
-  button.className = 'action-button roxo';
-
-button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
-
-  status.textContent = 'Sua previsão em andamento...';
-  status.className = 'status-process';
-
-  // 3. INCIA ANIMAÇÃO VISUAL DAS CARTAS
-  imgs.forEach(img => img.classList.add('card-spinning'));
-  labels.forEach(l => l.innerText = 'Sorteando');
-
-
-
-  const spin = setInterval(() => {
-    imgs.forEach(img => {
-      const r = cards[Math.floor(Math.random() * cards.length)];
-      img.src = `${basePath}${r.file}.jpg`;
-    });
-  }, 80);
-
-  setTimeout(() => {
-    clearInterval(spin);
-    shuffleAudio.pause();
-
-    const drawn = shuffle([...cards]).slice(0, 3);
-    drawn.forEach((c, i) => {
-      imgs[i].src = `${basePath}${c.file}.jpg`;
-      labels[i].innerText = c.label;
-      imgs[i].classList.remove('card-spinning');
-    });
-
-    loader.style.display = 'block';
-    status.innerHTML = `<span class="status-emoji">🤖</span><span class="status-text">Processando consulta com IA...</span>`;
-    status.className = 'status-loading'; 
-
-    callAuroraAPI(drawn.map(c => c.label));
-
-    hasReading = true;
-    button.className = 'action-button blue';
-    button.innerHTML = `<span class="btn-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
-    cabalaBox && (cabalaBox.style.display = 'none'); // Esconde a cabala ao final do sorteio
-
-        
-   showPrompt(drawn.map(c => c.label));
-   cabalaBox && (cabalaBox.style.display = 'none');
-
-        
-  }, 7500);
-}
-
-
-function showPrompt(drawn) {
-  const pBox = document.getElementById('promptBox');
-  if (pBox) {
-    const cardNamesHtml = drawn.map(name => `<span class="prompt-card-name">${name}</span>`).join('');
-    const termsHtml = `
-      <span style="color: #6b46c1; font-weight: normal;">Passado</span>
-      <span style="color: #6b46c1; font-weight: normal;">Presente</span>
-      <span style="color: #6b46c1; font-weight: normal;">Futuro</span>
-    `;
     
-    pBox.innerHTML = `
-     <p style="margin-top: 12px; color: #7fa3f3; font-weight: bold;">📜 Cartas selecionadas pela IA:</p>
-      <div class="prompt-container">
-        ${cardNamesHtml}
-        ${termsHtml}
-      </div>
-    `;
-    
-    pBox.style.display = 'block';
-  }
-}
-
-
-function clearPrompt() {
-  if (!promptBox) return;
-  promptBox.innerHTML = '';
-  promptBox.style.display = 'none';
-}
-      
-function resetReading() {
-  isResetting = true;
-
-  imgs.forEach(img => img.src = backCard);
-  labels.forEach(l => l.innerText = '');
-
-  clearPrompt();
-
-  aiBox.style.display = 'none';
-  loader.style.display = 'none';
-
-if (cabalaBox) {
-  cabalaBox.style.display = 'none';
-}
-florBox && (florBox.style.display = 'flex');
-  button.innerHTML = `<span class="btn-emoji">🔮</span><span>Embaralhar Cartas</span>`;
-  button.className = 'action-button pink';
-  button.disabled = false;
-
-  status.innerHTML = `<span class="status-text">Aguardando sua consulta...</span>`;
-  status.className = '';
-
-aiBox.style.display = 'none';
-
-const adContainer = document.getElementById('ad-container');
-if (adContainer) {
-  adContainer.style.display = 'none';
-}
-
-// ---------------- DELETA AUDIO ----------------
-// Para a música de fundo ao resetar
-    window.memoriesAudio.pause();
-    window.memoriesAudio.currentTime = 0;      
-
-
-   hasReading = false;
-  isResetting = false
-}
-      
-function shareOnWhatsApp() {
-  const title = document.querySelector('#aiBox h2')?.innerText?.trim() || 'Anora Tarô';
-  const analysisText = document.querySelector('#aiBox p')?.innerText?.trim() || '';
-
-  if (!analysisText) {
-    console.warn('Nenhum texto de análise encontrado para compartilhar.');
-    return;
-  }
-  const WHATSAPP_FOOTER = "\n\n🔮 Anora Tarô — leitura assistida por IA\n⚡ Powered by Geraldo A. Seabra";
-  const message = `✨ ${title}\n\n${analysisText}${WHATSAPP_FOOTER}`;
-
-  try {
-    if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
-      window.AppInventor.setWebViewString(message);
-    } else {
-      const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;
-      window.open(whatsappUrl, '_blank');
+    // Mostra a imagem da cabala
+    if (cabalaBox) {
+      cabalaBox.style.display = 'flex';
+      cabalaBox.style.justifyContent = 'center';
+      cabalaBox.style.alignItems = 'center';
     }
-  } catch (error) {
-    console.error("Erro ao tentar compartilhar no WhatsApp:", error);
-  }
-}
 
-        // ---------------- ELEMENTOS DO DOM API ----------------
+    aiBox.style.display = 'none';
+    promptBox.style.display = 'none';
+    loader.style.display = 'none';
       
-async function callAuroraAPI(cardsDrawn) {
-      
+    shuffleAudio.currentTime = 0;
+    shuffleAudio.play().catch(() => {});
 
-// Procure este trecho no seu index.html do Anora Tarô
-async function callAuroraAPI(cardsDrawn) {
-  try {
-    // ALTERE PARA ISSO:
-    const res = await fetch('/api/chat', { 
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: [{
-          role: "user",
-          content: `Interprete as cartas ${cardsDrawn.join(', ')}`
-      
-    const data = await res.json();
-        if (isResetting) return;
-    const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
+    button.className = 'action-button roxo';
+    button.innerHTML = `<span class="status-emoji giro">🌀</span><span class="status-text">Embaralhando Cartas</span>`;
+    status.textContent = 'Sua previsão em andamento...';
+    status.className = 'status-process';
 
-// MONTAGEM DO HTML
-aiBox.innerHTML = `
-    <h2 class="ai-title" style="display: flex; align-items: center; gap: 10px;"> 
-        <img src="cards_images/marca_anora.png" class="ai-logo" style="width: 30px; height: auto;">
-        Anora Assistente de IA 
-    </h2>
-    
-   <div id="aiResponseContent" style="text-align: justify; overflow: hidden;">
-    <button id="shareButton" onclick="shareOnWhatsApp()" style="display: flex;">
-        <img src="cards_images/zap.png" alt="Compartilhar">
-    </button>
-    <p style="margin: 0; line-height: 1.6; color: #333;">${text}</p>
-</div>
+    imgs.forEach(img => img.classList.add('card-spinning'));
+    labels.forEach(l => l.innerText = 'Sorteando');
 
-<div id="ad-container">
-    <span style="font-size: 10px; color: #999; margin-bottom: 5px;">Publicidade</span>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3940256099942544"
-         data-ad-slot="6300978111"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins></div>
-`;
+    const spin = setInterval(() => {
+      imgs.forEach(img => {
+        const r = cards[Math.floor(Math.random() * cards.length)];
+        img.src = `${basePath}${r.file}.jpg`;
+      });
+    }, 80);
 
-// Ativa o AdMob de forma responsiva App Inventor e Web
-
-const adContainer = document.getElementById('ad-container');
-if (adContainer) {
-    adContainer.style.display = 'flex'; // Mostra o container
-    
-    // Executa o push do AdMob com uma pequena espera para o DOM respirar
     setTimeout(() => {
-        try {
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (e) {
-            console.log("AdMob ainda carregando ou bloqueado.");
-        }
-    }, 300);
-}
+      clearInterval(spin);
+      shuffleAudio.pause();
 
+      const drawn = shuffle([...cards]).slice(0, 3);
+      drawn.forEach((c, i) => {
+        imgs[i].src = `${basePath}${c.file}.jpg`;
+        labels[i].innerText = c.label;
+        imgs[i].classList.remove('card-spinning');
+      });
 
+      loader.style.display = 'block';
+      status.innerHTML = `<span class="status-emoji">🤖</span><span class="status-text">Processando consulta com IA...</span>`;
+      status.className = 'status-loading'; 
 
-        
-// TOCA O ÁUDIO DE MEMÓRIAS (Agora liberado pelo clique inicial)
-        window.memoriesAudio.volume = 0.5; // Opcional: define um volume inicial mais baixo para não assustar o usuário
-        window.memoriesAudio.play().catch(err => {
-        console.error("ERRO DETALHADO:", err.name, err.message);
-    // Se der erro de 'NotAllowedError', é o Android bloqueando o autoplay
-});     
+      callAuroraAPI(drawn.map(c => c.label));
 
-        status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
- 
-        
-    status.className = 'status-success';
-  } catch (error) {
-    console.error('Erro na chamada da API:', error);
-    aiBox.innerHTML = `<p>Consulta solicitada ainda indisponível.</p>`;
-    status.textContent = 'Erro ao acessar análise feita pelo sistema.';
-    status.className = 'status-error';
+      hasReading = true;
+      button.className = 'action-button blue';
+      button.innerHTML = `<span class="btn-emoji">🔄</span><span class="status-text">Nova Consulta</span>`;
+      cabalaBox && (cabalaBox.style.display = 'none');
+      showPrompt(drawn.map(c => c.label));
+    }, 7500);
   }
-  loader.style.display = 'none';
-      
-  // >>> PONTO CHAVE: MOSTRANDO O AIBox E O ANÚNCIO <<<
-      
-  aiBox.style.display = 'block';
-  shareButton.style.display = 'flex'; // Use flex para manter ícone e texto alinhados    
 
-  // CORREÇÃO: Encontra o container do anúncio (que agora está dentro do aiBox)
-  // e o torna visível.
-  const adContainer = document.getElementById('ad-container');
-  if (adContainer) {
-    adContainer.style.display = 'block';
-    // Tenta carregar o anúncio agora que o container está visível.
-    try {
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.error("Erro ao tentar carregar o anúncio:", e);
+  function showPrompt(drawn) {
+    const pBox = document.getElementById('promptBox');
+    if (pBox) {
+      const cardNamesHtml = drawn.map(name => `<span class="prompt-card-name">${name}</span>`).join('');
+      const termsHtml = `
+        <span style="color: #6b46c1; font-weight: normal;">Passado</span>
+        <span style="color: #6b46c1; font-weight: normal;">Presente</span>
+        <span style="color: #6b46c1; font-weight: normal;">Futuro</span>
+      `;
+      
+      pBox.innerHTML = `
+       <p style="margin-top: 12px; color: #7fa3f3; font-weight: bold;">📜 Cartas selecionadas pela IA:</p>
+        <div class="prompt-container">
+          ${cardNamesHtml}
+          ${termsHtml}
+        </div>
+      `;
+      
+      pBox.style.display = 'block';
     }
   }
-} 
-      
-      // ---------------- EVENTOS ----------------
-if (button) {
-  button.onclick = () => hasReading ? resetReading() : newReading();
-}
 
-document.addEventListener('click', (event) => {
-  if (event.target && event.target.id === 'shareButton') {
-    shareOnWhatsApp();
+  function clearPrompt() {
+    if (!promptBox) return;
+    promptBox.innerHTML = '';
+    promptBox.style.display = 'none';
+  }
+        
+  function resetReading() {
+    isResetting = true;
+    imgs.forEach(img => img.src = backCard);
+    labels.forEach(l => l.innerText = '');
+    clearPrompt();
+    aiBox.style.display = 'none';
+    loader.style.display = 'none';
+    if (cabalaBox) cabalaBox.style.display = 'none';
+    florBox && (florBox.style.display = 'flex');
+    
+    button.innerHTML = `<span class="btn-emoji">🔮</span><span>Embaralhar Cartas</span>`;
+    button.className = 'action-button pink';
+    button.disabled = false;
+    status.innerHTML = `<span class="status-text">Aguardando sua consulta...</span>`;
+    status.className = '';
+    
+    const adContainer = document.getElementById('ad-container');
+    if (adContainer) adContainer.style.display = 'none';
+
+    window.memoriesAudio.pause();
+    window.memoriesAudio.currentTime = 0;       
+
+    hasReading = false;
+    isResetting = false;
+  }
+        
+  function shareOnWhatsApp() {
+    const title = document.querySelector('#aiBox h2')?.innerText?.trim() || 'Anora Tarô';
+    const analysisText = document.querySelector('#aiBox p')?.innerText?.trim() || '';
+
+    if (!analysisText) {
+      console.warn('Nenhum texto de análise encontrado para compartilhar.');
+      return;
+    }
+    const WHATSAPP_FOOTER = "\n\n🔮 Anora Tarô — leitura assistida por IA\n⚡ Powered by Geraldo A. Seabra";
+    const message = `✨ ${title}\n\n${analysisText}${WHATSAPP_FOOTER}`;
+
+    try {
+      if (window.AppInventor && typeof window.AppInventor.setWebViewString === 'function') {
+        window.AppInventor.setWebViewString(message);
+      } else {
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;
+        window.open(whatsappUrl, '_blank');
+      }
+    } catch (error) {
+      console.error("Erro ao tentar compartilhar no WhatsApp:", error);
+    }
+  }
+
+  // >>> FUNÇÃO DA API CORRIGIDA <<<
+  async function callAuroraAPI(cardsDrawn) {
+    try {
+      // CORREÇÃO 1: Usar a URL completa da API.
+      const res = await fetch('https://aurora-api-final-2025.vercel.app/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        // CORREÇÃO 2: Usar o prompt detalhado e corrigir o erro de sintaxe.
+        body: JSON.stringify({
+          messages: [{
+            role: "user",
+            content: `Faça uma pequena introdução interpretativa da sequência de cartas antes de iniciar a análise de cada ítem. Depois realize uma análise profunda da situação do consulente, em parágrafos separados, os significados do passado, do presente e do futuro de forma integrada e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente.Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
+
+**Situação do Consulente no Passado:**
+Escreva aqui sua análise sobre a carta ${cardsDrawn[0]} e sua influência no passado do consulente.
+
+**Situação do Consulente no Presente:**
+Escreva aqui sua análise sobre a carta ${cardsDrawn[1]} e sua influência no presente do consulente.
+
+**Situação do Consulente no Futuro:**
+Escreva aqui sua análise sobre a carta ${cardsDrawn[2]} e sua influência no futuro do consulente.
+
+**Análise Contextualizada do Consulente:**
+Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma orientação clara e integrada para o consulente.`
+          }]
+        })
+      });
+
+      if (!res.ok) {
+          throw new Error(`Erro de rede: ${res.status} ${res.statusText}`);
+      }
+
+      const data = await res.json();
+      if (isResetting) return;
+      
+      const text = data.choices?.[0]?.message?.content || 'A IA não retornou nenhuma análise.';
+
+      // Monta o HTML uma única vez
+      aiBox.innerHTML = `
+        <h2 class="ai-title">
+          <img src="cards_images/marca_anora.png" class="ai-logo">
+          Anora Assistente de IA
+        </h2>
+        <div id="aiResponseContent" style="text-align: justify; overflow: hidden;">
+          <button id="shareButton" onclick="shareOnWhatsApp()" style="display: flex;">
+              <img src="cards_images/zap.png" alt="Compartilhar">
+          </button>
+          <p style="margin: 0; line-height: 1.6; color: #333;">${text}</p>
+        </div>
+        <div id="ad-container">
+          <span style="font-size: 10px; color: #999; margin-bottom: 5px;">Publicidade</span>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-3940256099942544"
+               data-ad-slot="6300978111"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+        </div>
+      `;
+
+      status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
+      status.className = 'status-success';
+      
+      // Toca o áudio de memórias
+      window.memoriesAudio.volume = 0.5;
+      window.memoriesAudio.play().catch(err => console.error("Erro ao tocar áudio de memória:", err));
+
+    } catch (error) {
+      console.error('Erro na chamada da API:', error);
+      aiBox.innerHTML = `<p>Erro ao acessar a reflexão. Tente novamente.</p>`;
+      status.textContent = 'Erro de carregamento';
+      status.className = 'status-error';
+    }
+
+    loader.style.display = 'none';
+    aiBox.style.display = 'block';
+
+    // Ativa o AdMob
+    const adContainer = document.getElementById('ad-container');
+    if (adContainer) {
+        adContainer.style.display = 'flex';
+        setTimeout(() => {
+            try {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {
+                console.error("Erro ao tentar carregar o anúncio:", e);
+            }
+        }, 300);
+    }
+  }
+        
+  // ---------------- EVENTOS ----------------
+  if (button) {
+    button.onclick = () => hasReading ? resetReading() : newReading();
+  }
+
+  document.addEventListener('click', (event) => {
+    if (event.target && event.target.id === 'shareButton') {
+      shareOnWhatsApp();
+    }
+  });
+
+  window.addEventListener('load', () => {
+    setTimeout(() => pageLoader?.classList.add('hidden'), 1500);
+  });
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .catch(err => console.warn('SW erro:', err));
   }
 });
-
-window.addEventListener('load', () => {
-  setTimeout(() => pageLoader?.classList.add('hidden'), 1500);
-});
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js')
-    .catch(err => console.warn('SW erro:', err));
-}
-});
-      
-   
 </script>
-</body>
-</html>
-
