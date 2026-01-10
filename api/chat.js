@@ -38,7 +38,7 @@ export default async function handler(req, res) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.GROQ_API_KEY.trim()}` // trim() evita erros de espaço
+                 'Authorization': `Bearer ${process.env.GROQ_API_KEY.trim()}` // trim() evita erros de espaço
             },
             body: JSON.stringify({
                 model: model || 'llama-3.3-70b-versatile',
@@ -69,3 +69,4 @@ export default async function handler(req, res) {
         });
     }
 } // <--- Chave extra removida aqui
+
