@@ -33,8 +33,8 @@ export default async function handler(req, res) {
         }
 
         console.log('📥 Chamando Groq API para Anora Tarô...');
+      const res = await fetch('/api/chat', {
 
-        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,4 +69,5 @@ export default async function handler(req, res) {
         });
     }
 } // <--- Chave extra removida aqui
+
 
