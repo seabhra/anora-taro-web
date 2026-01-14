@@ -226,28 +226,19 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       // CORREÇÃO 1: Usar a URL completa da API.
       const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        // CORREÇÃO 2: Usar o prompt detalhado e corrigir o erro de sintaxe.
-        body: JSON.stringify({
-          messages: [{
-            role: "user",
-            content: `Faça uma pequena introdução interpretativa da sequência de cartas antes de iniciar a análise de cada ítem. Depois realize uma análise profunda da situação do consulente, em parágrafos separados, os significados do passado, do presente e do futuro de forma integrada e, ao final, construa uma síntese clara, coerente e significativa, conectando os símbolos revelados ao momento vivido pelo consulente.Analise as três cartas sorteadas, estruturando sua resposta em quatro parágrafos distintos. Cada parágrafo deve ter um título em negrito. Siga exatamente esta estrutura:
 
-**Situação do Consulente no Passado:**
-Escreva aqui sua análise sobre a carta ${cardsDrawn[0]} e sua influência no passado do consulente.
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{
+          role: "user",
+          content: `Interprete as cartas ${cardsDrawn.join(', ')}`
+        }]
+      })
+    });
 
-**Situação do Consulente no Presente:**
-Escreva aqui sua análise sobre a carta ${cardsDrawn[1]} e sua influência no presente do consulente.
 
-**Situação do Consulente no Futuro:**
-Escreva aqui sua análise sobre a carta ${cardsDrawn[2]} e sua influência no futuro do consulente.
-
-**Análise Contextualizada do Consulente:**
-Escreva aqui uma síntese final, conectando as três cartas e oferecendo uma orientação clara e integrada para o consulente.`
-          }]
-        })
-      });
+          
 
       if (!res.ok) {
           throw new Error(`Erro de rede: ${res.status} ${res.statusText}`);
