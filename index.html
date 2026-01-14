@@ -1,3 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+      <!-- 1. SCRIPT PRINCIPAL DO ADMOB -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3940256099942544"
+            crossorigin="anonymous"></script>
+  
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#6b46c1">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+  
+<title>Anora Tarô</title>
+
+<style>
+ 
+body {
+margin: 0;
+padding: 20px;
+font-family: Arial, Helvetica, sans-serif;
+background: #f7f7f7;
+text-align: center;
+}
+
+.cards {
+display: flex;
+justify-content: center;
+gap: 12px;
+margin-bottom: 24px;
+}
+
+.card { width: 90px; }
+
+.card img {
+width: 100%;
+border-radius: 10px;
+box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.flors {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.flor {
+  width: 70px;
+  height: auto;
+}
+
+.flor img {
+  width: 100%;
+  height: auto;
+  display: block;
+  box-shadow: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* Container */
+#cabalaBox {
+  display: none; /* começa oculto */
+  justify-content: center;
+  align-items: center;
+  margin: 16px 0;
+  animation: fadeIn 0.6s ease;
+}
+
+/* Imagem */
+#cabalaBox img {
+  width: 80px;          /* 👈 tamanho real */
+  height: auto;
+  animation: spin 2.4s linear infinite; /* 🐢 mais lento */
+  opacity: 0.9;
+  display: block;       /* 👈 ESSENCIAL */
+}
+
+/* Animação */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+      
+.label {
+margin-top: 6px;
+font-size: 13px;
+font-weight: bold;
+}
+
+.card-name {
+font-size: 11px;
+color: #6b46c1;
+min-height: 14px;
+}
+
+.action-button {
+width: 100%;
+max-width: 320px;
+height: 50px;
+border: none;
+border-radius: 4px;
+font-size: 18px;
+font-weight: bold;
+color: #fff;
+cursor: pointer;
+}
+
+/* Status da cor do botão */
+  
+.pink { background:#fd98be; }
+.roxo { background:#de86e5 }
+.blue { background:#98e6ce; }
+
+/* Estilo marca anora na mensagem compartilhada */
+  
+  .ai-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Shape arredondado */
+.ai-logo {
+  width: 26px;
+  height: 26px;
+  padding: 6px;
+  background: #f3e8ff;           /* lilás suave */
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+      
+/* Estilo padrão do status */
+#status {
+margin-top: 16px;
+font-weight: bold;
+color: #718096;
+transition: color 0.3s ease;
+}
+/* status da mudança de cores da label abaixo do botão*/
+
+#status.status-process {
+color: #4d0567; /* Roxinho */
+}
+#status.status-loading {
+color: #1383c9; /* Azul */
+}
+#status.status-success {
+color: #38a169; /* Verde */
+}
+#status.status-error {
+color: #ce3149; /* Vermelho */
+}
+
+/* Loader da API */
+#loader {
+display: none;
+margin: 20px auto;
+width: 50px;
+height: 50px;
+border: 5px solid rgba(131, 242, 212, 0.2);
+border-top: 5px solid #83f2d4;
+border-radius: 50%;
+animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
+
+/* Loader da página */
+#pageLoader {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: #f7f7f7;
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 9999;
+opacity: 1;
+transition: opacity 0.5s ease-out;
+}
+
+#pageLoader.hidden {
+opacity: 0;
+pointer-events: none;
+}
+
+.page-spinner {
+width: 60px;
+height: 60px;
+border: 6px solid rgba(131, 242, 212, 0.3);
+border-top: 6px solid #83f2d4;
+border-radius: 50%;
+animation: spin 1s linear infinite;
+}
+
+/* ESTILO DA CAIXA DE RESPOSTA DA IA */
+#aiBox { /* CORREÇÃO: ID unificado para aiBox */
+display: none;
+margin-top: 16px;
+padding: 5px;
+background: #fff;
+border-radius: 12px;
+font-size: 16px;
+text-align: center;
+}
+
+/* ESTILO DO NOVO CABEÇALHO COMPARTILHADO H2 */
+#aiBox h2 {
+text-align: center;
+color: #6b46c1;
+margin-top: 0;
+margin-bottom: 16px;
+font-size: 18px;
+font-weight: bold;
+}
+
+/* Estilo do parágrafo com espaçamento <<< */
+#aiBox p {
+line-height: 1.6;
+margin: 0; /* Reseta a margem */
+}
+
+/* Adiciona espaço apenas ENTRE os parágrafos (a partir do segundo) */
+  
+#aiBox p:not(:first-child) {
+margin-top: 1em;
+}
+
+/* ESTILO PARA OS TÍTULOS DENTRO DA ANÁLISE */
+#aiBox p strong {
+color: #6b46c1;
+display: block;
+margin-top: 18px;
+margin-bottom: 8px;
+font-size: 15px;
+}
+
+ /* ESTILO PARA BOTÃO WHATSAPP */
+
+#shareButton {
+  width: 100%;
+  max-width: 320px;
+  height: 45px;
+  margin: 12px auto 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #fff;
+  background-color: #25D366;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Estado oculto */
+#shareButton.hidden {
+  display: none;
+}
+
+/* Hover elegante */
+#shareButton:hover {
+  background-color: #128C7E;
+  transform: scale(1.02);
+}
+
+/* Feedback de clique */
+#shareButton:active {
+  transform: scale(0.98);
+}
+
+/* Efeito de vibração/giro das cartas */
+.card-spinning {
+    animation: spinEffect 0.15s infinite linear;
+    filter: blur(1px); /* Leve desfoque para dar sensação de velocidade */
+}
+
+@keyframes spinEffect {
+    0% { transform: translateY(-5px); }
+    50% { transform: translateY(5px); }
+    100% { transform: translateY(-5px); }
+}
+ /* CONTROLE DE ESPAÇO EMOJI FORA JS */
+    
+ .btn-emoji {
+  margin-right: 8px;
+}
+ /* CONTROLE DE ESPAÇO EMOJI DENTRO DO JS */
+
+      /* 1. Define a animação de rotação (giro de 360 graus) */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.status-emoji {
+  margin-right: 8px; /* Define o espaçamento à direita */
+  display: inline-block; /* ESSENCIAL para a margem funcionar */
+  vertical-align: middle; /* Alinha o emoji verticalmente com o texto */
+}
+
+.status-text {
+ vertical-align: middle;
+}
+
+.status-emoji.giro {
+  margin-right: 8px;
+  display: inline-block; /* Necessário para a animação funcionar bem em spans */
+  animation: spin 0.6s linear infinite;
+}
+  
+ 
+/* Container do AdMob Google */
+#ad-container {
+  margin-top: 24px;
+  width: 100%;
+  min-height: 0;   /* 👈 altura mínima realista */
+  text-align: center;
+  display: none;     /* começa escondido */
+ border: 1px dashed red; /* debug visual */
+}
+ 
+ 
+</style>
+</head>
+
+<body>
+
+<!-- Loader da página -->
+           
+<div id="pageLoader">
+<div class="page-spinner"></div>
+</div>
+
+<div class="cards">
+<div class="card">
+<img id="card1" src="cards_images/back.jpg">
+<div class="label">Passado</div>
+<div class="card-name" id="name1"></div>
+</div>
+<div class="card">
+<img id="card2" src="cards_images/back.jpg">
+<div class="label">Presente</div>
+<div class="card-name" id="name2"></div>
+</div>
+<div class="card">
+<img id="card3" src="cards_images/back.jpg">
+<div class="label">Futuro</div>
+<div class="card-name" id="name3"></div>
+</div>
+</div>
+
+<button id="actionButton" class="action-button pink">
+  <span class="btn-emoji">🔮</span>
+  <span>Embaralhar Cartas</span>
+</button>
+
+  <!-- LABEL AGUARDANDO SUA CONSULTA -->
+  <div id="status">
+  <span class="status-emoji"></span>
+  <span class="status-text">Aguardando sua consulta...</span>
+  </div>
+  
+ <!-- LOCAL DA FLOR DE LIZ -->
+  
+<div class="flors" id="florBox">
+  <div class="flor">
+    <img src="cards_images/liz.png" alt="Flor simbólica">
+  </div>
+</div>
+
+<div id="cabalaBox" style="display:none;">
+  <img src="cards_images/cabala.png" alt="Cabala">
+</div>
+
+      
+<div id="loader"></div>
+
+<!-- LOCAL DO PROMPT DA IA -->
+  
+<div id="promptBox"></div>
+
+<!-- LOCAL Compartilhar no WhatsApp e Anúncio -->
+
+<div id="aiBox" style="display: none;">
+  <!-- conteúdo do prompt da IA entra aqui -->
+
+  <!-- 👇 FICA FIXO, NÃO É RECRIADO -->
+  <div id="ad-container">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-3940256099942544"
+         data-ad-slot="6300978111"
+         data-ad-format="auto"
+         data-full-width-responsive="true">
+    </ins>
+  </div>
+</div
+
 <script>
 // ===================================================================
 // SCRIPT PRINCIPAL - ORÁCULO ANORA TARÔ (VERSÃO FINAL CORRIGIDA)
@@ -221,7 +636,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // >>> FUNÇÃO DA API CORRIGIDA <<<
+  // >>> FUNÇÃO DA API <<<
   async function callAuroraAPI(cardsDrawn) {
     try {
       // CORREÇÃO 1: Usar a URL completa da API.
@@ -324,3 +739,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+
+    
