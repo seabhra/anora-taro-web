@@ -705,18 +705,26 @@ document.addEventListener('DOMContentLoaded', () => {
     aiBox.style.display = 'block';
 
     // Ativa o AdMob
+        
+ // Ativa o AdMob apenas em produção
+
+        if (process.env.NODE_ENV === 'production') {
+
     const adContainer = document.getElementById('ad-container');
+
     if (adContainer) {
         adContainer.style.display = 'flex';
+
         setTimeout(() => {
             try {
-                (adsbygoogle = window.adsbygoogle || []).push({});
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
             } catch (e) {
                 console.error("Erro ao tentar carregar o anúncio:", e);
             }
         }, 300);
     }
-  }
+}
+
         
   // ---------------- EVENTOS ----------------
   if (button) {
@@ -741,3 +749,30 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
     
+  
+      
+      // ---------------- EVENTOS ----------------
+if (button) {
+  button.onclick = () => hasReading ? resetReading() : newReading();
+}
+
+document.addEventListener('click', (event) => {
+  if (event.target && event.target.id === 'shareButton') {
+    shareOnWhatsApp();
+  }
+});
+
+window.addEventListener('load', () => {
+  setTimeout(() => pageLoader?.classList.add('hidden'), 1500);
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .catch(err => console.warn('SW erro:', err));
+}
+});
+      
+   
+</script>
+</body>
+</html>
