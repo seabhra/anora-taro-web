@@ -696,7 +696,7 @@ async function callAuroraAPI(cardsDrawn) {
         <img src="cards_images/marca_anora.png" class="ai-logo">
         Anora Assistente de IA
       </h2>
-      <p>${mockResponse}</p>
+      <p>${text}</p>
       <img src="cards_images/zap.png" class="btn-zap-redondo" onclick="shareOnWhatsApp()" title="Compartilhar">
       <div id="ad-container">
         <ins class="adsbygoogle"
@@ -713,77 +713,16 @@ async function callAuroraAPI(cardsDrawn) {
     loader.style.display = 'none';
     aiBox.style.display = 'block';
 
-    // Carrega anúncio
-    const adContainer = document.getElementById('ad-container');
-    if (adContainer) {
-      adContainer.style.display = 'block';
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    }
-
+   
     // Toca áudio (opcional)
     memoriesAudio.volume = 0.5;
     memoriesAudio.play().catch(e => console.log("Áudio ignorado:", e));
-    
-  } catch (error) {
-    console.error('Erro simulado:', error);
-    aiBox.innerHTML = `<p>Modo offline: análise simulada.</p>`;
-    status.textContent = 'Modo de demonstração.';
-    status.className = 'status-success';
-    loader.style.display = 'none';
-    aiBox.style.display = 'block';
-  }
-}
-        // ---------------- ELEMENTOS DO DOM API ----------------
-      
-async function callAuroraAPI(cardsDrawn) {
-      
-
-  try {
-
-    const res = await fetch('https://anora-taro-web.vercel.app/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: [{
-          role: "user",
-         content: `✨ As cartas ${cardsDrawn.join(', ')} revelam um momento de transformação. Confie na sua intuição!`
-        }]
-      })
-    });
-    const data = await res.json();
-        if (isResetting) return;
-    const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
-
-
-      aiBox.innerHTML = `
-      <h2 class="ai-title">
-        <img src="cards_images/marca_anora.png" class="ai-logo">
-        Anora Assistente de IA
-      </h2>
-      <p>${text}</p>
-      <img src="cards_images/zap.png" class="btn-zap-redondo" onclick="shareOnWhatsApp()" title="Compartilhar">
-            <div id="conteudoIA"></div>
-      
-      <div id="ad-container">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-3940256099942544"
-             data-ad-slot="6300978111"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-    `;
-
-// TOCA O ÁUDIO DE MEMÓRIAS (Agora liberado pelo clique inicial)
-        memoriesAudio.volume = 0.5; // Opcional: define um volume inicial mais baixo para não assustar o usuário
-      
-        memoriesAudio.play().catch(err => {
+    memoriesAudio.play().catch(err => {
     console.error("ERRO DETALHADO:", err.name, err.message);
     // Se der erro de 'NotAllowedError', é o Android bloqueando o autoplay
 });
      
-status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
- 
+
         
     status.className = 'status-success';
   } catch (error) {
