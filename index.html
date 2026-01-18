@@ -641,7 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function callAuroraAPI(cardsDrawn) {
     try {
       // CORREÇÃO 1: Usar a URL completa da API.
-      const res = await fetch('/api/chat', {
+      const res = await fetch('anora-taro-web.vercel.app/api/chat', {
 
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
