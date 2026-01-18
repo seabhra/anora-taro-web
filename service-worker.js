@@ -1,26 +1,32 @@
-const CACHE_NAME = 'anora-taro-v3'; // Versão atualizada para forçar o navegador a recarregar
+const CACHE_NAME = 'anora-taro-v4'; // Mudei para v4 para forçar limpeza imediata
 
+// AQUI ESTAVA O PROBLEMA: Liste SOMENTE arquivos que realmente existem na pasta
+// Se não tiver certeza, comente a lista e deixe vazio temporariamente para testar
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/cards_images/back.jpg',
-  '/cards_images/marca_anora.png',
+  // '/' // Removi pois não há index.html
+  // '/index.html', // Removi pois provavelmente é Anora_prompt.html
+  // '/manifest.json', // Comente se estiver dando erro
+  '/cards_images/back.jpg', // Verifique se este arquivo existe em localhost
+  '/cards_images/marca_anora.png', 
   '/cards_images/zap.png'
 ];
 
-// Instalação: Salva arquivos básicos no celular do usuário
 self.addEventListener('install', event => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('📦 Cache Anora Tarô atualizado');
-      return cache.addAll(urlsToCache);
+      console.log('📦 Tentando cachear...');
+      
+      // TRATAMENTO DE ERRO: Isso previne a falha se um arquivo 404
+      return Promise.allSettled(urlsToCache.map(url => {
+          return cache.add(url).catch(err => {
+              console.warn(`⚠️ Falha ao cachear ${url}:`, err);
+          });
+      })).then(() => console.log('✅ Cache concluído (com ou sem falhas)'));
     })
   );
 });
 
-// Ativação: Remove caches de versões antigas
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -36,22 +42,28 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Interceptação de pedidos (Fetch)
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // 1. EXCEÇÃO PARA API INTERNA:
-  // Se a requisição for para a sua própria API (/api/chat), 
-  // o Service Worker NÃO deve intervir. Deixa ir direto pela internet.
+  // 1. BLOQUEIO DE API:
+  // Se for para /api/ (seja localhost ou Vercel), não intervir
   if (url.pathname.startsWith('/api/')) {
-    return; // Sai da função e deixa o navegador tratar via rede
+    return; // Sai da função, deixa o browser fazer o fetch direto
   }
 
-  // 2. ESTRATÉGIA PARA OUTROS ARQUIVOS:
-  // Tenta buscar no cache (offline), se não achar, busca na internet.
+  // 2. CACHE DE ARQUIVOS ESTÁTICOS:
   event.respondWith(
     caches.match(event.request).then(response => {
-      return response || fetch(event.request);
+      // Cache First Strategy: Tenta cache, se não tiver, busca rede
+      if (response) {
+        return response; 
+      }
+      return fetch(event.request).catch(() => {
+          // Opcional: Retornar uma página offline customizada se falhar a rede
+          return new Response('Sem conexão');
+      });
     })
   );
 });
+
+
