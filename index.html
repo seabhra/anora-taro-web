@@ -723,23 +723,26 @@ async function callAuroraAPI(cardsDrawn) {
 }
         // ---------------- ELEMENTOS DO DOM API ----------------
       
-        // ---------------- ELEMENTOS DO DOM API ----------------
+async function callAuroraAPI(cardsDrawn) {
       
-async function callAuroraAPI(cardsDrawn) {      
+
   try {
-    const res = await fetch('api/chat', {
+
+    const res = await fetch('https://anora-taro-web.vercel.app', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         messages: [{
           role: "user",
-          content: `Interprete as cartas ${cardsDrawn.join(', ')}`
+         content: `✨ As cartas ${cardsDrawn.join(', ')} revelam um momento de transformação. Confie na sua intuição!`
         }]
       })
     });
     const data = await res.json();
         if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
+
+
       aiBox.innerHTML = `
       <h2 class="ai-title">
         <img src="cards_images/marca_anora.png" class="ai-logo">
@@ -758,16 +761,19 @@ async function callAuroraAPI(cardsDrawn) {
              data-full-width-responsive="true"></ins>
       </div>
     `;
+
 // TOCA O ÁUDIO DE MEMÓRIAS (Agora liberado pelo clique inicial)
         memoriesAudio.volume = 0.5; // Opcional: define um volume inicial mais baixo para não assustar o usuário
       
         memoriesAudio.play().catch(err => {
     console.error("ERRO DETALHADO:", err.name, err.message);
     // Se der erro de 'NotAllowedError', é o Android bloqueando o autoplay
-});     
+});
+     
 status.innerHTML = `<span class="status-emoji">✅</span><span class="status-text">Consulta realizada com sucesso</span>`;
  
-            status.className = 'status-success';
+        
+    status.className = 'status-success';
   } catch (error) {
     console.error('Erro na chamada da API:', error);
     aiBox.innerHTML = `<p>Indisponível no momento por problema de acesso.</p>`;
