@@ -740,7 +740,7 @@ async function callAuroraAPI(cardsDrawn) {
 
   try {
 
-    const res = await fetch('https://anora-taro-web.vercel.app', {
+    const res = await fetch('https://anora-taro-web.vercel.app/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
