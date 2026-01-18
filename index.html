@@ -30,7 +30,7 @@ html, body {
 /* Layout flexível e adaptável */
 body {
   display: flex;
- 
+  padding-top: 20px; /* 👈 margem visual superior */
   font-family: Arial, Helvetica, sans-serif;
   flex-direction: column;
   min-height: 100vh;
@@ -50,8 +50,6 @@ img, video, canvas {
     font-size: 16px;
   }
 }
-
-
 
 
 .cards {
@@ -239,6 +237,7 @@ animation: spin 1s linear infinite;
 }
 
 /* ESTILO DA CAIXA DE RESPOSTA DA IA */
+
 #aiBox { /* CORREÇÃO: ID unificado para aiBox */
 display: none;
 margin-top: 16px;
@@ -280,28 +279,23 @@ margin-bottom: 8px;
 font-size: 15px;
 }
 
- /* ESTILO PARA BOTÃO WHATSAPP */
 
-#shareButton {
-  width: 100%;
-  max-width: 320px;
+/* Botão redondo do WhatsApp */
+.btn-zap-redondo {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  width: 45px;
   height: 45px;
-  margin: 12px auto 0;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: #fff;
-  background-color: #25D366;
+
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: transform 0.2s;
+  z-index: 10; /* garante que fica acima do texto */
 }
 
-/* Estado oculto */
-#shareButton.hidden {
-  display: none;
+.btn-zap-redondo:hover {
+  transform: scale(1.1);
 }
 
 /* Hover elegante */
@@ -370,7 +364,6 @@ font-size: 15px;
  border: 1px dashed red; /* debug visual */
 }
  
- 
 </style>
 </head>
 
@@ -405,6 +398,8 @@ font-size: 15px;
   <span>Embaralhar Cartas</span>
 </button>
 
+
+
   <!-- LABEL AGUARDANDO SUA CONSULTA -->
   <div id="status">
   <span class="status-emoji"></span>
@@ -426,14 +421,15 @@ font-size: 15px;
       
 <div id="loader"></div>
 
-<!-- LOCAL DO PROMPT DA IA -->
   
+<!-- LOCAL DO PROMPT DA IA -->
 <div id="promptBox"></div>
 
 <!-- LOCAL Compartilhar no WhatsApp e Anúncio -->
-
 <div id="aiBox" style="display: none;">
-  <!-- conteúdo do prompt da IA entra aqui -->
+
+  <!-- 👇 CONTEÚDO DA IA (DINÂMICO) -->
+  <div id="conteudoIA"></div>
 
   <!-- 👇 FICA FIXO, NÃO É RECRIADO -->
   <div id="ad-container">
@@ -445,14 +441,13 @@ font-size: 15px;
          data-full-width-responsive="true">
     </ins>
   </div>
-</div
+
+</div>
 
 
    
+<!-- CORPO DO APLICATIVO -->
 
-  
- --  CORPO DO JS DO APLICATIVO  -->
-  
 <script>
 // ===================================================================
 // SCRIPT PRINCIPAL - ORÁCULO ANORA TARÔ (VERSÃO FINAL CORRIGIDA)
@@ -678,7 +673,7 @@ async function callAuroraAPI(cardsDrawn) {
 
   try {
 
-    const res = await fetch('http://localhost:3000/api/chat', {
+    const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -699,7 +694,8 @@ async function callAuroraAPI(cardsDrawn) {
         Anora Assistente de IA
       </h2>
       <p>${text}</p>
-      <button id="shareButton" class="action-button">Compartilhar no WhatsApp</button>
+      <img src="images_runas/zap.png" class="btn-zap-redondo" onclick="shareOnWhatsApp()" title="Compartilhar">
+            <div id="conteudoIA"></div>
       
       <div id="ad-container">
         <ins class="adsbygoogle"
