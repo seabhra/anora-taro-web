@@ -672,12 +672,24 @@ function shareOnWhatsApp() {
   }
 }
 
-async function callAuroraAPI(cardsDrawn) {
+// ---------------- ELEMENTOS DO DOM API ----------------
+      
+async function callAuroraAPI(cardsDrawn) {      
   try {
-    // Simula delay de rede
-    await new Promise(r => setTimeout(r, 2000));
+    const res = await fetch('https://anora-taro-web.vercel.app/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{
+          role: "user",
+          content: `Interprete as cartas ${cardsDrawn.join(', ')}`
+        }]
+      })
+    });
+    const data = await res.json();
+        if (isResetting) return;
+    const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
-    const mockResponse = `✨ As cartas ${cardsDrawn.join(', ')} revelam um momento de transformação. Confie na sua intuição!`;
 
     aiBox.innerHTML = `
       <h2 class="ai-title">
