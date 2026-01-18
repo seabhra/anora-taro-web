@@ -51,6 +51,7 @@ img, video, canvas {
   }
 }
 
+/* Ajuste das cartas */
 
 .cards {
 display: flex;
@@ -309,7 +310,9 @@ font-size: 15px;
   transform: scale(0.98);
 }
 
+
 /* Efeito de vibração/giro das cartas */
+
 .card-spinning {
     animation: spinEffect 0.15s infinite linear;
     filter: blur(1px); /* Leve desfoque para dar sensação de velocidade */
@@ -673,7 +676,7 @@ async function callAuroraAPI(cardsDrawn) {
 
   try {
 
-    const res = await fetch('/api/chat', {
+    const res = await fetch('http://localhost:3000/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -694,7 +697,7 @@ async function callAuroraAPI(cardsDrawn) {
         Anora Assistente de IA
       </h2>
       <p>${text}</p>
-      <img src="images_runas/zap.png" class="btn-zap-redondo" onclick="shareOnWhatsApp()" title="Compartilhar">
+      <img src="cards_images/zap.png" class="btn-zap-redondo" onclick="shareOnWhatsApp()" title="Compartilhar">
             <div id="conteudoIA"></div>
       
       <div id="ad-container">
