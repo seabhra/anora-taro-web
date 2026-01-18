@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
-    // 1. Configuração de CORS
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    // 1. Configuração de CORS CORRIGIDA
+    // Removemos a linha 'Allow-Credentials' para permitir o uso do '*'
     res.setHeader('Access-Control-Allow-Origin', '*'); 
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
     res.setHeader(
@@ -8,7 +8,7 @@ export default async function handler(req, res) {
         'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
     );
 
-    // 2. Resposta para Preflight (OPTIONS)
+    // 2. Resposta para Preflight (OPTIONS) - Essencial para o erro "Preflight" sumir
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
@@ -33,16 +33,17 @@ export default async function handler(req, res) {
         }
 
         console.log('📥 Chamando Groq API para Anora Tarô...');
+        
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                 'Authorization': `Bearer ${process.env.GROQ_API_KEY.trim()}` // trim() evita erros de espaço
+                 'Authorization': `Bearer ${process.env.GROQ_API_KEY.trim()}`
             },
             body: JSON.stringify({
                 model: model || 'llama-3.3-70b-versatile',
                 messages: messages,
-                temperature: temperature ?? 0.7, // ?? garante que 0 seja aceito como valor
+                temperature: temperature ?? 0.7, 
                 max_tokens: max_tokens || 1024
             })
         });
@@ -67,7 +68,4 @@ export default async function handler(req, res) {
             message: error.message 
         });
     }
-} // <--- Chave extra removida aqui
-
-
-
+}
