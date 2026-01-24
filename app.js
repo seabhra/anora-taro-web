@@ -1,20 +1,18 @@
 
-// Função para buscar dados da API de Anora Tarô
+// Função para buscar dados da API de Anora Tarô versão 3
 
-// URL da sua API na Vercel (URL Absoluta para evitar CORS local)
-const API_URL = 'https://anora-taro-web.vercel.app/api/chat';
+// URL Relativa é mais segura para evitar erros de cabeçalho/CORS na Vercel
+const API_URL = '/api/chat';
 
 // Função unificada para buscar/enviar dados (Chat com a IA)
 async function askAnora(userMessage) {
   const resultElement = document.getElementById('result');
   
-  // Verificação de segurança
   if (!resultElement) {
     console.error("Erro: Elemento com ID 'result' não encontrado no HTML.");
     return;
   }
 
-  // Feedback visual de carregamento
   resultElement.innerText = "Consultando os astros e as cartas...";
   resultElement.style.opacity = "0.7";
 
@@ -24,44 +22,43 @@ async function askAnora(userMessage) {
       headers: {
         'Content-Type': 'application/json',
       },
-      // Enviamos a mensagem do usuário. 
-      // Nota: Se sua API esperar outra chave (ex: 'prompt' em vez de 'message'), ajuste aqui.
+      // Ajuste: Enviando um objeto que tenta cobrir as esperas comuns de APIs (message e messages)
       body: JSON.stringify({ 
-        message: userMessage || "Faça uma leitura de tarô para mim." 
+        message: userMessage || "Faça uma leitura de tarô para mim.",
+        // Caso sua API espere o formato de array (comum em IAs):
+        messages: [{ role: "user", content: userMessage || "Faça uma leitura de tarô para mim." }]
       }),
     });
 
-    // Verifica se a resposta da rede foi ok
+    // Se o erro for 400, vamos tentar ler o corpo do erro para saber o que a Vercel diz
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Detalhes do erro 400:', errorData);
       throw new Error(`Erro na API: ${response.status}`);
     }
 
     const data = await response.json();
     
-    // Atualiza a tela com a resposta.
-    // Ajuste 'data.reply' conforme a estrutura exata que sua API retorna (ex: data.content, data.texto)
-    const replyText = data.reply || data.message || data.content || JSON.stringify(data);
+    // Tenta encontrar a resposta em diferentes campos comuns
+    const replyText = data.reply || data.message || data.content || (data.choices && data.choices[0].message.content) || JSON.stringify(data);
     
     resultElement.innerText = replyText;
     resultElement.style.opacity = "1";
 
   } catch (error) {
     console.error('Erro ao chamar Anora:', error);
-    resultElement.innerText = "Erro: Não foi possível conectar com a Anora. Verifique sua conexão.";
+    resultElement.innerText = "Erro: A Anora não pôde responder agora. Tente novamente.";
     resultElement.style.opacity = "1";
   }
 }
 
-// Função wrapper antiga para manter compatibilidade se você chamar "fetchData" em algum lugar
-// Mas agora ela usa a lógica correta de chat
+// Funções de compatibilidade
 async function fetchData() {
   askAnora("Olá, gostaria de uma leitura geral.");
 }
 
-// Função wrapper antiga para manter compatibilidade se você chamar "sendData"
 async function sendData() {
-  // Pega o valor de um input se existir, ou envia um padrão
   const inputElement = document.getElementById('userInput'); 
-  const message = inputElement ? inputElement.value : "Uma leitura rápida, por favor.";
+  const message = inputElement && inputElement.value ? inputElement.value : "Uma leitura rápida, por favor.";
   askAnora(message);
 }
