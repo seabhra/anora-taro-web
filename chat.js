@@ -3,6 +3,10 @@
 // pages/api/chat.js
 
 
+
+// pages/api/chat.js
+
+
 export default async function handler(req, res) {
   // 1. Configuração de CORS (Necessário para o localhost funcionar)
   res.setHeader('Access-Control-Allow-Credentials', true);
