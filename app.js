@@ -31,11 +31,13 @@ async function askAnora(userMessage) {
     });
 
     // Se o erro for 400, vamos tentar ler o corpo do erro para saber o que a Vercel diz
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('Detalhes do erro 400:', errorData);
-      throw new Error(`Erro na API: ${response.status}`);
-    }
+ if (!response.ok) {
+  // Tenta ler o erro do servidor (muitas APIs explicam o que falta no 400)
+  const errorDetail = await response.text(); 
+  console.error('Detalhes do Erro 400 no Servidor:', errorDetail);
+  throw new Error(`Servidor rejeitou (400): ${errorDetail}`);
+}
+    
 
     const data = await response.json();
     
@@ -62,3 +64,4 @@ async function sendData() {
   const message = inputElement && inputElement.value ? inputElement.value : "Uma leitura rápida, por favor.";
   askAnora(message);
 }
+
