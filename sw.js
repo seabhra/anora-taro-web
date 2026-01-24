@@ -1,5 +1,6 @@
 
-const CACHE_NAME = 'anora-taro-v6'; // Versão forçada para limpeza
+
+const CACHE_NAME = 'anora-taro-v7'; // Versão atualizada
 
 // Lista de arquivos para cachear
 // IMPORTANTE: Verifique se esses arquivos existem realmente nas pastas do seu projeto
@@ -33,7 +34,7 @@ self.addEventListener('install', (event) => {
             
             // Se o DevTools estiver aberto, a execução vai PAUSAR aqui.
             // Isso permite ver exatamente qual erro aconteceu.
-            debugger; 
+            // debugger; 
             
             // Não relançamos o erro para não quebrar o Promise.all
           });
@@ -63,15 +64,13 @@ self.addEventListener('activate', (event) => {
 
 // Interceptação de requisições
 self.addEventListener('fetch', (event) => {
-  // Log opcional para ver o que está sendo requisitado
-  // console.log('[Service Worker] Buscando:', event.request.url);
-
   // 1. Verifica se é uma chamada de API
-  // Se for API, buscamos na rede e NÃO cachearmos (para garantir respostas frescas do tarô)
-  if (event.request.url.includes('/api/')) {
+  // Mudança: Verificamos se NÃO é um método GET ou se contém /api/
+  // Requisições POST de API nunca devem ser tratadas pelo cache do SW
+  if (event.request.url.includes('/api/') || event.request.method !== 'GET') {
     event.respondWith(
-      fetch(event.request).catch(() => {
-        // Opcional: Retornar algo se estiver totalmente offline e tentar usar a API
+      fetch(event.request).catch((err) => {
+        console.error('[Service Worker] Erro na rede da API:', err);
         return new Response(JSON.stringify({ error: 'Sem conexão para a API' }), {
           status: 503,
           headers: { 'Content-Type': 'application/json' },
@@ -93,9 +92,8 @@ self.addEventListener('fetch', (event) => {
       return fetch(event.request)
         .then((networkResponse) => {
           // Se a rede funcionou, salva no cache para a próxima vez
-          // Clonamos a resposta porque ela só pode ser lida uma vez
-          // Verificamos status 200 para não cachear erros (404, 500, etc)
-          if (networkResponse && networkResponse.status === 200) {
+          // Verificamos status 200 e tipo 'basic' para evitar cachear recursos de terceiros com erro
+          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
             const responseClone = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(event.request, responseClone);
