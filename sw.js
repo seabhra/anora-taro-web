@@ -9,7 +9,7 @@ const urlsToCache = [
   '/manifest.json',
   '/cards_images/back.jpg', 
   '/cards_images/marca_anora.png', 
-   '/imagens_app/zap.png',
+  '/cards/images/zap.png',
   '/icons/icon-192.png',
   '/script.js',
 ];
@@ -21,8 +21,10 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('Service Worker: Cache aberto');
+
         // Mapeia cada URL e tenta adicionar individualmente.
         // Se um arquivo falhar (404), ele não trava a instalação dos outros.
+        
         return Promise.all(
           urlsToCache.map(url => {
             return cache.add(url).catch(err => {
@@ -100,5 +102,4 @@ self.addEventListener('fetch', (event) => {
         return new Response('Offline: Recurso não disponível');
       })
   );
-
 });
