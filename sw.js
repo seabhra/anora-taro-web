@@ -9,8 +9,7 @@ const urlsToCache = [
   '/manifest.json',
   '/cards_images/back.jpg', 
   '/cards_images/marca_anora.png', 
-  '/cards_images/zap.png',
-  '/imagens_app/zap.png',
+   '/imagens_app/zap.png',
   '/icons/icon-192.png',
   '/script.js',
 ];
@@ -101,4 +100,5 @@ self.addEventListener('fetch', (event) => {
         return new Response('Offline: Recurso não disponível');
       })
   );
+
 });
