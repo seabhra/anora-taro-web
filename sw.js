@@ -13,7 +13,7 @@ const urlsToCache = [
   '/cards_images/marca_anora.png',
   '/cards_images/zap.png',
   '/icons/icon-192.png',
-  '/script.js',
+  '/app.js',
 ];
 
 // Instalação do Service Worker
@@ -112,3 +112,4 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+
