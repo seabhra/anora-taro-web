@@ -1,58 +1,49 @@
-// api/chat.js - VERSÃO COMPLETA COM CORS
+// pages/api/chat.js
+
 export default async function handler(req, res) {
-	// ==========================================
-	// CORS HEADERS - ESSENCIAL!
-	// ==========================================
-	res.setHeader('Access-Control-Allow-Credentials', 'true');
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-	res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
-  
-	// Preflight
-	if (req.method === 'OPTIONS') {
-	  return res.status(200).end();
-	}
-  
-	// Apenas POST
-	if (req.method !== 'POST') {
-	  return res.status(405).json({ error: 'Method not allowed' });
-	}
-  
-	try {
-	  const { model, messages, temperature, max_tokens } = req.body;
-  
-	  if (!messages || !Array.isArray(messages)) {
-		return res.status(400).json({ error: 'messages é obrigatório' });
-	  }
-  
-	  console.log('📥 Requisição recebida:', messages.length, 'mensagens');
-  
-	  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-		method: 'POST',
-		headers: {
-		  'Content-Type': 'application/json',
-		  'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
-		},
-		body: JSON.stringify({
-		  model: model || 'llama-3.3-70b-versatile',
-		  messages: messages,
-		  temperature: temperature || 0.7,
-		  max_tokens: max_tokens || 500
-		})
-	  });
-  
-	  if (!response.ok) {
-		const error = await response.json();
-		console.error('❌ Erro Groq:', error);
-		return res.status(response.status).json(error);
-	  }
-  
-	  const data = await response.json();
-	  console.log('✅ Resposta enviada');
-	  return res.status(200).json(data);
-  
-	} catch (error) {
-	  console.error('❌ Erro:', error.message);
-	  return res.status(500).json({ error: error.message });
-	}
+  // 1. TRATAMENTO DO CORS (Preflight)
+  // O navegador manda uma requisição OPTIONS antes para perguntar "Posso mandar um POST?"
+	
+  if (req.method === 'OPTIONS') {
+    // Define quem pode acessar (qualquer origem *)
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    // Define quais métodos são permitidos (GET, POST, OPTIONS)
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    // Define quais cabeçalhos o cliente pode enviar
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
+    // Retorna sucesso 200 para o navegador saber que pode prosseguir
+    return res.status(200).end();
   }
+
+  // 2. LÓGICA DO CHAT (Método POST)
+  if (req.method === 'POST') {
+    // Importante: Também precisamos do header na resposta real
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    try {
+      // Pega a mensagem que o front-end enviou
+      const { message } = req.body;
+
+      if (!message) {
+        return res.status(400).json({ error: 'Mensagem não enviada' });
+      }
+
+      // --- AQUI VAI A CHAMADA PARA SUA IA (OpenAI, etc) ---
+      // Exemplo simulado:
+      // const aiResponse = await fetchOpenAI(message); 
+      const respostaDaIA = `A Anora Tarô respondeu para: ${message}`;
+
+      // Retorna o JSON com a resposta
+      res.status(200).json({ reply: respostaDaIA });
+
+    } catch (error) {
+      console.error('Erro no chat:', error);
+      res.status(500).json({ error: 'Erro ao processar o pedido' });
+    }
+  } else {
+    // Se tentar usar GET, PUT, DELETE...
+    res.setHeader('Allow', ['POST', 'OPTIONS']);
+    return res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+}
