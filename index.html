@@ -681,7 +681,7 @@ function shareOnWhatsApp() {
       
 async function callAuroraAPI(cardsDrawn) {      
   try {
-    const res = await fetch('/api/chat', {
+    const res = await fetch('https://anora-taro-web.vercel.app/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -793,3 +793,4 @@ if ('serviceWorker' in navigator) {
 </body>
 
 </html>
+
