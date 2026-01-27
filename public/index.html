@@ -662,10 +662,12 @@ function shareOnWhatsApp() {
   }
 }
 
-// ---------------- ELEMENTOS DO DOM API ----------------
+      // ---------------- ELEMENTOS DO DOM API ----------------
       
 async function callAuroraAPI(cardsDrawn) {      
   try {
+    console.log("🚀 Enviando requisição para /api/chat com:", cardsDrawn);
+
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -676,11 +678,36 @@ async function callAuroraAPI(cardsDrawn) {
         }]
       })
     });
-    const data = await res.json();
+
+    // 1. Verifica se o status HTTP é OK (200, 201, etc)
+    if (!res.ok) {
+       throw new Error(`Erro no Servidor: Status ${res.status} ${res.statusText}`);
+    }
+
+    // 2. Tenta ler o corpo da resposta como TEXTO primeiro
+    // Isso evita o erro de JSON vazio
+    const rawText = await res.text();
+
+    // 3. Se o texto estiver vazio, lança erro específico
+    if (!rawText) {
+        throw new Error("O servidor retornou uma resposta vazia (Body Vazio).");
+    }
+
+    // 4. Tenta converter o texto em JSON
+    let data;
+    try {
+        data = JSON.parse(rawText);
+    } catch (e) {
+        console.error("❌ Falha ao fazer parse do JSON. O servidor respondeu isso:", rawText);
+        throw new Error("A resposta do servidor não é um JSON válido.");
+    }
+
     if (isResetting) return;
-    const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
+    
+    // Pega o texto da resposta (Formato OpenAI padrão)
+    const text = data.choices?.[0]?.message?.content || data.message || 'Sem resposta da IA.';
 
-
+    // --- RENDERIZAÇÃO DE SUCESSO ---
     aiBox.innerHTML = `
       <h2 class="ai-title">
         <img src="cards_images/marca_anora.png" class="ai-logo">
@@ -705,28 +732,33 @@ async function callAuroraAPI(cardsDrawn) {
     loader.style.display = 'none';
     aiBox.style.display = 'block';
 
-   
-    // Toca áudio (opcional)
+    // Toca áudio
     memoriesAudio.volume = 0.5;
     memoriesAudio.play().catch(e => console.log("Áudio ignorado:", e));
      
-    status.className = 'status-success';
   } catch (error) {
-    console.error('Erro na chamada da API:', error);
-    aiBox.innerHTML = `<p>Indisponível no momento por problema de acesso.</p>`;
-    status.innerText = "Erro ao acessar a IA: " + error.message; // CORRIGIDO: status.innerText em vez de status.className.innerText
+    console.error('--- ERRO DETALHADO NA API ---');
+    console.error('Mensagem:', error.message);
+    console.error('Objeto Erro:', error);
+    
+    aiBox.innerHTML = `
+        <div style="color:red; padding:10px; border:1px solid red; border-radius:5px;">
+            <strong>Erro de Conexão:</strong><br>
+            ${error.message}<br><br>
+            <small>Verifique o console (F12) e se o backend está rodando.</small>
+        </div>`;
+    
+    status.innerText = "Erro ao acessar a IA.";
     status.className = 'status-error';
   }
+  
   loader.style.display = 'none';
-  // >>> PONTO CHAVE: MOSTRANDO O AIBox E O ANÚNCIO <<<
   aiBox.style.display = 'block';
 
-  // CORREÇÃO: Encontra o container do anúncio (que agora está dentro do aiBox)
-  // e o torna visível.
+  // Mostra o container do anúncio
   const adContainer = document.getElementById('ad-container');
   if (adContainer) {
     adContainer.style.display = 'block';
-    // Tenta carregar o anúncio agora que o container está visível.
     try {
       (adsbygoogle = window.adsbygoogle || []).push({});
     } catch (e) {
@@ -769,6 +801,7 @@ if ('serviceWorker' in navigator) {
 </script>
 </body>
 </html>
+
 
 
 
