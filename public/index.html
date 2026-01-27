@@ -22,7 +22,7 @@
 
   
 <title>Anora Tarô</title>
-
+  /* ESTILO CSS DO APLICATIVO */
 <style>
 
   /* Evita scroll fantasma em standalone */
@@ -95,6 +95,8 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   box-shadow: none;
   border-radius: 0;
   background: transparent;
+  /* 👈 CORREÇÃO: Adicionada animação de giro para a flor */
+  animation: spin 10s linear infinite;
 }
 
 /* Container */
@@ -110,7 +112,8 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 #cabalaBox img {
   width: 80px;          /* 👈 tamanho real */
   height: auto;
-  animation: spin 2.4s linear infinite; /* 🐢 mais lento */
+  /* 👈 Mantém o giro rápido da cabala */
+  animation: spin 2.4s linear infinite; 
   opacity: 0.9;
   display: block;       /* 👈 ESSENCIAL */
 }
@@ -154,7 +157,7 @@ min-height: 14px;
 /* Status da cor do botão */
   
 .pink { background:#fd98be; }
-.roxo { background:#de86e5; } /* Adicionado ponto e vírgula */
+.roxo { background:#de86e5; }
 .blue { background:#98e6ce; }
 
 /* Estilo marca anora na mensagem compartilhada */
@@ -207,6 +210,7 @@ height: 50px;
 border: 5px solid rgba(131, 242, 212, 0.2);
 border-top: 5px solid #83f2d4;
 border-radius: 50%;
+/* 👈 Correção: Garante que o loader use o spin */
 animation: spin 1s linear infinite;
 }
 
@@ -301,7 +305,7 @@ font-size: 15px;
   transform: scale(1.1);
 }
 
-/* Hover elegante - Corrigido para usar classe em vez de ID inexistente */
+/* Hover elegante */
 .btn-zap-redondo:active {
   transform: scale(0.98);
 }
@@ -325,9 +329,6 @@ font-size: 15px;
   margin-right: 8px;
 }
 
-      /* 1. Define a animação de rotação (giro de 360 graus) */
-      /* Nota: Já existe um @keyframes spin acima, removi duplicação */
-
 .status-emoji {
   margin-right: 8px; /* Define o espaçamento à direita */
   display: inline-block; /* ESSENCIAL para a margem funcionar */
@@ -338,24 +339,31 @@ font-size: 15px;
  vertical-align: middle;
 }
 
+/* 👈 CORREÇÃO E GARANTIA: Classe específica para o emoji girar */
 .status-emoji.giro {
-  margin-right: 8px;
-  display: inline-block; /* Necessário para a animação funcionar bem em spans */
+  display: inline-block;
   animation: spin 0.6s linear infinite;
 }
-  
- 
+
 /* Container do AdMob Google - Dinâmico via JS */
 #ad-container {
   margin-top: 24px;
   width: 100%;
   min-height: 50px;   
   text-align: center;
-  /* border: 1px dashed red;  debug visual removido */
 }
  
+/* 👈 DEFINIÇÃO GLOBAL DA ANIMAÇÃO DE GIRO (360 GRAUS) */
+/* Colocado no final para garantir que sobrescreva conflitos */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 </style>
 </head>
+
+      
+/* CORPO DO APLICATIVO */
 
 <body>
 
@@ -745,3 +753,4 @@ if ('serviceWorker' in navigator) {
 </script>
 </body>
 </html>
+
