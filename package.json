@@ -1,14 +1,30 @@
 {
   "name": "Anora Tarô",
   "version": "1.0.0",
+  "main": "index.js",
+  "dev": "node index.js",
+ 
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
-  },
+},
+
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+ 
+  "description": "",
+ 
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "groq-sdk": "^0.36.0",
     "next": "latest",
     "react": "18",
     "react-dom": "18"
+
   }
 }
