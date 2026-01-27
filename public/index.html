@@ -20,12 +20,11 @@
 
 <meta name="theme-color" content="#6b46c1">
 
-  
-<title>Anora Tarô</title>
+  <title>Anora Tarô</title>
+      
   /* ESTILO CSS DO APLICATIVO */
 <style>
 
-  /* Evita scroll fantasma em standalone */
 html, body {
   margin: 0;
   padding: 0;
@@ -95,8 +94,6 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   box-shadow: none;
   border-radius: 0;
   background: transparent;
-  /* 👈 CORREÇÃO: Adicionada animação de giro para a flor */
-  animation: spin 10s linear infinite;
 }
 
 /* Container */
@@ -112,8 +109,7 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 #cabalaBox img {
   width: 80px;          /* 👈 tamanho real */
   height: auto;
-  /* 👈 Mantém o giro rápido da cabala */
-  animation: spin 2.4s linear infinite; 
+  animation: spin 2.4s linear infinite; /* 🐢 mais lento */
   opacity: 0.9;
   display: block;       /* 👈 ESSENCIAL */
 }
@@ -157,7 +153,7 @@ min-height: 14px;
 /* Status da cor do botão */
   
 .pink { background:#fd98be; }
-.roxo { background:#de86e5; }
+.roxo { background:#de86e5 }
 .blue { background:#98e6ce; }
 
 /* Estilo marca anora na mensagem compartilhada */
@@ -210,8 +206,12 @@ height: 50px;
 border: 5px solid rgba(131, 242, 212, 0.2);
 border-top: 5px solid #83f2d4;
 border-radius: 50%;
-/* 👈 Correção: Garante que o loader use o spin */
 animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
 }
 
 /* Loader da página */
@@ -246,7 +246,7 @@ animation: spin 1s linear infinite;
 
 /* ESTILO DA CAIXA DE RESPOSTA DA IA */
 
-#aiBox {
+#aiBox { /* CORREÇÃO: ID unificado para aiBox */
 display: none;
 margin-top: 16px;
 padding: 5px;
@@ -254,7 +254,6 @@ background: #fff;
 border-radius: 12px;
 font-size: 16px;
 text-align: center;
-position: relative; /* Essencial para posicionar o botão do Zap dentro */
 }
 
 /* ESTILO DO NOVO CABEÇALHO COMPARTILHADO H2 */
@@ -294,8 +293,10 @@ font-size: 15px;
   position: absolute;
   top: 10px;
   right: 10px;
+
   width: 45px;
   height: 45px;
+
   cursor: pointer;
   transition: transform 0.2s;
   z-index: 10; /* garante que fica acima do texto */
@@ -306,7 +307,13 @@ font-size: 15px;
 }
 
 /* Hover elegante */
-.btn-zap-redondo:active {
+#shareButton:hover {
+  background-color: #128C7E;
+  transform: scale(1.02);
+}
+
+/* Feedback de clique */
+#shareButton:active {
   transform: scale(0.98);
 }
 
@@ -328,6 +335,17 @@ font-size: 15px;
  .btn-emoji {
   margin-right: 8px;
 }
+ /* CONTROLE DE ESPAÇO EMOJI DENTRO DO JS */
+
+      /* 1. Define a animação de rotação (giro de 360 graus) */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .status-emoji {
   margin-right: 8px; /* Define o espaçamento à direita */
@@ -339,26 +357,24 @@ font-size: 15px;
  vertical-align: middle;
 }
 
-/* 👈 CORREÇÃO E GARANTIA: Classe específica para o emoji girar */
 .status-emoji.giro {
-  display: inline-block;
+  margin-right: 8px;
+  display: inline-block; /* Necessário para a animação funcionar bem em spans */
   animation: spin 0.6s linear infinite;
 }
-
-/* Container do AdMob Google - Dinâmico via JS */
+  
+ 
+/* Container do AdMob Google */
 #ad-container {
   margin-top: 24px;
   width: 100%;
-  min-height: 50px;   
+  min-height: 0;   /* 👈 altura mínima realista */
   text-align: center;
+  display: none;     /* começa escondido */
+ border: 1px dashed red; /* debug visual */
 }
  
-/* 👈 DEFINIÇÃO GLOBAL DA ANIMAÇÃO DE GIRO (360 GRAUS) */
-/* Colocado no final para garantir que sobrescreva conflitos */
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+</style>
 </style>
 </head>
 
@@ -753,4 +769,5 @@ if ('serviceWorker' in navigator) {
 </script>
 </body>
 </html>
+
 
