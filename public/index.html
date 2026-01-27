@@ -736,9 +736,10 @@ async function callAuroraAPI(cardsDrawn) {
   } catch (error) {
     console.error('Erro na chamada da API:', error);
     aiBox.innerHTML = `<p>Indisponível no momento por problema de acesso.</p>`;
-    status.textContent = 'Erro ao acessar análise do sistema.';
-    status.className = 'status-error';
-    status.className.innerText = "Erro ao acessar a IA: " + err.message;
+
+        status.innerText = "Erro ao acessar a IA: " + error.message;
+        status.className = 'status-error';
+
   }
   loader.style.display = 'none';
   // >>> PONTO CHAVE: MOSTRANDO O AIBox E O ANÚNCIO <<<
@@ -796,4 +797,5 @@ if ('serviceWorker' in navigator) {
 </script>
 </body>
 </html>
+
 
