@@ -154,7 +154,7 @@ min-height: 14px;
 /* Status da cor do botão */
   
 .pink { background:#fd98be; }
-.roxo { background:#de86e5 }
+.roxo { background:#de86e5; } /* Adicionado ponto e vírgula */
 .blue { background:#98e6ce; }
 
 /* Estilo marca anora na mensagem compartilhada */
@@ -210,11 +210,6 @@ border-radius: 50%;
 animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-0% { transform: rotate(0deg); }
-100% { transform: rotate(360deg); }
-}
-
 /* Loader da página */
 #pageLoader {
 position: fixed;
@@ -247,7 +242,7 @@ animation: spin 1s linear infinite;
 
 /* ESTILO DA CAIXA DE RESPOSTA DA IA */
 
-#aiBox { /* CORREÇÃO: ID unificado para aiBox */
+#aiBox {
 display: none;
 margin-top: 16px;
 padding: 5px;
@@ -255,6 +250,7 @@ background: #fff;
 border-radius: 12px;
 font-size: 16px;
 text-align: center;
+position: relative; /* Essencial para posicionar o botão do Zap dentro */
 }
 
 /* ESTILO DO NOVO CABEÇALHO COMPARTILHADO H2 */
@@ -294,10 +290,8 @@ font-size: 15px;
   position: absolute;
   top: 10px;
   right: 10px;
-
   width: 45px;
   height: 45px;
-
   cursor: pointer;
   transition: transform 0.2s;
   z-index: 10; /* garante que fica acima do texto */
@@ -307,14 +301,8 @@ font-size: 15px;
   transform: scale(1.1);
 }
 
-/* Hover elegante */
-#shareButton:hover {
-  background-color: #128C7E;
-  transform: scale(1.02);
-}
-
-/* Feedback de clique */
-#shareButton:active {
+/* Hover elegante - Corrigido para usar classe em vez de ID inexistente */
+.btn-zap-redondo:active {
   transform: scale(0.98);
 }
 
@@ -336,17 +324,9 @@ font-size: 15px;
  .btn-emoji {
   margin-right: 8px;
 }
- /* CONTROLE DE ESPAÇO EMOJI DENTRO DO JS */
 
       /* 1. Define a animação de rotação (giro de 360 graus) */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+      /* Nota: Já existe um @keyframes spin acima, removi duplicação */
 
 .status-emoji {
   margin-right: 8px; /* Define o espaçamento à direita */
@@ -365,14 +345,13 @@ font-size: 15px;
 }
   
  
-/* Container do AdMob Google */
+/* Container do AdMob Google - Dinâmico via JS */
 #ad-container {
   margin-top: 24px;
   width: 100%;
-  min-height: 0;   /* 👈 altura mínima realista */
+  min-height: 50px;   
   text-align: center;
-  display: none;     /* começa escondido */
- border: 1px dashed red; /* debug visual */
+  /* border: 1px dashed red;  debug visual removido */
 }
  
 </style>
@@ -437,25 +416,8 @@ font-size: 15px;
 <div id="promptBox"></div>
 
 <!-- LOCAL Compartilhar no WhatsApp e Anúncio -->
-<div id="aiBox" style="display: none;">
-
-  <!-- 👇 CONTEÚDO DA IA (DINÂMICO) -->
-  <div id="conteudoIA"></div>
-
-  <!-- 👇 FICA FIXO, NÃO É RECRIADO -->
-
-  <div id="ad-container">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3940256099942544"
-         data-ad-slot="6300978111"
-         data-ad-format="auto"
-         data-full-width-responsive="true">
-    </ins>
-  </div>
-
-</div>
-
+<!-- O conteúdo dinâmico será injetado aqui pelo JS -->
+<div id="aiBox"></div>
 
    
 <!-- CORPO DO APLICATIVO -->
@@ -465,7 +427,7 @@ font-size: 15px;
 // SCRIPT PRINCIPAL - ORÁCULO ANORA TARÔ (VERSÃO FINAL CORRIGIDA)
 // ===================================================================
 
-let hasReading = false;
+// Removida declaração global duplicada de 'hasReading'
 let isResetting = false;
       
 document.addEventListener('DOMContentLoaded', () => {
@@ -478,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const aiBox = document.getElementById('aiBox');
   const promptBox = document.getElementById('promptBox');
   const florBox = document.getElementById('florBox');
- const cabalaBox = document.getElementById('cabalaBox');
+  const cabalaBox = document.getElementById('cabalaBox');
  
 
   const imgs = [
@@ -535,7 +497,6 @@ function newReading() {
         memoriesAudio.currentTime = 0;
     }).catch(e => console.log("Áudio preparado"));
 
-      const florBox = document.getElementById('florBox');
     if (florBox) florBox.style.display = 'none';
       
       
@@ -638,7 +599,6 @@ florBox && (florBox.style.display = 'flex');
   status.innerHTML = `<span class="status-text">Aguardando sua consulta...</span>`;
   status.className = '';
 
-aiBox.style.display = 'none';
 
 const adContainer = document.getElementById('ad-container');
 if (adContainer) {
@@ -693,7 +653,7 @@ async function callAuroraAPI(cardsDrawn) {
       })
     });
     const data = await res.json();
-        if (isResetting) return;
+    if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
 
 
@@ -725,20 +685,13 @@ async function callAuroraAPI(cardsDrawn) {
     // Toca áudio (opcional)
     memoriesAudio.volume = 0.5;
     memoriesAudio.play().catch(e => console.log("Áudio ignorado:", e));
-    memoriesAudio.play().catch(err => {
-    console.error("ERRO DETALHADO:", err.name, err.message);
-    // Se der erro de 'NotAllowedError', é o Android bloqueando o autoplay
-});
      
-
-        
     status.className = 'status-success';
   } catch (error) {
     console.error('Erro na chamada da API:', error);
     aiBox.innerHTML = `<p>Indisponível no momento por problema de acesso.</p>`;
-    status.textContent = 'Erro ao acessar análise do sistema.';
+    status.innerText = "Erro ao acessar a IA: " + error.message; // CORRIGIDO: status.innerText em vez de status.className.innerText
     status.className = 'status-error';
-    status.className.innerText = "Erro ao acessar a IA: " + err.message;
   }
   loader.style.display = 'none';
   // >>> PONTO CHAVE: MOSTRANDO O AIBox E O ANÚNCIO <<<
@@ -766,11 +719,7 @@ if (button) {
   button.onclick = () => hasReading ? resetReading() : newReading();
 }
 
-document.addEventListener('click', (event) => {
-  if (event.target && event.target.id === 'shareButton') {
-    shareOnWhatsApp();
-  }
-});
+// Removido event listener global morto para #shareButton pois o clique é tratado inline na imagem
 
 window.addEventListener('load', () => {
   setTimeout(() => pageLoader?.classList.add('hidden'), 1500);
