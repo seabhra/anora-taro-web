@@ -681,17 +681,18 @@ function shareOnWhatsApp() {
 // ---------------- ELEMENTOS DO DOM API ----------------
       
 async function callAuroraAPI(cardsDrawn) {      
+ 
   try {
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: [{
-          role: "user",
-          content: `Interprete as cartas ${cardsDrawn.join(', ')}`
-        }]
-      })
-    });
+       body: JSON.stringify({ messages: [ {
+      role: "system", 
+      content: "Você é Anora, uma taróloga mística e acolhedora. Responda SEMPRE em português do Brasil, nunca em inglês ou qualquer outro idioma, mesmo que o conteúdo pareça técnico ou filosófico." }, { 
+      role: "user", 
+      content: `Interprete as cartas ${cardsDrawn.join(', ')}` } ] })})
+       
+    
     const data = await res.json();
         if (isResetting) return;
     const text = data.choices?.[0]?.message?.content || 'Sem resposta.';
