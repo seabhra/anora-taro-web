@@ -42,7 +42,8 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         // Usando o Llama 3.3 que é rápido e barato
-        model: 'llama-3.3-70b-versatile', 
+       
+        model: 'qwen/qwen3.6-27b', 
         messages: messages,
         temperature: 0.7,
         max_tokens: 900 // Suficiente para uma leitura de tarô
